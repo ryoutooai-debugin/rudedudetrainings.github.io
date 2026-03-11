@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🦉 SamOwl's Color Match - Learn & Play!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            font-family: 'Comic Sans MS', 'Chalkboard', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 600px;
+            background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
+            border-radius: 30px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            overflow: hidden;
+            position: relative;
+            min-height: 700px;
+        }
+        
+        /* Header with SamOwl */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '🦉';
+            position: absolute;
+            font-size: 8em;
+            opacity: 0.1;
+            top: -20px;
+            right: -20px;
+            transform: rotate(-15deg);
+        }
+        
+        .samowl-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .samowl-logo {
+            font-size: 3em;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .samowl-text {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .game-title {
+            font-size: 1.3em;
+            color: rgba(255,255,255,0.9);
+            margin-top: 5px;
+        }
+        
+        .age-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Score Board */
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 3px solid #dee2e6;
+        }
+        
+        .score-item {
+            text-align: center;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .score-label {
+            font-size: 0.75em;
+            color: #6c757d;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .stars { color: #ffc107; }
+        .level { color: #28a745; }
+        .streak { color: #dc3545; }
+        
+        /* Progress Bar */
+        .progress-container {
+            padding: 15px 25px;
+            background: #f8f9fa;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '🦉';
+            position: absolute;
+            right: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 0.85em;
+            color: #6c757d;
+            margin-top: 8px;
+        }
+        
+        /* Game Area */
+        .game-area {
+            padding: 25px;
+            min-height: 350px;
+        }
+        
+        .instruction {
+            text-align: center;
+            font-size: 1.4em;
+            color: #495057;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-radius: 20px;
+            border: 3px dashed #ffc107;
+            box-shadow: 0 5px 15px rgba(255,193,7,0.2);
+        }
+        
+        .target-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .target-label {
+            font-size: 1em;
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .target-card {
+            width: 150px;
+            height: 150px;
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: 5px solid white;
+        }
+        
+        .target-card.pulse {
+            animation: targetPulse 0.5s ease;
+        }
+        
+        @keyframes targetPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Color Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .color-card {
+            aspect-ratio: 1;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 4px solid white;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .color-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+        }
+        
+        .color-card:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .color-card:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+        
+        .color-card.correct {
+            animation: correctBounce 0.6s ease;
+        }
+        
+        .color-card.wrong {
+            animation: wrongShake 0.5s ease;
+        }
+        
+        @keyframes correctBounce {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(0.9); }
+            75% { transform: scale(1.1); }
+        }
+        
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+        
+        /* Colors */
+        .card-red { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); }
+        .card-blue { background: linear-gradient(135deg, #4ecdc4 0%, #44a3aa 100%); }
+        .card-green { background: linear-gradient(135deg, #95e1d3 0%, #6ab04c 100%); }
+        .card-yellow { background: linear-gradient(135deg, #ffd93d 0%, #f9ca24 100%); }
+        .card-purple { background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); }
+        .card-orange { background: linear-gradient(135deg, #ff9f43 0%, #ee5a24 100%); }
+        .card-pink { background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%); }
+        .card-cyan { background: linear-gradient(135deg, #00cec9 0%, #01a3a4 100%); }
+        .card-rainbow { 
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 25%, #95e1d3 50%, #4ecdc4 75%, #a29bfe 100%);
+        }
+        
+        /* Feedback Overlay */
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feedback-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .feedback-emoji {
+            font-size: 8em;
+            animation: feedbackPop 0.5s ease;
+        }
+        
+        @keyframes feedbackPop {
+            0% { transform: scale(0) rotate(-180deg); }
+            50% { transform: scale(1.2) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        .feedback-text {
+            font-size: 2em;
+            color: white;
+            margin-top: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        /* Start Screen */
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .start-mascot {
+            font-size: 8em;
+            animation: mascotBounce 1s ease infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes mascotBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .start-title {
+            font-size: 2.2em;
+            color: #495057;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .start-subtitle {
+            font-size: 1.3em;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        
+        .start-instructions {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            max-width: 350px;
+        }
+        
+        .start-instructions p {
+            font-size: 1.1em;
+            color: #495057;
+            margin: 10px 0;
+        }
+        
+        .start-btn {
+            padding: 20px 60px;
+            font-size: 1.5em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+        
+        .start-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Level Complete Screen */
+        .level-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #d4edda 0%, #c3e6cb 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 90;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .level-screen.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .level-emoji {
+            font-size: 6em;
+            margin-bottom: 20px;
+        }
+        
+        .level-title {
+            font-size: 2em;
+            color: #155724;
+            margin-bottom: 15px;
+        }
+        
+        .level-message {
+            font-size: 1.2em;
+            color: #28a745;
+            margin-bottom: 30px;
+        }
+        
+        .reward-display {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .reward-item {
+            font-size: 3em;
+            animation: rewardPop 0.5s ease;
+        }
+        
+        @keyframes rewardPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .continue-btn {
+            padding: 15px 40px;
+            font-size: 1.3em;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        }
+        
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Confetti animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confettiFall linear forwards;
+        }
+        
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* SamOwl helper bubble */
+        .helper-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-size: 1em;
+            color: #495057;
+            max-width: 250px;
+            z-index: 50;
+            animation: bubblePop 0.5s ease;
+        }
+        
+        .helper-bubble::before {
+            content: '🦉';
+            font-size: 2em;
+            position: absolute;
+            top: -25px;
+            right: 10px;
+        }
+        
+        @keyframes bubblePop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 500px) {
+            .cards-grid {
+                gap: 10px;
+            }
+            
+            .color-card {
+                font-size: 2em;
+            }
+            
+            .target-card {
+                width: 120px;
+                height: 120px;
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <div class="start-mascot">🦉</div>
+            <div class="start-title">SamOwl's Color Match</div>
+            <div class="start-subtitle">Learn colors with your trading buddy!</div>
+            <div class="age-badge">Ages 4-6</div>
+            <div class="start-instructions">
+                <p>🎯 Match the colors</p>
+                <p>⭐ Earn stars</p>
+                <p>🏆 Collect rewards</p>
+                <p>🦉 Help SamOwl learn!</p>
+            </div>
+            <button class="start-btn" onclick="startGame()">🎮 Play Now!</button>
+        </div>
+
+        <!-- Level Complete Screen -->
+        <div class="level-screen" id="levelScreen">
+            <div class="level-emoji">⭐🦉⭐</div>
+            <div class="level-title" id="levelTitle">Level Complete!</div>
+            <div class="level-message" id="levelMessage">You're amazing!</div>
+            <div class="reward-display" id="rewardDisplay"></div>
+            <button class="continue-btn" onclick="continueGame()">Continue ➡️</button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="samowl-brand">
+                <div class="samowl-logo">🦉</div>
+                <div class="samowl-text">SamOwl</div>
+            </div>
+            <div class="game-title">Color Match</div>
+            <div class="age-badge">Ages 4-6</div>
+        </div>
+
+        <!-- Score Board -->
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">⭐ Stars</div>
+                <div class="score-value stars" id="stars">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">🎯 Level</div>
+                <div class="score-value level" id="level">1</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">🔥 Streak</div>
+                <div class="score-value streak" id="streak">0</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">
+                Match colors to help SamOwl! 🦉
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <div class="instruction" id="instruction">
+                Find the matching color! 🎨
+            </div>
+            
+            <div class="target-display">
+                <div class="target-label">Match this:</div>
+                <div class="target-card" id="targetCard">
+                    ❓
+                </div>
+            </div>
+            
+            <div class="cards-grid" id="cardsGrid">
+                <!-- Cards generated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Overlay -->
+    <div class="feedback-overlay" id="feedbackOverlay">
+        <div class="feedback-emoji" id="feedbackEmoji">✨</div>
+        <div class="feedback-text" id="feedbackText">Great job!</div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            stars: 0,
+            level: 1,
+            streak: 0,
+            correctInLevel: 0,
+            targetColor: null,
+            isProcessing: false
+        };
+
+        // Color definitions with emojis
+        const colors = [
+            { name: 'red', emoji: '🔴', class: 'card-red', label: 'Red' },
+            { name: 'blue', emoji: '🔵', class: 'card-blue', label: 'Blue' },
+            { name: 'green', emoji: '🟢', class: 'card-green', label: 'Green' },
+            { name: 'yellow', emoji: '🟡', class: 'card-yellow', label: 'Yellow' },
+            { name: 'purple', emoji: '🟣', class: 'card-purple', label: 'Purple' },
+            { name: 'orange', emoji: '🟠', class: 'card-orange', label: 'Orange' },
+            { name: 'pink', emoji: '💗', class: 'card-pink', label: 'Pink' },
+            { name: 'cyan', emoji: '🔷', class: 'card-cyan', label: 'Cyan' },
+            { name: 'rainbow', emoji: '🌈', class: 'card-rainbow', label: 'Rainbow' }
+        ];
+
+        // Rewards for levels
+        const rewards = [
+            { level: 1, emoji: '🌟', name: 'Star' },
+            { level: 2, emoji: '🦉', name: 'SamOwl' },
+            { level: 3, emoji: '🎨', name: 'Paint' },
+            { level: 4, emoji: '🏆', name: 'Trophy' },
+            { level: 5, emoji: '👑', name: 'Crown' },
+            { level: 6, emoji: '🚀', name: 'Rocket' },
+            { level: 7, emoji: '🌈', name: 'Rainbow' },
+            { level: 8, emoji: '💎', name: 'Diamond' },
+            { level: 9, emoji: '🎪', name: 'Circus' },
+            { level: 10, emoji: '🎓', name: 'Graduate' }
+        ];
+
+        // Encouraging messages
+        const correctMessages = [
+            'Amazing! 🌟',
+            'You got it! 🎉',
+            'Perfect match! ✨',
+            'So smart! 🦉',
+            'Excellent! ⭐',
+            'Great job! 🎨',
+            'Fantastic! 🌈',
+            'Super star! ⭐'
+        ];
+
+        const streakMessages = [
+            'On fire! 🔥',
+            'Unstoppable! 🚀',
+            'Incredible! 💫',
+            'Legendary! 👑'
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            generateNewRound();
+            updateDisplay();
+        }
+
+        function generateNewRound() {
+            const grid = document.getElementById('cardsGrid');
+            grid.innerHTML = '';
+            
+            // Determine difficulty based on level
+            let numColors = 3;
+            if (gameState.level >= 3) numColors = 4;
+            if (gameState.level >= 5) numColors = 6;
+            if (gameState.level >= 8) numColors = 9;
+            
+            // Select random colors for this round
+            const shuffled = [...colors].sort(() => Math.random() - 0.5);
+            const roundColors = shuffled.slice(0, numColors);
+            
+            // Pick target
+            const target = roundColors[Math.floor(Math.random() * roundColors.length)];
+            gameState.targetColor = target;
+            
+            // Update target display
+            const targetCard = document.getElementById('targetCard');
+            targetCard.className = `target-card ${target.class}`;
+            targetCard.textContent = target.emoji;
+            targetCard.classList.add('pulse');
+            setTimeout(() => targetCard.classList.remove('pulse'), 500);
+            
+            // Update instruction
+            const instruction = document.getElementById('instruction');
+            instruction.innerHTML = `Find the <b>${target.label}</b> card! 🎨`;
+            
+            // Create cards (shuffle again for display)
+            const displayColors = [...roundColors].sort(() => Math.random() - 0.5);
+            displayColors.forEach(color => {
+                const card = document.createElement('div');
+                card.className = `color-card ${color.class}`;
+                card.innerHTML = `<span>${color.emoji}</span>`;
+                card.onclick = () => handleCardClick(color, card);
+                grid.appendChild(card);
+            });
+            
+            gameState.isProcessing = false;
+        }
+
+        function handleCardClick(color, cardElement) {
+            if (gameState.isProcessing) return;
+            gameState.isProcessing = true;
+            
+            const isCorrect = color.name === gameState.targetColor.name;
+            
+            if (isCorrect) {
+                // Correct!
+                cardElement.classList.add('correct');
+                gameState.stars += 10 + (gameState.streak * 2);
+                gameState.streak++;
+                gameState.correctInLevel++;
+                
+                // Show feedback
+                let message = correctMessages[Math.floor(Math.random() * correctMessages.length)];
+                if (gameState.streak >= 5) {
+                    message = streakMessages[Math.min(Math.floor((gameState.streak - 5) / 3), streakMessages.length - 1)];
+                }
+                
+                showFeedback('✅', message);
+                
+                // Check for level up
+                if (gameState.correctInLevel >= 5) {
+                    setTimeout(() => showLevelComplete(), 1500);
+                } else {
+                    setTimeout(() => {
+                        generateNewRound();
+                        updateDisplay();
+                    }, 1500);
+                }
+            } else {
+                // Wrong!
+                cardElement.classList.add('wrong');
+                gameState.streak = 0;
+                
+                showFeedback('❌', `That's ${color.label}. Try again! 🦉`);
+                
+                setTimeout(() => {
+                    cardElement.classList.remove('wrong');
+                    gameState.isProcessing = false;
+                    updateDisplay();
+                }, 1500);
+            }
+        }
+
+        function showFeedback(emoji, text) {
+            const overlay = document.getElementById('feedbackOverlay');
+            document.getElementById('feedbackEmoji').textContent = emoji;
+            document.getElementById('feedbackText').textContent = text;
+            overlay.classList.add('show');
+            
+            setTimeout(() => {
+                overlay.classList.remove('show');
+            }, 1200);
+        }
+
+        function showLevelComplete() {
+            const reward = rewards[Math.min(gameState.level - 1, rewards.length - 1)];
+            
+            document.getElementById('levelTitle').textContent = `Level ${gameState.level} Complete!`;
+            document.getElementById('levelMessage').textContent = `You earned a ${reward.name}!`;
+            document.getElementById('rewardDisplay').innerHTML = `<div class="reward-item">${reward.emoji}</div>`;
+            
+            document.getElementById('levelScreen').classList.add('show');
+            createConfetti();
+        }
+
+        function continueGame() {
+            document.getElementById('levelScreen').classList.remove('show');
+            gameState.level++;
+            gameState.correctInLevel = 0;
+            generateNewRound();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('stars').textContent = gameState.stars;
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('streak').textContent = gameState.streak;
+            
+            // Update progress bar
+            const progress = (gameState.correctInLevel / 5) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#95e1d3', '#ffd93d', '#a29bfe', '#ff9f43'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>

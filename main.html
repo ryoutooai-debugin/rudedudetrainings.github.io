@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🐂 Bull vs Bear: Market Adventures 🐻</title>
+    <!-- Sound Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 3px solid #e9ecef;
+        }
+        
+        .score-item {
+            text-align: center;
+        }
+        
+        .score-label {
+            font-size: 0.8em;
+            color: #6c757d;
+            font-weight: bold;
+        }
+        
+        .score-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .coins { color: #ffc107; }
+        .streak { color: #28a745; }
+        .level { color: #17a2b8; }
+        
+        .game-area {
+            padding: 20px;
+            min-height: 400px;
+        }
+        
+        .mascot-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+        
+        .mascot {
+            font-size: 4em;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .mascot:hover {
+            transform: scale(1.1);
+        }
+        
+        .mascot.bull { 
+            filter: drop-shadow(0 4px 8px rgba(40, 167, 69, 0.4));
+        }
+        
+        .mascot.bear { 
+            filter: drop-shadow(0 4px 8px rgba(220, 53, 69, 0.4));
+        }
+        
+        .vs-text {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #6c757d;
+        }
+        
+        .chart-container {
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            text-align: center;
+            font-size: 1.1em;
+            color: #495057;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .candles {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 150px;
+            gap: 8px;
+            padding: 10px;
+        }
+        
+        .candle {
+            width: 30px;
+            border-radius: 4px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .candle:hover {
+            transform: scale(1.05);
+        }
+        
+        .candle.green {
+            background: linear-gradient(180deg, #28a745 0%, #20c997 100%);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+        
+        .candle.red {
+            background: linear-gradient(180deg, #dc3545 0%, #e74c3c 100%);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+        
+        .candle.wick {
+            position: absolute;
+            width: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #495057;
+        }
+        
+        .candle-emoji {
+            font-size: 2em;
+            text-align: center;
+            margin-top: 5px;
+        }
+        
+        .question {
+            text-align: center;
+            font-size: 1.3em;
+            color: #495057;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 15px;
+            border: 3px dashed #ffc107;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 0 20px 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 20px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 rgba(0,0,0,0.2);
+        }
+        
+        .btn-up {
+            background: linear-gradient(180deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .btn-up:hover {
+            background: linear-gradient(180deg, #218838 0%, #1e7e34 100%);
+        }
+        
+        .btn-down {
+            background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        
+        .btn-down:hover {
+            background: linear-gradient(180deg, #c82333 0%, #a71d2a 100%);
+        }
+        
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 6em;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .feedback.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .start-screen, .level-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .start-screen h2 {
+            font-size: 2em;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+        
+        .start-screen p {
+            font-size: 1.1em;
+            color: #6c757d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .start-btn {
+            padding: 20px 50px;
+            font-size: 1.5em;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(240, 147, 251, 0.5);
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .pattern-hint {
+            text-align: center;
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+            transition: width 0.5s ease;
+        }
+        
+        .animal-farm {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+        
+        .farm-animal {
+            font-size: 2em;
+            padding: 5px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .bounce {
+            animation: bounce 0.5s ease infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease;
+        }
+        
+        .music-control {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .music-control:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+        
+        .music-control.muted {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <div style="font-size: 6em; margin-bottom: 20px;">🐂 🆚 🐻</div>
+            <h2>Bull vs Bear:<br>Market Adventures!</h2>
+            <p>Learn to read candlestick charts!<br>Help Bull and Bear predict where the market goes!<br>Collect coins and build your animal farm! 🐮🐷🐔</p>
+            <button class="start-btn" onclick="startGame()">🎮 Start Playing!</button>
+        </div>
+
+        <!-- Level Up Screen -->
+        <div class="level-screen hidden" id="levelScreen">
+            <div style="font-size: 5em; margin-bottom: 20px;">⭐</div>
+            <h2>Level Up!</h2>
+            <p id="levelMessage">You're getting better at reading charts!</p>
+            <div class="animal-farm" id="newAnimal"></div>
+            <button class="start-btn" onclick="continueGame()">Continue ➡️</button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>🐂 Bull vs Bear 🐻</h1>
+            <div style="font-size: 0.9em; opacity: 0.9;">Market Adventures</div>
+        </div>
+
+        <!-- Score Board -->
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">💰 COINS</div>
+                <div class="score-value coins" id="coins">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">🔥 STREAK</div>
+                <div class="score-value streak" id="streak">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">⭐ LEVEL</div>
+                <div class="score-value level" id="level">1</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div style="padding: 0 20px;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div style="text-align: center; font-size: 0.8em; color: #6c757d;">
+                Progress to next animal! 🐮
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <!-- Mascots -->
+            <div class="mascot-container">
+                <div class="mascot bull" id="bullMascot" onclick="mascotJump('bull')">🐂</div>
+                <div class="vs-text">VS</div>
+                <div class="mascot bear" id="bearMascot" onclick="mascotJump('bear')">🐻</div>
+            </div>
+
+            <!-- Chart -->
+            <div class="chart-container">
+                <div class="chart-title">📊 What happens next?</div>
+                <div class="candles" id="candles">
+                    <!-- Candles generated by JS -->
+                </div>
+                <div class="pattern-hint" id="patternHint">
+                    Look at the pattern! Green = Up 📈, Red = Down 📉
+                </div>
+            </div>
+
+            <!-- Question -->
+            <div class="question" id="question">
+                Will the next candle go UP or DOWN? 🤔
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons">
+            <button class="btn btn-up" onclick="makeGuess('up')">
+                📈 UP!
+            </button>
+            <button class="btn btn-down" onclick="makeGuess('down')">
+                📉 DOWN!
+            </button>
+        </div>
+
+        <!-- Animal Farm Display -->
+        <div class="animal-farm" id="animalFarm">
+            <div style="width: 100%; text-align: center; color: #6c757d; font-size: 0.9em;">
+                Your Farm: Collect animals with coins! 🏆
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Emoji -->
+    <div class="feedback" id="feedback"></div>
+    
+    <!-- Sound Control Button -->
+    <button class="music-control" id="musicBtn" onclick="toggleMusic()">🔊</button>
+
+    <script>
+        // Game State
+        let gameState = {
+            coins: 0,
+            streak: 0,
+            level: 1,
+            correctAnswers: 0,
+            totalQuestions: 0,
+            animals: ['🐮'], // Start with cow
+            currentPattern: null,
+            nextDirection: null
+        };
+
+        // Sound Effects State
+        let soundState = {
+            enabled: true,
+            synth: null,
+            initialized: false
+        };
+
+        // Initialize sound effects
+        async function initSounds() {
+            if (soundState.initialized) return;
+            
+            await Tone.start();
+            
+            // Create synth for sound effects
+            soundState.synth = new Tone.PolySynth(Tone.Synth, {
+                oscillator: {
+                    type: "triangle"
+                },
+                envelope: {
+                    attack: 0.01,
+                    decay: 0.1,
+                    sustain: 0.1,
+                    release: 0.5
+                }
+            }).toDestination();
+            
+            soundState.synth.volume.value = -5;
+            soundState.initialized = true;
+        }
+
+        // Play celebration sound for correct answer
+        function playCorrectSound() {
+            if (!soundState.enabled || !soundState.initialized) return;
+            
+            const now = Tone.now();
+            // Happy ascending arpeggio
+            soundState.synth.triggerAttackRelease("C5", "16n", now);
+            soundState.synth.triggerAttackRelease("E5", "16n", now + 0.1);
+            soundState.synth.triggerAttackRelease("G5", "16n", now + 0.2);
+            soundState.synth.triggerAttackRelease("C6", "8n", now + 0.3);
+        }
+
+        // Play sad sound for wrong answer
+        function playWrongSound() {
+            if (!soundState.enabled || !soundState.initialized) return;
+            
+            const now = Tone.now();
+            // Sad descending notes
+            soundState.synth.triggerAttackRelease("G4", "16n", now);
+            soundState.synth.triggerAttackRelease("E4", "16n", now + 0.15);
+            soundState.synth.triggerAttackRelease("C4", "8n", now + 0.3);
+        }
+
+        // Play level up sound
+        function playLevelUpSound() {
+            if (!soundState.enabled || !soundState.initialized) return;
+            
+            const now = Tone.now();
+            // Victory fanfare
+            soundState.synth.triggerAttackRelease("C5", "16n", now);
+            soundState.synth.triggerAttackRelease("E5", "16n", now + 0.1);
+            soundState.synth.triggerAttackRelease("G5", "16n", now + 0.2);
+            soundState.synth.triggerAttackRelease("C6", "8n", now + 0.3);
+            soundState.synth.triggerAttackRelease("G5", "16n", now + 0.5);
+            soundState.synth.triggerAttackRelease("C6", "4n", now + 0.6);
+        }
+
+        // Toggle sounds on/off
+        async function toggleMusic() {
+            const btn = document.getElementById('musicBtn');
+            
+            if (!soundState.initialized) {
+                await initSounds();
+            }
+            
+            soundState.enabled = !soundState.enabled;
+            
+            if (soundState.enabled) {
+                btn.textContent = '🔊';
+                btn.classList.remove('muted');
+            } else {
+                btn.textContent = '🔇';
+                btn.classList.add('muted');
+            }
+        }
+
+        // Initialize sounds on first user interaction
+        document.addEventListener('click', async function initOnFirstClick() {
+            if (!soundState.initialized) {
+                await initSounds();
+            }
+            document.removeEventListener('click', initOnFirstClick);
+        }, { once: true });
+
+        // Animal rewards at coin milestones
+        const animalRewards = [
+            { coins: 0, animal: '🐮', name: 'Cow' },
+            { coins: 50, animal: '🐷', name: 'Pig' },
+            { coins: 100, animal: '🐔', name: 'Chicken' },
+            { coins: 200, animal: '🐑', name: 'Sheep' },
+            { coins: 350, animal: '🦆', name: 'Duck' },
+            { coins: 500, animal: '🐴', name: 'Horse' },
+            { coins: 750, animal: '🦚', name: 'Peacock' },
+            { coins: 1000, animal: '🦒', name: 'Giraffe' },
+            { coins: 1500, animal: '🐘', name: 'Elephant' },
+            { coins: 2000, animal: '🦁', name: 'Lion' }
+        ];
+
+        // Pattern types for educational variety
+        const patterns = [
+            { name: 'Green Streak', hint: 'Green candles often continue up! 📈', bias: 'up' },
+            { name: 'Red Streak', hint: 'Red candles often continue down! 📉', bias: 'down' },
+            { name: 'Bounce Up', hint: 'After red, sometimes it bounces up! 🏀', bias: 'up' },
+            { name: 'Bounce Down', hint: 'After green, sometimes it falls down! 🍂', bias: 'down' },
+            { name: 'Big Green', hint: 'Big green candle = strong up! 💪', bias: 'up' },
+            { name: 'Big Red', hint: 'Big red candle = strong down! 😰', bias: 'down' }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            generateNewRound();
+            updateDisplay();
+        }
+
+        function generateNewRound() {
+            const candleContainer = document.getElementById('candles');
+            candleContainer.innerHTML = '';
+            
+            // Pick a pattern
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            gameState.currentPattern = pattern;
+            
+            // Generate 3-4 candles based on pattern
+            const numCandles = 3 + Math.floor(Math.random() * 2);
+            const candleData = [];
+            
+            for (let i = 0; i < numCandles; i++) {
+                let isGreen;
+                
+                // Bias based on pattern
+                if (pattern.bias === 'up') {
+                    isGreen = Math.random() > 0.3; // 70% green
+                } else if (pattern.bias === 'down') {
+                    isGreen = Math.random() < 0.3; // 30% green
+                } else {
+                    isGreen = Math.random() > 0.5;
+                }
+                
+                candleData.push(isGreen);
+                
+                // Create candle element
+                const candle = document.createElement('div');
+                candle.className = `candle ${isGreen ? 'green' : 'red'}`;
+                candle.style.height = `${40 + Math.random() * 60}px`;
+                
+                // Add wick
+                const wick = document.createElement('div');
+                wick.className = 'candle wick';
+                wick.style.height = `${10 + Math.random() * 20}px`;
+                wick.style.top = `-${10 + Math.random() * 10}px`;
+                candle.appendChild(wick);
+                
+                // Add emoji
+                const emoji = document.createElement('div');
+                emoji.className = 'candle-emoji';
+                emoji.textContent = isGreen ? '📗' : '📕';
+                candle.appendChild(emoji);
+                
+                candleContainer.appendChild(candle);
+            }
+            
+            // Determine next direction (70% follows pattern bias)
+            const followPattern = Math.random() > 0.3;
+            gameState.nextDirection = followPattern ? pattern.bias : (pattern.bias === 'up' ? 'down' : 'up');
+            
+            // Update hint
+            document.getElementById('patternHint').textContent = `💡 Hint: ${pattern.hint}`;
+        }
+
+        function makeGuess(direction) {
+            const correct = direction === gameState.nextDirection;
+            gameState.totalQuestions++;
+            
+            if (correct) {
+                // Correct answer
+                gameState.coins += 10 + (gameState.streak * 2);
+                gameState.streak++;
+                gameState.correctAnswers++;
+                
+                // Show feedback
+                showFeedback('✅');
+                
+                // Play celebration sound
+                playCorrectSound();
+                
+                // Animate mascots
+                if (direction === 'up') {
+                    document.getElementById('bullMascot').classList.add('bounce');
+                    setTimeout(() => document.getElementById('bullMascot').classList.remove('bounce'), 500);
+                } else {
+                    document.getElementById('bearMascot').classList.add('bounce');
+                    setTimeout(() => document.getElementById('bearMascot').classList.remove('bounce'), 500);
+                }
+                
+                // Check for new animal
+                checkNewAnimal();
+                
+            } else {
+                // Wrong answer
+                gameState.streak = 0;
+                showFeedback('❌');
+                
+                // Play sad sound
+                playWrongSound();
+                
+                document.querySelector('.game-container').classList.add('shake');
+                setTimeout(() => document.querySelector('.game-container').classList.remove('shake'), 500);
+            }
+            
+            // Level up every 5 correct answers
+            gameState.level = 1 + Math.floor(gameState.correctAnswers / 5);
+            
+            updateDisplay();
+            
+            // Generate new round after delay
+            setTimeout(() => {
+                generateNewRound();
+            }, 1500);
+        }
+
+        function showFeedback(emoji) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = emoji;
+            feedback.classList.add('show');
+            setTimeout(() => feedback.classList.remove('show'), 800);
+        }
+
+        function checkNewAnimal() {
+            const nextReward = animalRewards.find(r => r.coins > gameState.coins);
+            const currentProgress = nextReward ? (gameState.coins / nextReward.coins) * 100 : 100;
+            document.getElementById('progressFill').style.width = `${currentProgress}%`;
+            
+            // Check if we earned a new animal
+            const earnedAnimal = animalRewards.find(r => 
+                r.coins <= gameState.coins && !gameState.animals.includes(r.animal)
+            );
+            
+            if (earnedAnimal) {
+                gameState.animals.push(earnedAnimal.animal);
+                showLevelUp(earnedAnimal);
+            }
+        }
+
+        function showLevelUp(animal) {
+            document.getElementById('levelMessage').textContent = 
+                `You earned a ${animal.name}! Keep trading to collect more animals!`;
+            document.getElementById('newAnimal').innerHTML = 
+                `<div class="farm-animal" style="font-size: 4em;">${animal.animal}</div>`;
+            document.getElementById('levelScreen').classList.remove('hidden');
+            
+            // Play victory sound
+            playLevelUpSound();
+        }
+
+        function continueGame() {
+            document.getElementById('levelScreen').classList.add('hidden');
+            generateNewRound();
+        }
+
+        function updateDisplay() {
+            document.getElementById('coins').textContent = gameState.coins;
+            document.getElementById('streak').textContent = gameState.streak;
+            document.getElementById('level').textContent = gameState.level;
+            
+            // Update farm display
+            const farmContainer = document.getElementById('animalFarm');
+            if (gameState.animals.length > 0) {
+                farmContainer.innerHTML = gameState.animals.map(animal => 
+                    `<div class="farm-animal">${animal}</div>`
+                ).join('');
+            }
+            
+            // Update progress
+            const nextReward = animalRewards.find(r => r.coins > gameState.coins);
+            const currentProgress = nextReward ? (gameState.coins / nextReward.coins) * 100 : 100;
+            document.getElementById('progressFill').style.width = `${currentProgress}%`;
+        }
+
+        function mascotJump(mascot) {
+            const element = document.getElementById(mascot + 'Mascot');
+            element.classList.add('pulse');
+            setTimeout(() => element.classList.remove('pulse'), 500);
+        }
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>

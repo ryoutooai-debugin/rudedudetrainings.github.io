@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Leaderboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      padding: 40px 0;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #888;
+      font-size: 1.1rem;
+    }
+    
+    .disclaimer {
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 20px 0;
+      font-size: 0.85rem;
+      color: #888;
+      text-align: center;
+    }
+    
+    .disclaimer strong {
+      color: #ff9f43;
+    }
+    
+    .privacy-notice {
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-left: 3px solid #00d4ff;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+    
+    .privacy-notice h3 {
+      color: #00d4ff;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    
+    .privacy-notice ul {
+      margin-left: 20px;
+      color: #aaa;
+    }
+    
+    .privacy-notice li {
+      margin: 4px 0;
+    }
+    
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+      color: #888;
+    }
+    
+    .tab:hover {
+      background: #252540;
+    }
+    
+    .tab.active {
+      background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+      color: white;
+      border-color: transparent;
+    }
+    
+    .trader-setup {
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .trader-setup h2 {
+      margin-bottom: 16px;
+      color: #fff;
+    }
+    
+    .trader-setup input {
+      padding: 12px 16px;
+      background: #0a0a0f;
+      border: 1px solid #2a2a3e;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      width: 250px;
+      margin-right: 10px;
+    }
+    
+    .trader-setup input:focus {
+      outline: none;
+      border-color: #00d4ff;
+    }
+    
+    .trader-setup button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .trader-setup button:hover {
+      opacity: 0.9;
+    }
+    
+    .current-trader {
+      background: #1a1a2e;
+      border: 1px solid #2a2a3e;
+      border-radius: 16px;
+      padding: 16px 24px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .current-trader .info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .current-trader .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    
+    .current-trader .name {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .current-trader .id {
+      font-size: 0.75rem;
+      color: #666;
+      font-family: monospace;
+    }
+    
+    .current-trader button {
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid #2a2a3e;
+      border-radius: 6px;
+      color: #888;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    
+    .current-trader button:hover {
+      border-color: #ff4757;
+      color: #ff4757;
+    }
+    
+    .leaderboard {
+      background: #1a1a2e;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #2a2a3e;
+    }
+    
+    .leaderboard-header {
+      display: grid;
+      grid-template-columns: 60px 1fr 100px 80px 80px 100px;
+      padding: 16px 20px;
+      background: #252540;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 100px 80px 80px 100px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a3e;
+      align-items: center;
+      transition: background 0.2s;
+    }
+    
+    .leaderboard-row:hover {
+      background: #252540;
+    }
+    
+    .leaderboard-row:last-child {
+      border-bottom: none;
+    }
+    
+    .leaderboard-row.you {
+      background: rgba(0, 212, 255, 0.1);
+      border-left: 3px solid #00d4ff;
+    }
+    
+    .rank {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    
+    .rank-1 { color: #ffd700; }
+    .rank-2 { color: #c0c0c0; }
+    .rank-3 { color: #cd7f32; }
+    
+    .trader {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00d4ff, #7b2cbf);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    
+    .trader-name {
+      font-weight: 600;
+    }
+    
+    .you-badge {
+      font-size: 0.7rem;
+      background: #00d4ff;
+      color: #0a0a0f;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+    
+    .pnl-positive {
+      color: #00d084;
+      font-weight: 700;
+    }
+    
+    .pnl-negative {
+      color: #ff4757;
+      font-weight: 700;
+    }
+    
+    .stat {
+      color: #aaa;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: #888;
+    }
+    
+    .error {
+      text-align: center;
+      padding: 40px;
+      color: #ff4757;
+    }
+    
+    .empty {
+      text-align: center;
+      padding: 60px;
+      color: #888;
+    }
+    
+    .last-updated {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 0.85rem;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+      font-size: 0.8rem;
+    }
+    
+    footer a {
+      color: #00d4ff;
+      text-decoration: none;
+    }
+    
+    @media (max-width: 600px) {
+      .leaderboard-header,
+      .leaderboard-row {
+        grid-template-columns: 50px 1fr 80px;
+      }
+      
+      .leaderboard-header > :nth-child(4),
+      .leaderboard-header > :nth-child(5),
+      .leaderboard-header > :nth-child(6),
+      .leaderboard-row > :nth-child(4),
+      .leaderboard-row > :nth-child(5),
+      .leaderboard-row > :nth-child(6) {
+        display: none;
+      }
+      
+      .trader-setup input {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-right: 0;
+      }
+      
+      .trader-setup button {
+        width: 100%;
+      }
+      
+      .current-trader {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏆 Trading Leaderboard</h1>
+      <p class="subtitle">Top performers by P&L percentage</p>
+    </header>
+    
+    <div class="disclaimer">
+      <strong>⚠️ For Entertainment & Educational Purposes Only</strong><br>
+      This is a simulated trading game. No real money is involved. 
+      Past performance in the game does not guarantee future results. 
+      Not financial advice.
+    </div>
+    
+    <div class="privacy-notice">
+      <h3>🔒 Privacy Notice</h3>
+      <ul>
+        <li>No email, password, or personal information required</li>
+        <li>Your trader identity is stored only in this browser</li>
+        <li><strong>Important:</strong> Clearing cookies or using a different device creates a new identity</li>
+        <li>We only collect: display name, trade history, and game statistics</li>
+      </ul>
+    </div>
+    
+    <div style="text-align: center; margin: 20px 0;">
+      <a href="index.html" style="color: #00d4ff; text-decoration: none; font-size: 1.1rem;">← Back to Games</a>
+    </div>
+    
+    <div id="traderSection"></div>
+    
+    <div class="tabs">
+      <button class="tab active" data-timeframe="monthly">This Month</button>
+      <button class="tab" data-timeframe="all_time">All Time</button>
+    </div>
+    
+    <div class="leaderboard" id="leaderboard">
+      <div class="loading">Loading leaderboard...</div>
+    </div>
+    
+    <div class="last-updated" id="lastUpdated"></div>
+    
+    <footer>
+      <p>Made for fun and learning 📚</p>
+      <p style="margin-top: 8px;">Trade responsibly. Learn continuously.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Supabase config
+    const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
+    
+    // Initialize Supabase
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    let currentTimeframe = 'monthly';
+    let currentUser = null;
+    
+    // Cache for leaderboard data
+    const cache = {
+      monthly: { data: null, timestamp: 0 },
+      all_time: { data: null, timestamp: 0 }
+    };
+    
+    // Error tracking
+    let lastErrorTime = 0;
+    const ERROR_BACKOFF_MS = 60000;
+    const CACHE_DURATION_MS = 15 * 60 * 1000;
+    
+    // Load or create user
+    function loadUser() {
+      const stored = localStorage.getItem('traderUser');
+      if (stored) {
+        currentUser = JSON.parse(stored);
+        showCurrentTrader();
+        loadLeaderboard(currentTimeframe);
+      } else {
+        showTraderSetup();
+      }
+    }
+    
+    function showTraderSetup() {
+      document.getElementById('traderSection').innerHTML = `
+        <div class="trader-setup">
+          <h2>👋 Welcome, Trader!</h2>
+          <p style="color: #888; margin-bottom: 16px;">Choose your display name to join the leaderboard</p>
+          <input type="text" id="displayNameInput" placeholder="YourTraderName" maxlength="32">
+          <button onclick="createTrader()">Start Trading</button>
+          <p style="color: #666; font-size: 0.8rem; margin-top: 12px;">
+            Or leave blank for a random name
+          </p>
+        </div>
+      `;
+    }
+    
+    function showCurrentTrader() {
+      if (!currentUser) return;
+      
+      const avatar = currentUser.display_name.charAt(0).toUpperCase();
+      const shortId = currentUser.id.substring(0, 8);
+      
+      document.getElementById('traderSection').innerHTML = `
+        <div class="current-trader">
+          <div class="info">
+            <div class="avatar">${avatar}</div>
+            <div>
+              <div class="name">${currentUser.display_name}</div>
+              <div class="id">ID: ${shortId}...</div>
+            </div>
+          </div>
+          <button onclick="resetTrader()">New Identity</button>
+        </div>
+      `;
+    }
+    
+    async function createTrader() {
+      const displayName = document.getElementById('displayNameInput').value.trim() || generateRandomName();
+      
+      if (Date.now() - lastErrorTime < ERROR_BACKOFF_MS) {
+        alert('Service temporarily unavailable. Please try again in a minute.');
+        return;
+      }
+      
+      try {
+        // Generate UUID for user
+        const userId = generateUUID();
+        
+        const { data, error } = await supabaseClient
+          .from('users')
+          .insert([{
+            id: userId,
+            display_name: displayName,
+            created_at: new Date().toISOString()
+          }])
+          .select()
+          .single();
+        
+        if (error) throw error;
+        
+        currentUser = {
+          id: data.id,
+          display_name: data.display_name
+        };
+        
+        localStorage.setItem('traderUser', JSON.stringify(currentUser));
+        showCurrentTrader();
+        loadLeaderboard(currentTimeframe);
+        
+      } catch (error) {
+        lastErrorTime = Date.now();
+        console.error('Error creating trader:', error);
+        alert('Service temporarily unavailable. Please try again later.');
+      }
+    }
+    
+    function resetTrader() {
+      if (confirm('Create a new trader identity? Your current history will remain but you\'ll start fresh.')) {
+        localStorage.removeItem('traderUser');
+        currentUser = null;
+        showTraderSetup();
+      }
+    }
+    
+    async function loadLeaderboard(timeframe) {
+      const leaderboard = document.getElementById('leaderboard');
+      const now = Date.now();
+      
+      // Check cache
+      const cached = cache[timeframe];
+      if (cached.data && (now - cached.timestamp) < CACHE_DURATION_MS) {
+        renderLeaderboard(cached.data);
+        document.getElementById('lastUpdated').textContent = 
+          `Last updated: ${new Date(cached.timestamp).toLocaleString()} (cached)`;
+        return;
+      }
+      
+      // Check error backoff
+      if (now - lastErrorTime < ERROR_BACKOFF_MS) {
+        if (cached.data) {
+          renderLeaderboard(cached.data);
+          document.getElementById('lastUpdated').textContent = 
+            `Last updated: ${new Date(cached.timestamp).toLocaleString()} (offline mode)`;
+        } else {
+          leaderboard.innerHTML = '<div class="error">Service temporarily unavailable. Please try again later.</div>';
+        }
+        return;
+      }
+      
+      leaderboard.innerHTML = '<div class="loading">Loading leaderboard...</div>';
+      
+      try {
+        let query = supabaseClient
+          .from('trades')
+          .select('user_id, display_name:users(display_name), pnl_pct, created_at');
+        
+        if (timeframe === 'monthly') {
+          const startOfMonth = new Date();
+          startOfMonth.setDate(1);
+          startOfMonth.setHours(0, 0, 0, 0);
+          query = query.gte('created_at', startOfMonth.toISOString());
+        }
+        
+        const { data, error } = await query;
+        
+        if (error) throw error;
+        
+        // Process data into rankings
+        const rankings = processRankings(data);
+        
+        // Cache the data
+        cache[timeframe] = {
+          data: rankings,
+          timestamp: now
+        };
+        
+        renderLeaderboard(rankings);
+        document.getElementById('lastUpdated').textContent = 
+          `Last updated: ${new Date().toLocaleString()}`;
+        
+      } catch (error) {
+        lastErrorTime = now;
+        console.error('Error loading leaderboard:', error);
+        
+        if (cached.data) {
+          renderLeaderboard(cached.data);
+          document.getElementById('lastUpdated').textContent = 
+            `Last updated: ${new Date(cached.timestamp).toLocaleString()} (offline mode)`;
+        } else {
+          leaderboard.innerHTML = '<div class="error">Unable to load leaderboard. Please try again later.</div>';
+        }
+      }
+    }
+    
+    function processRankings(trades) {
+      // Group by user and calculate stats
+      const userStats = {};
+      
+      trades.forEach(trade => {
+        const userId = trade.user_id;
+        const displayName = trade.display_name?.display_name || 'Unknown';
+        
+        if (!userStats[userId]) {
+          userStats[userId] = {
+            user_id: userId,
+            display_name: displayName,
+            total_pnl_pct: 0,
+            trade_count: 0,
+            wins: 0,
+            returns: []
+          };
+        }
+        
+        userStats[userId].total_pnl_pct += trade.pnl_pct || 0;
+        userStats[userId].trade_count++;
+        if (trade.pnl_pct > 0) userStats[userId].wins++;
+        userStats[userId].returns.push(trade.pnl_pct || 0);
+      });
+      
+      // Convert to array and calculate derived stats
+      return Object.values(userStats).map(user => ({
+        user_id: user.user_id,
+        display_name: user.display_name,
+        total_pnl_pct: user.total_pnl_pct,
+        trade_count: user.trade_count,
+        win_rate: user.trade_count > 0 ? (user.wins / user.trade_count * 100) : 0,
+        avg_return: user.returns.reduce((a, b) => a + b, 0) / user.returns.length
+      })).sort((a, b) => b.total_pnl_pct - a.total_pnl_pct);
+    }
+    
+    function renderLeaderboard(rankings) {
+      const leaderboard = document.getElementById('leaderboard');
+      
+      if (rankings.length === 0) {
+        leaderboard.innerHTML = '<div class="empty">No traders yet. Be the first!</div>';
+        return;
+      }
+      
+      const header = `
+        <div class="leaderboard-header">
+          <div>Rank</div>
+          <div>Trader</div>
+          <div>P&L %</div>
+          <div>Trades</div>
+          <div>Win Rate</div>
+          <div>Avg Return</div>
+        </div>
+      `;
+      
+      const rows = rankings.map((trader, index) => {
+        const rank = index + 1;
+        const rankClass = rank <= 3 ? `rank-${rank}` : '';
+        const pnlClass = trader.total_pnl_pct >= 0 ? 'pnl-positive' : 'pnl-negative';
+        const pnlSign = trader.total_pnl_pct >= 0 ? '+' : '';
+        const avatar = trader.display_name.charAt(0).toUpperCase();
+        const isYou = currentUser && trader.user_id === currentUser.id;
+        const youBadge = isYou ? '<span class="you-badge">YOU</span>' : '';
+        
+        return `
+          <div class="leaderboard-row ${isYou ? 'you' : ''}">
+            <div class="rank ${rankClass}">${rank <= 3 ? ['🥇','🥈','🥉'][rank-1] : rank}</div>
+            <div class="trader">
+              <div class="avatar">${avatar}</div>
+              <div class="trader-name">${trader.display_name}${youBadge}</div>
+            </div>
+            <div class="${pnlClass}">${pnlSign}${trader.total_pnl_pct.toFixed(2)}%</div>
+            <div class="stat">${trader.trade_count}</div>
+            <div class="stat">${trader.win_rate.toFixed(0)}%</div>
+            <div class="stat">${trader.avg_return >= 0 ? '+' : ''}${trader.avg_return.toFixed(2)}%</div>
+          </div>
+        `;
+      }).join('');
+      
+      leaderboard.innerHTML = header + rows;
+    }
+    
+    function generateRandomName() {
+      const adjectives = ['Swift', 'Bold', 'Clever', 'Wise', 'Lucky', 'Sharp', 'Quick', 'Calm'];
+      const nouns = ['Trader', 'Owl', 'Wolf', 'Hawk', 'Fox', 'Bear', 'Bull', 'Eagle'];
+      const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+      const noun = nouns[Math.floor(Math.random() * nouns.length)];
+      const num = Math.floor(Math.random() * 999);
+      return `${adj}${noun}${num}`;
+    }
+    
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentTimeframe = tab.dataset.timeframe;
+        loadLeaderboard(currentTimeframe);
+      });
+    });
+    
+    // Initialize
+    loadUser();
+    
+    // Auto-refresh every 15 minutes
+    setInterval(() => {
+      if (currentUser) {
+        loadLeaderboard(currentTimeframe);
+      }
+    }, 15 * 60 * 1000);
+  </script>
+</body>
+</html>

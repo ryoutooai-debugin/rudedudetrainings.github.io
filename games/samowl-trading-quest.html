@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🦉 SamOwl's Trading Quest - Strategy & Adventure!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            font-family: 'Segoe UI', 'Comic Sans MS', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 600px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+            color: white;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .samowl-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .samowl-logo {
+            font-size: 3em;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+        
+        .brand-text h1 {
+            font-size: 1.6em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .brand-text p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .age-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat-label {
+            font-size: 0.7em;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .stat-value.portfolio { color: #4ade80; }
+        .stat-value.xp { color: #fbbf24; }
+        .stat-value.rank { color: #f472b6; }
+        
+        /* Game Tabs */
+        .tabs {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            padding: 5px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        
+        .tab:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 20px;
+            min-height: 400px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Trade Tab */
+        .chart-area {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .stock-name {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .stock-price {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .stock-price.up { color: #4ade80; }
+        .stock-price.down { color: #f87171; }
+        
+        .chart-canvas {
+            height: 150px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 10px;
+            gap: 4px;
+        }
+        
+        .chart-bar {
+            width: 20px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        .chart-bar.green {
+            background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+        }
+        
+        .chart-bar.red {
+            background: linear-gradient(180deg, #f87171 0%, #ef4444 100%);
+        }
+        
+        .trade-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .trade-btn {
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .trade-btn.buy {
+            background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+            color: white;
+            box-shadow: 0 6px 0 #15803d;
+        }
+        
+        .trade-btn.sell {
+            background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            box-shadow: 0 6px 0 #b91c1c;
+        }
+        
+        .trade-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0;
+        }
+        
+        .trade-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Portfolio Tab */
+        .portfolio-summary {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .portfolio-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4ade80;
+        }
+        
+        .portfolio-change {
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+        
+        .holdings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .holding-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .holding-info h4 {
+            font-size: 1.1em;
+            margin-bottom: 3px;
+        }
+        
+        .holding-info p {
+            font-size: 0.85em;
+            color: #a0a0a0;
+        }
+        
+        .holding-value {
+            text-align: right;
+        }
+        
+        .holding-value .value {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .holding-value .change {
+            font-size: 0.85em;
+        }
+        
+        /* Quests Tab */
+        .quest-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .quest-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .quest-item.completed {
+            border-left-color: #22c55e;
+            opacity: 0.7;
+        }
+        
+        .quest-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .quest-title {
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        .quest-reward {
+            background: #fbbf24;
+            color: #333;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .quest-progress {
+            background: rgba(0,0,0,0.3);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .quest-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .quest-text {
+            font-size: 0.85em;
+            color: #a0a0a0;
+        }
+        
+        /* Learn Tab */
+        .lesson-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .lesson-card h3 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .lesson-card p {
+            color: #d0d0d0;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+        
+        .lesson-card .example {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        /* Start Screen */
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .start-mascot {
+            font-size: 6em;
+            margin-bottom: 20px;
+            animation: mascotFloat 2s ease-in-out infinite;
+        }
+        
+        @keyframes mascotFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .start-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .start-subtitle {
+            font-size: 1.1em;
+            color: #a0a0a0;
+            margin-bottom: 25px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .feature-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .feature-item .emoji {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        
+        .feature-item p {
+            font-size: 0.85em;
+            color: #d0d0d0;
+        }
+        
+        .start-btn {
+            padding: 18px 50px;
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Feedback */
+        .feedback-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            color: #333;
+            padding: 30px 50px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease;
+        }
+        
+        .feedback-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .feedback-popup .emoji {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+        
+        .feedback-popup h3 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .feedback-popup p {
+            color: #666;
+        }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <div class="start-mascot">🦉</div>
+            <h1 class="start-title">SamOwl's Trading Quest</h1>
+            <p class="start-subtitle">Master the markets, complete quests, level up!</p>
+            <div class="age-badge">Ages 10-12</div>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="emoji">📈</div>
+                    <p>Trade Stocks</p>
+                </div>
+                <div class="feature-item">
+                    <div class="emoji">🎯</div>
+                    <p>Complete Quests</p>
+                </div>
+                <div class="feature-item">
+                    <div class="emoji">📚</div>
+                    <p>Learn Strategies</p>
+                </div>
+                <div class="feature-item">
+                    <div class="emoji">🏆</div>
+                    <p>Level Up</p>
+                </div>
+            </div>
+            
+            <button class="start-btn" onclick="startGame()">🚀 Start Your Quest!</button>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <div class="samowl-brand">
+                <div class="samowl-logo">🦉</div>
+                <div class="brand-text">
+                    <h1>SamOwl</h1>
+                    <p>Trading Quest</p>
+                </div>
+            </div>
+            <div class="age-badge">Ages 10-12</div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="stat-label">Portfolio</div>
+                <div class="stat-value portfolio" id="portfolioValue">$10,000</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">XP</div>
+                <div class="stat-value xp" id="xpValue">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Rank</div>
+                <div class="stat-value rank" id="rankValue">Rookie</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('trade')">📈 Trade</div>
+            <div class="tab" onclick="switchTab('portfolio')">💼 Portfolio</div>
+            <div class="tab" onclick="switchTab('quests')">🎯 Quests</div>
+            <div class="tab" onclick="switchTab('learn')">📚 Learn</div>
+        </div>
+
+        <!-- Trade Tab -->
+        <div class="tab-content active" id="tradeTab">
+            <div class="chart-area">
+                <div class="stock-header">
+                    <div class="stock-name" id="stockName">AAPL</div>
+                    <div class="stock-price up" id="stockPrice">$150.00</div>
+                </div>
+                <div class="chart-canvas" id="chartCanvas">
+                    <!-- Bars generated by JS -->
+                </div>
+            </div>
+            
+            <div class="trade-buttons">
+                <button class="trade-btn buy" onclick="trade('buy')">
+                    <span>📈</span>
+                    <span>BUY</span>
+                </button>
+                <button class="trade-btn sell" onclick="trade('sell')">
+                    <span>📉</span>
+                    <span>SELL</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Portfolio Tab -->
+        <div class="tab-content" id="portfolioTab">
+            <div class="portfolio-summary">
+                <div class="portfolio-value" id="totalValue">$10,000</div>
+                <div class="portfolio-change" id="totalChange">+0.00%</div>
+            </div>
+            
+            <div class="holdings-list" id="holdingsList">
+                <div class="holding-item">
+                    <div class="holding-info">
+                        <h4>Cash</h4>
+                        <p>Available to trade</p>
+                    </div>
+                    <div class="holding-value">
+                        <div class="value" id="cashValue">$10,000</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quests Tab -->
+        <div class="tab-content" id="questsTab">
+            <div class="quest-list" id="questList">
+                <!-- Quests generated by JS -->
+            </div>
+        </div>
+
+        <!-- Learn Tab -->
+        <div class="tab-content" id="learnTab">
+            <div class="lesson-card">
+                <h3>📗 What is a Stock?</h3>
+                <p>A stock represents ownership in a company. When you buy a stock, you own a small piece of that company!</p>
+            </div>
+            
+            <div class="lesson-card">
+                <h3>📈 Bull vs Bear Markets</h3>
+                <p>A <strong>Bull Market</strong> means prices are going UP 📈<br>
+                A <strong>Bear Market</strong> means prices are going DOWN 📉</p>
+            </div>
+            
+            <div class="lesson-card">
+                <h3>🎯 Buy Low, Sell High</h3>
+                <p>The goal of trading is to buy stocks when they're cheap and sell them when they're worth more!</p>
+                <div class="example">
+                    Buy at $50 → Sell at $75 = $25 profit! 💰
+                </div>
+            </div>
+            
+            <div class="lesson-card">
+                <h3>📊 Reading Charts</h3>
+                <p>Green bars mean the price went UP that day.<br>
+                Red bars mean the price went DOWN that day.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Popup -->
+    <div class="feedback-popup" id="feedbackPopup">
+        <div class="emoji" id="feedbackEmoji">✅</div>
+        <h3 id="feedbackTitle">Great Trade!</h3>
+        <p id="feedbackText">You made a profit!</p>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            cash: 10000,
+            portfolio: 0,
+            xp: 0,
+            level: 1,
+            holdings: {},
+            currentStock: null,
+            stockPrices: {},
+            quests: [],
+            tradesToday: 0
+        };
+
+        const stocks = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'NFLX', 'NVDA'];
+        
+        const ranks = [
+            { xp: 0, name: 'Rookie', emoji: '🌱' },
+            { xp: 100, name: 'Trader', emoji: '📈' },
+            { xp: 500, name: 'Investor', emoji: '💼' },
+            { xp: 1000, name: 'Analyst', emoji: '📊' },
+            { xp: 2500, name: 'Pro Trader', emoji: '🎯' },
+            { xp: 5000, name: 'Market Master', emoji: '🏆' },
+            { xp: 10000, name: 'Wall Street Wizard', emoji: '🧙' }
+        ];
+
+        const questTemplates = [
+            { id: 1, title: 'First Trade', desc: 'Make your first trade', target: 1, reward: 50, type: 'trades' },
+            { id: 2, title: 'Profit Maker', desc: 'Make a profitable trade', target: 1, reward: 100, type: 'profit' },
+            { id: 3, title: 'Day Trader', desc: 'Complete 5 trades', target: 5, reward: 150, type: 'trades' },
+            { id: 4, title: 'Portfolio Builder', desc: 'Own 3 different stocks', target: 3, reward: 200, type: 'stocks' },
+            { id: 5, title: 'Profit Streak', desc: 'Make 3 profitable trades in a row', target: 3, reward: 300, type: 'streak' }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            initGame();
+        }
+
+        function initGame() {
+            // Initialize stock prices
+            stocks.forEach(stock => {
+                gameState.stockPrices[stock] = {
+                    current: 50 + Math.random() * 200,
+                    history: []
+                };
+                // Generate history
+                for (let i = 0; i < 10; i++) {
+                    gameState.stockPrices[stock].history.push(Math.random() > 0.5);
+                }
+            });
+
+            // Initialize quests
+            gameState.quests = questTemplates.map(q => ({...q, progress: 0, completed: false}));
+
+            // Select first stock
+            selectStock(stocks[0]);
+            
+            updateDisplay();
+            renderQuests();
+        }
+
+        function selectStock(symbol) {
+            gameState.currentStock = symbol;
+            const price = gameState.stockPrices[symbol].current;
+            document.getElementById('stockName').textContent = symbol;
+            document.getElementById('stockPrice').textContent = `$${price.toFixed(2)}`;
+            renderChart(symbol);
+        }
+
+        function renderChart(symbol) {
+            const canvas = document.getElementById('chartCanvas');
+            canvas.innerHTML = '';
+            
+            const history = gameState.stockPrices[symbol].history;
+            history.forEach((isUp, index) => {
+                const bar = document.createElement('div');
+                bar.className = `chart-bar ${isUp ? 'green' : 'red'}`;
+                bar.style.height = `${30 + Math.random() * 70}px`;
+                canvas.appendChild(bar);
+            });
+        }
+
+        function trade(action) {
+            const symbol = gameState.currentStock;
+            const price = gameState.stockPrices[symbol].current;
+            const quantity = 10; // Fixed quantity for simplicity
+            const total = price * quantity;
+
+            if (action === 'buy') {
+                if (gameState.cash >= total) {
+                    gameState.cash -= total;
+                    gameState.holdings[symbol] = (gameState.holdings[symbol] || 0) + quantity;
+                    showFeedback('✅', 'Stock Purchased!', `Bought ${quantity} shares of ${symbol}`);
+                    updateQuests('trades');
+                } else {
+                    showFeedback('❌', 'Not Enough Cash!', 'You need more money to buy');
+                }
+            } else {
+                if (gameState.holdings[symbol] >= quantity) {
+                    gameState.cash += total;
+                    gameState.holdings[symbol] -= quantity;
+                    showFeedback('💰', 'Stock Sold!', `Sold ${quantity} shares of ${symbol}`);
+                    updateQuests('profit');
+                } else {
+                    showFeedback('❌', 'No Shares!', `You don't own enough ${symbol}`);
+                }
+            }
+
+            // Random price movement
+            const priceChange = (Math.random() - 0.5) * 10;
+            gameState.stockPrices[symbol].current += priceChange;
+            gameState.stockPrices[symbol].history.push(priceChange > 0);
+            gameState.stockPrices[symbol].history.shift();
+
+            gameState.xp += 10;
+            gameState.tradesToday++;
+
+            selectStock(symbol);
+            updateDisplay();
+            renderHoldings();
+        }
+
+        function updateQuests(type) {
+            gameState.quests.forEach(quest => {
+                if (!quest.completed && quest.type === type) {
+                    quest.progress++;
+                    if (quest.progress >= quest.target) {
+                        quest.completed = true;
+                        gameState.xp += quest.reward;
+                        setTimeout(() => {
+                            showFeedback('🎯', 'Quest Complete!', `${quest.title} +${quest.reward} XP`);
+                        }, 1500);
+                    }
+                }
+            });
+            renderQuests();
+        }
+
+        function renderQuests() {
+            const list = document.getElementById('questList');
+            list.innerHTML = '';
+            
+            gameState.quests.forEach(quest => {
+                const item = document.createElement('div');
+                item.className = `quest-item ${quest.completed ? 'completed' : ''}`;
+                
+                const progress = (quest.progress / quest.target) * 100;
+                
+                item.innerHTML = `
+                    <div class="quest-header">
+                        <div class="quest-title">${quest.completed ? '✅' : '🎯'} ${quest.title}</div>
+                        <div class="quest-reward">+${quest.reward} XP</div>
+                    </div>
+                    <div class="quest-progress">
+                        <div class="quest-progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    <div class="quest-text">${quest.desc} (${quest.progress}/${quest.target})</div>
+                `;
+                
+                list.appendChild(item);
+            });
+        }
+
+        function renderHoldings() {
+            const list = document.getElementById('holdingsList');
+            list.innerHTML = `
+                <div class="holding-item">
+                    <div class="holding-info">
+                        <h4>Cash</h4>
+                        <p>Available to trade</p>
+                    </div>
+                    <div class="holding-value">
+                        <div class="value">$${gameState.cash.toFixed(2)}</div>
+                    </div>
+                </div>
+            `;
+
+            Object.entries(gameState.holdings).forEach(([symbol, quantity]) => {
+                if (quantity > 0) {
+                    const price = gameState.stockPrices[symbol].current;
+                    const value = quantity * price;
+                    
+                    const item = document.createElement('div');
+                    item.className = 'holding-item';
+                    item.innerHTML = `
+                        <div class="holding-info">
+                            <h4>${symbol}</h4>
+                            <p>${quantity} shares</p>
+                        </div>
+                        <div class="holding-value">
+                            <div class="value">$${value.toFixed(2)}</div>
+                            <div class="change">@ $${price.toFixed(2)}</div>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                }
+            });
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            if (tabName === 'portfolio') {
+                renderHoldings();
+            }
+        }
+
+        function updateDisplay() {
+            // Calculate portfolio value
+            let portfolioValue = gameState.cash;
+            Object.entries(gameState.holdings).forEach(([symbol, quantity]) => {
+                portfolioValue += quantity * gameState.stockPrices[symbol].current;
+            });
+
+            document.getElementById('portfolioValue').textContent = `$${portfolioValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            document.getElementById('xpValue').textContent = gameState.xp;
+            
+            // Update rank
+            const currentRank = ranks.slice().reverse().find(r => gameState.xp >= r.xp);
+            document.getElementById('rankValue').textContent = currentRank ? currentRank.name : 'Rookie';
+            
+            document.getElementById('totalValue').textContent = `$${portfolioValue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            document.getElementById('cashValue').textContent = `$${gameState.cash.toFixed(2)}`;
+        }
+
+        function showFeedback(emoji, title, text) {
+            const popup = document.getElementById('feedbackPopup');
+            document.getElementById('feedbackEmoji').textContent = emoji;
+            document.getElementById('feedbackTitle').textContent = title;
+            document.getElementById('feedbackText').textContent = text;
+            
+            popup.classList.add('show');
+            setTimeout(() => popup.classList.remove('show'), 2000);
+        }
+
+        // Auto-rotate stocks every 30 seconds
+        setInterval(() => {
+            if (gameState.currentStock) {
+                const currentIndex = stocks.indexOf(gameState.currentStock);
+                const nextIndex = (currentIndex + 1) % stocks.length;
+                selectStock(stocks[nextIndex]);
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

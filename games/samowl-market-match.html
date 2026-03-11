@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🦉 SamOwl's Market Match - Pattern Power!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            font-family: 'Comic Sans MS', 'Chalkboard', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 550px;
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 30px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            overflow: hidden;
+            position: relative;
+            min-height: 800px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .samowl-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        
+        .samowl-logo {
+            font-size: 2.5em;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+        }
+        
+        .samowl-text {
+            font-size: 1.6em;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .age-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #333;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        
+        .score-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        
+        .score-item {
+            text-align: center;
+            padding: 10px 5px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .score-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+        
+        .coins { color: #ffc107; }
+        .streak { color: #28a745; }
+        .level { color: #17a2b8; }
+        .accuracy { color: #dc3545; }
+        
+        .mascot-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        
+        .mascot {
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mascot:hover {
+            transform: scale(1.1);
+        }
+        
+        .vs-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            padding: 20px;
+            background: white;
+        }
+        
+        .candles-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 120px;
+            gap: 8px;
+            margin-bottom: 15px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 15px;
+        }
+        
+        .candle {
+            width: 35px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .candle.green {
+            background: linear-gradient(180deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .candle.red {
+            background: linear-gradient(180deg, #dc3545 0%, #e74c3c 100%);
+        }
+        
+        .candle.mystery {
+            background: linear-gradient(180deg, #6c757d 0%, #495057 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            animation: pulse 1.5s ease infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pattern-hint {
+            text-align: center;
+            font-size: 0.95em;
+            color: #495057;
+            padding: 12px;
+            background: #fff3cd;
+            border-radius: 12px;
+            border: 2px dashed #ffc107;
+        }
+        
+        .question-box {
+            margin: 0 20px 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 20px;
+            text-align: center;
+            border: 3px solid #2196f3;
+        }
+        
+        .buttons-container {
+            display: flex;
+            gap: 15px;
+            padding: 0 20px 20px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0 0 rgba(0,0,0,0.2);
+        }
+        
+        .btn-up {
+            background: linear-gradient(180deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+        
+        .btn-down {
+            background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+            color: white;
+        }
+        
+        .start-screen, .level-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .start-btn, .continue-btn {
+            padding: 18px 50px;
+            font-size: 1.3em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        
+        .hidden { display: none !important; }
+        
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feedback-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .feedback-emoji {
+            font-size: 6em;
+        }
+        
+        .feedback-text {
+            font-size: 1.8em;
+            color: white;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="start-screen" id="startScreen">
+            <div style="font-size: 5em; margin-bottom: 20px;">🐂 🦉 🐻</div>
+            <h2 style="font-size: 1.8em; color: #495057; margin-bottom: 10px;">SamOwl's Market Match</h2>
+            <p style="font-size: 1.1em; color: #6c757d; margin-bottom: 20px;">Learn patterns with Bull & Bear!</p>
+            <div class="age-badge">Ages 7-9</div>
+            <div style="background: #e9ecef; padding: 20px; border-radius: 20px; margin: 20px 0; text-align: left;">
+                <p>📈 Predict market moves</p>
+                <p>🧠 Learn chart patterns</p>
+                <p>💰 Collect trading coins</p>
+                <p>🦉 Help SamOwl trade!</p>
+            </div>
+            <button class="start-btn" onclick="startGame()">🎮 Start Trading!</button>
+        </div>
+
+        <div class="level-screen hidden" id="levelScreen">
+            <div style="font-size: 5em; margin-bottom: 20px;">🦉⭐🦉</div>
+            <h2 style="font-size: 1.8em; color: #155724;">Level Complete!</h2>
+            <p style="font-size: 1.1em; color: #28a745; margin: 15px 0;">You're becoming a pattern master!</p>
+            <div style="font-size: 4em; margin: 20px 0;" id="newReward">🏆</div>
+            <button class="continue-btn" onclick="continueGame()">Keep Trading! ➡️</button>
+        </div>
+
+        <div class="header">
+            <div class="samowl-brand">
+                <div class="samowl-logo">🦉</div>
+                <div class="samowl-text">SamOwl</div>
+            </div>
+            <div style="color: rgba(255,255,255,0.9);">Market Match</div>
+            <div class="age-badge">Ages 7-9</div>
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div style="font-size: 0.65em; color: #6c757d;">💰 Coins</div>
+                <div class="score-value coins" id="coins">0</div>
+            </div>
+            <div class="score-item">
+                <div style="font-size: 0.65em; color: #6c757d;">🔥 Streak</div>
+                <div class="score-value streak" id="streak">0</div>
+            </div>
+            <div class="score-item">
+                <div style="font-size: 0.65em; color: #6c757d;">⭐ Level</div>
+                <div class="score-value level" id="level">1</div>
+            </div>
+            <div class="score-item">
+                <div style="font-size: 0.65em; color: #6c757d;">🎯 Accuracy</div>
+                <div class="score-value accuracy" id="accuracy">0%</div>
+            </div>
+        </div>
+
+        <div class="mascot-container">
+            <div style="text-align: center;">
+                <div class="mascot" id="bullMascot">🐂</div>
+                <div style="font-size: 0.85em; color: #6c757d;">Bull</div>
+            </div>
+            <div class="vs-badge">VS</div>
+            <div style="text-align: center;">
+                <div class="mascot" id="bearMascot">🐻</div>
+                <div style="font-size: 0.85em; color: #6c757d;">Bear</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div style="text-align: center; font-size: 1.2em; color: #495057; margin-bottom: 15px; font-weight: bold;">📊 What Happens Next?</div>
+            <div class="candles-row" id="candlesRow"></div>
+            <div class="pattern-hint" id="patternHint">💡 Look for patterns in the candles!</div>
+        </div>
+
+        <div class="question-box">
+            <div style="font-size: 1.3em; color: #1565c0; font-weight: bold;">Will the next candle go UP 📈 or DOWN 📉?</div>
+        </div>
+
+        <div class="buttons-container">
+            <button class="btn btn-up" onclick="makeGuess('up')">📈 UP!</button>
+            <button class="btn btn-down" onclick="makeGuess('down')">📉 DOWN!</button>
+        </div>
+    </div>
+
+    <div class="feedback-overlay" id="feedbackOverlay">
+        <div class="feedback-emoji" id="feedbackEmoji">✅</div>
+        <div class="feedback-text" id="feedbackText">Great prediction!</div>
+    </div>
+
+    <script>
+        let gameState = {
+            coins: 0,
+            streak: 0,
+            level: 1,
+            correct: 0,
+            total: 0,
+            correctInLevel: 0,
+            nextDirection: null,
+            isProcessing: false
+        };
+
+        const patterns = [
+            { hint: 'Green candles often continue up! Bulls are strong! 📈', bias: 'up', sequence: [true, true, true] },
+            { hint: 'Red candles often continue down! Bears are strong! 📉', bias: 'down', sequence: [false, false, false] },
+            { hint: 'After falling, prices often bounce back up! 🏀', bias: 'up', sequence: [false, false, true] },
+            { hint: 'After rising, prices often fall back down! 🍂', bias: 'down', sequence: [true, true, false] },
+            { hint: 'Markets go back and forth! Watch the trend! ↔️', bias: 'up', sequence: [true, false, true] },
+            { hint: 'Markets go back and forth! Watch the trend! ↔️', bias: 'down', sequence: [false, true, false] }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            generateNewRound();
+            updateDisplay();
+        }
+
+        function generateNewRound() {
+            const container = document.getElementById('candlesRow');
+            container.innerHTML = '';
+            
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            
+            pattern.sequence.forEach((isGreen, index) => {
+                const candle = document.createElement('div');
+                candle.className = `candle ${isGreen ? 'green' : 'red'}`;
+                candle.style.height = `${50 + Math.random() * 40}px`;
+                container.appendChild(candle);
+            });
+            
+            const mystery = document.createElement('div');
+            mystery.className = 'candle mystery';
+            mystery.style.height = '80px';
+            mystery.textContent = '?';
+            container.appendChild(mystery);
+            
+            const followPattern = Math.random() > 0.3;
+            gameState.nextDirection = followPattern ? pattern.bias : (pattern.bias === 'up' ? 'down' : 'up');
+            
+            document.getElementById('patternHint').textContent = `💡 ${pattern.hint}`;
+            gameState.isProcessing = false;
+        }
+
+        function makeGuess(direction) {
+            if (gameState.isProcessing) return;
+            gameState.isProcessing = true;
+            
+            const correct = direction === gameState.nextDirection;
+            gameState.total++;
+            
+            if (correct) {
+                gameState.correct++;
+                gameState.coins += 15 + (gameState.streak * 3);
+                gameState.streak++;
+                gameState.correctInLevel++;
+                
+                showFeedback('✅', 'Great prediction! 🎯');
+                
+                if (gameState.correctInLevel >= 5) {
+                    setTimeout(() => showLevelUp(), 1500);
+                } else {
+                    setTimeout(() => {
+                        generateNewRound();
+                        updateDisplay();
+                    }, 1500);
+                }
+            } else {
+                gameState.streak = 0;
+                showFeedback('❌', 'Markets are tricky! Try again! 🎲');
+                
+                setTimeout(() => {
+                    generateNewRound();
+                    updateDisplay();
+                }, 1500);
+            }
+        }
+
+        function showFeedback(emoji, text) {
+            const overlay = document.getElementById('feedbackOverlay');
+            document.getElementById('feedbackEmoji').textContent = emoji;
+            document.getElementById('feedbackText').textContent = text;
+            overlay.classList.add('show');
+            setTimeout(() => overlay.classList.remove('show'), 1200);
+        }
+
+        function showLevelUp() {
+            const rewards = ['🏆', '📊', '💎', '🚀', '👑', '🦉'];
+            document.getElementById('newReward').textContent = rewards[Math.min(gameState.level - 1, rewards.length - 1)];
+            document.getElementById('levelScreen').classList.remove('hidden');
+        }
+
+        function continueGame() {
+            document.getElementById('levelScreen').classList.add('hidden');
+            gameState.level++;
+            gameState.correctInLevel = 0;
+            generateNewRound();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('coins').textContent = gameState.coins;
+            document.getElementById('streak').textContent = gameState.streak;
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('accuracy').textContent = gameState.total > 0 ? Math.round((gameState.correct / gameState.total) * 100) + '%' : '0%';
+        }
+
+        updateDisplay();
+    </script>
+</body>
+</html>
