@@ -28,11 +28,9 @@
             background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
             border-radius: 30px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.4);
-            overflow-y: auto;
+            overflow: hidden;
             position: relative;
-            max-height: 95vh;
-            display: flex;
-            flex-direction: column;
+            min-height: 700px;
         }
         
         /* Header with SamOwl */
@@ -173,8 +171,7 @@
         /* Game Area */
         .game-area {
             padding: 25px;
-            flex: 1;
-            overflow-y: auto;
+            min-height: 350px;
         }
         
         .instruction {
@@ -573,6 +570,7 @@
     </style>
 </head>
 <body>
+    <a href="index.html" style="position: fixed; top: 10px; left: 10px; color: white; text-decoration: none; font-size: 0.85em; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; z-index: 1000;">← Back to Games</a>
     <div class="game-container">
         <!-- Start Screen -->
         <div class="start-screen" id="startScreen">

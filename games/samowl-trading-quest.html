@@ -552,6 +552,7 @@
                 </div>
             </div>
             <div class="age-badge">Ages 10-12</div>
+            <a href="index.html" style="position: absolute; top: 20px; left: 20px; color: white; text-decoration: none; font-size: 0.9em; background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px;">← Back to Games</a>
         </div>
 
         <!-- Stats Bar -->
@@ -580,6 +581,18 @@
 
         <!-- Trade Tab -->
         <div class="tab-content active" id="tradeTab">
+            <!-- Stock Selector -->
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 15px; background: rgba(255,255,255,0.05); justify-content: center;">
+                <button onclick="selectStock('AAPL')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">AAPL</button>
+                <button onclick="selectStock('GOOGL')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">GOOGL</button>
+                <button onclick="selectStock('MSFT')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">MSFT</button>
+                <button onclick="selectStock('AMZN')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">AMZN</button>
+                <button onclick="selectStock('TSLA')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">TSLA</button>
+                <button onclick="selectStock('META')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">META</button>
+                <button onclick="selectStock('NFLX')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">NFLX</button>
+                <button onclick="selectStock('NVDA')" style="padding: 8px 12px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em;">NVDA</button>
+            </div>
+            
             <div class="chart-area">
                 <div class="stock-header">
                     <div class="stock-name" id="stockName">AAPL</div>
