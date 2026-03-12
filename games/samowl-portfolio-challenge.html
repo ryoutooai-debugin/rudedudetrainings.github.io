@@ -532,18 +532,35 @@
             updateHoldings();
             updateLeaderboard();
             
-            // Start price updates
-            setInterval(updatePrices, 5000);
+            // Fetch real prices on start, then update every 30 seconds
+            fetchRealPrices();
+            setInterval(updatePrices, 30000);
         }
 
-        // Update stock prices
-        function updatePrices() {
-            stocks.forEach(s => {
-                const change = (Math.random() - 0.5) * 4;
-                s.basePrice = Math.max(s.basePrice * (1 + change/100), 1);
-            });
+        // Fetch real prices from Yahoo Finance
+        async function fetchRealPrices() {
+            try {
+                const symbols = stocks.map(s => s.symbol).join(',');
+                const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
+                const data = await response.json();
+                
+                if (data.chart && data.chart.result) {
+                    data.chart.result.forEach((result, index) => {
+                        if (result.meta && result.meta.regularMarketPrice) {
+                            stocks[index].basePrice = result.meta.regularMarketPrice;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log('Using simulated prices (Yahoo Finance unavailable)');
+            }
             renderMarket();
             updateDashboard();
+        }
+
+        // Update stock prices (fallback to simulation if API fails)
+        function updatePrices() {
+            fetchRealPrices();
         }
 
         // Switch tabs
@@ -756,9 +773,9 @@
             const rank = allPlayers.findIndex(p => p.name === gameState.playerName) + 1;
             document.getElementById('dashRank').textContent = rank > 0 ? `#${rank}` : '#--';
             
-            // Render top 10
+            // Render top 50
             const list = document.getElementById('leaderboardList');
-            list.innerHTML = allPlayers.slice(0, 10).map((p, i) => `
+            list.innerHTML = allPlayers.slice(0, 50).map((p, i) => `
                 <div class="leaderboard-item">
                     <div class="leaderboard-rank">#${i + 1}</div>
                     <div class="leaderboard-name">${p.name}</div>
