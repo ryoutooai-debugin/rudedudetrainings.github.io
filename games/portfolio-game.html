@@ -593,12 +593,19 @@
             setInterval(updatePrices, 30000);
         }
 
-        // Fetch real prices from Yahoo Finance
+        // Fetch real prices from Yahoo Finance via CORS proxy
         async function fetchRealPrices() {
             try {
                 const symbols = stocks.map(s => s.symbol).join(',');
-                const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
-                const data = await response.json();
+                // Use CORS proxy to bypass browser restrictions
+                const proxyUrl = 'https://api.allorigins.win/get?url=';
+                const yahooUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
+                
+                const response = await fetch(proxyUrl + yahooUrl);
+                const proxyData = await response.json();
+                
+                // Parse the JSON content from the proxy response
+                const data = JSON.parse(proxyData.contents);
                 
                 if (data.chart && data.chart.result) {
                     data.chart.result.forEach((result, index) => {
@@ -606,9 +613,10 @@
                             stocks[index].basePrice = result.meta.regularMarketPrice;
                         }
                     });
+                    console.log('Real prices loaded from Yahoo Finance');
                 }
             } catch (e) {
-                console.log('Using simulated prices (Yahoo Finance unavailable)');
+                console.log('Using simulated prices (Yahoo Finance unavailable):', e);
             }
             renderMarket();
             updateDashboard();
