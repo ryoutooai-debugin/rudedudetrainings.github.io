@@ -495,21 +495,22 @@
 
     <script>
         // Supabase Setup - wait for library to load
-        let supabase = null;
+        // Use a unique variable name to avoid conflicts with the CDN global
+        let dbClient = null;
         
         function initSupabase() {
             try {
                 if (typeof window !== 'undefined' && window.supabase && window.supabase.createClient) {
                     const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
                     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
-                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
                     console.log('Supabase initialized');
                 } else {
                     console.log('Supabase library not available, running in offline mode');
                 }
             } catch (e) {
                 console.log('Supabase init failed, running in offline mode:', e);
-                supabase = null;
+                dbClient = null;
             }
         }
         
@@ -576,9 +577,9 @@
             const totalValue = gameState.cash + holdingsValue;
             
             // Save to Supabase leaderboard
-            if (supabase) {
+            if (dbClient) {
                 try {
-                    const { error } = await supabase
+                    const { error } = await dbClient
                         .from('portfolio_leaderboard')
                         .upsert({
                             player_name: gameState.playerName,
@@ -829,7 +830,7 @@
 
         // Update leaderboard from Supabase
         async function updateLeaderboard() {
-            if (!supabase) {
+            if (!dbClient) {
                 // Offline mode - show local only
                 document.getElementById('dashRank').textContent = '#--';
                 document.getElementById('leaderboardList').innerHTML = '<div class="empty-state">Leaderboard unavailable in offline mode</div>';
@@ -838,7 +839,7 @@
             
             try {
                 // Fetch top 50 from Supabase
-                const { data: players, error } = await supabase
+                const { data: players, error } = await dbClient
                     .from('portfolio_leaderboard')
                     .select('*')
                     .order('portfolio_value', { ascending: false })
