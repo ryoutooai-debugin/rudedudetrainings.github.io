@@ -385,6 +385,11 @@
         <input type="text" id="playerNameInput" class="name-input" placeholder="Enter your name" maxlength="20">
         <button class="start-btn" onclick="startGame()">🚀 Start Trading</button>
         <p id="resumeHint" style="margin-top: 20px; font-size: 0.9em; color: #667eea; display: none;">💡 Your previous game will be restored automatically</p>
+        <div style="margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 0.75em; opacity: 0.7; max-width: 400px;">
+            <strong>📊 Educational Simulation</strong><br>
+            Prices are delayed (~15-20 min). Not financial advice. 
+            Past performance ≠ future results. For learning purposes only.
+        </div>
     </div>
 
     <div class="app-container" id="appContainer" style="display: none;">
@@ -507,14 +512,23 @@
         };
 
         let currentTrade = { symbol: '', action: '', price: 0 };
+        // Diversified established companies for swing trading
         const stocks = [
             { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 175.50 },
-            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30 },
             { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 380.25 },
+            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30 },
             { symbol: 'AMZN', name: 'Amazon.com', basePrice: 178.90 },
-            { symbol: 'TSLA', name: 'Tesla Inc.', basePrice: 205.60 },
-            { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75 },
             { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 890.15 },
+            { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75 },
+            { symbol: 'BRK-B', name: 'Berkshire Hathaway', basePrice: 412.50 },
+            { symbol: 'LLY', name: 'Eli Lilly', basePrice: 725.00 },
+            { symbol: 'V', name: 'Visa Inc.', basePrice: 285.00 },
+            { symbol: 'JPM', name: 'JPMorgan Chase', basePrice: 195.00 },
+            { symbol: 'WMT', name: 'Walmart Inc.', basePrice: 168.00 },
+            { symbol: 'MA', name: 'Mastercard', basePrice: 445.00 },
+            { symbol: 'PG', name: 'Procter & Gamble', basePrice: 168.00 },
+            { symbol: 'HD', name: 'Home Depot', basePrice: 345.00 },
+            { symbol: 'COST', name: 'Costco Wholesale', basePrice: 785.00 },
             { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40 }
         ];
 
@@ -588,9 +602,9 @@
             updateHoldings();
             updateLeaderboard();
             
-            // Fetch real prices on start, then update every 30 seconds
+            // Fetch real prices on start, then update every 5 minutes for swing trading
             fetchRealPrices();
-            setInterval(updatePrices, 30000);
+            setInterval(updatePrices, 300000);
         }
 
         // Fetch real prices from Yahoo Finance via CORS proxy
@@ -875,7 +889,8 @@
                 updateHoldings();
                 updateLeaderboard();
                 fetchRealPrices();
-                setInterval(updatePrices, 30000);
+                // Update every 5 minutes for swing trading (was 30 seconds)
+                setInterval(updatePrices, 300000);
             }
         };
     </script>
