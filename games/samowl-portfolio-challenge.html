@@ -494,10 +494,17 @@
     </div>
 
     <script>
-        // Supabase Setup
-        const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Supabase Setup (with fallback for tracking prevention)
+        let supabase = null;
+        try {
+            if (window.supabase) {
+                const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
+                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            }
+        } catch (e) {
+            console.log('Supabase init failed, running in offline mode:', e);
+        }
 
         // Game State
         let gameState = {
@@ -555,21 +562,23 @@
             const totalValue = gameState.cash + holdingsValue;
             
             // Save to Supabase leaderboard
-            try {
-                const { error } = await supabase
-                    .from('portfolio_leaderboard')
-                    .upsert({
-                        player_name: gameState.playerName,
-                        portfolio_value: totalValue,
-                        cash: gameState.cash,
-                        updated_at: new Date().toISOString()
-                    }, {
-                        onConflict: 'player_name'
-                    });
-                
-                if (error) console.log('Supabase save error:', error);
-            } catch (e) {
-                console.log('Supabase unavailable, using localStorage only');
+            if (supabase) {
+                try {
+                    const { error } = await supabase
+                        .from('portfolio_leaderboard')
+                        .upsert({
+                            player_name: gameState.playerName,
+                            portfolio_value: totalValue,
+                            cash: gameState.cash,
+                            updated_at: new Date().toISOString()
+                        }, {
+                            onConflict: 'player_name'
+                        });
+                    
+                    if (error) console.log('Supabase save error:', error);
+                } catch (e) {
+                    console.log('Supabase unavailable, using localStorage only');
+                }
             }
         }
 
@@ -806,6 +815,13 @@
 
         // Update leaderboard from Supabase
         async function updateLeaderboard() {
+            if (!supabase) {
+                // Offline mode - show local only
+                document.getElementById('dashRank').textContent = '#--';
+                document.getElementById('leaderboardList').innerHTML = '<div class="empty-state">Leaderboard unavailable in offline mode</div>';
+                return;
+            }
+            
             try {
                 // Fetch top 50 from Supabase
                 const { data: players, error } = await supabase
