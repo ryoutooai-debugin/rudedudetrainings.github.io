@@ -790,6 +790,7 @@
                             <th>Current</th>
                             <th>Value</th>
                             <th>P&L</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -808,6 +809,7 @@
                                     <td>$${currentPrice.toFixed(2)}</td>
                                     <td>$${value.toFixed(2)}</td>
                                     <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                                    <td><button class="btn btn-sell" onclick="openTrade('${symbol}', 'sell')" style="padding: 8px 15px; font-size: 0.9em;">Sell</button></td>
                                 </tr>
                             `;
                         }).join('')}
