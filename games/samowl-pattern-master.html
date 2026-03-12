@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🦉 SamOwl's Pattern Master - Technical Analysis Training</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; font-family: 'Segoe UI', 'Roboto', sans-serif; }
+        :root { --primary: #667eea; --secondary: #764ba2; --success: #10b981; --danger: #ef4444; --dark: #0f172a; --card-bg: #1e293b; }
+        body { background: linear-gradient(135deg, var(--dark) 0%, #1e1b4b 100%); min-height: 100vh; color: white; }
+        .app-container { max-width: 900px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+        .back-bar { padding: 12px 20px; background: rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { color: white; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; gap: 8px; padding: 10px 18px; background: rgba(255,255,255,0.1); border-radius: 25px; }
+        .header { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 25px 20px; text-align: center; }
+        .header-content { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .logo { font-size: 3.5em; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .age-badge { display: inline-block; background: #ffd700; color: #333; padding: 6px 18px; border-radius: 20px; font-size: 0.85em; font-weight: bold; }
+        .stats-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px; background: rgba(255,255,255,0.03); }
+        .stat-item { background: var(--card-bg); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        .stat-label { font-size: 0.7em; color: #94a3b8; text-transform: uppercase; }
+        .stat-value { font-size: 1.6em; font-weight: 700; margin-top: 5px; }
+        .stat-value.score { color: #fbbf24; } .stat-value.streak { color: #34d399; }
+        .main-content { flex: 1; padding: 20px; }
+        .game-card { background: var(--card-bg); border-radius: 20px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .chart-container { background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); border-radius: 15px; padding: 25px; margin-bottom: 20px; border: 2px solid rgba(255,255,255,0.1); }
+        .candlestick-chart { display: flex; justify-content: center; align-items: flex-end; height: 200px; gap: 8px; padding: 20px 10px; background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .candlestick { width: 40px; position: relative; display: flex; flex-direction: column; align-items: center; }
+        .wick { width: 2px; background: #64748b; }
+        .candle-body { width: 32px; border-radius: 4px; }
+        .candlestick.bull .candle-body { background: linear-gradient(180deg, var(--success) 0%, #059669 100%); border: 2px solid #34d399; }
+        .candlestick.bear .candle-body { background: linear-gradient(180deg, var(--danger) 0%, #dc2626 100%); border: 2px solid #f87171; }
+        .candlestick.mystery .candle-body { background: linear-gradient(180deg, #6b7280 0%, #4b5563 100%); border: 2px dashed #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+        .pattern-info { background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%); border-radius: 15px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--primary); }
+        .pattern-name { font-size: 1.3em; font-weight: 700; margin-bottom: 10px; color: #fbbf24; }
+        .button-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .answer-btn { padding: 20px; border: none; border-radius: 15px; font-size: 1.1em; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .answer-btn:hover { transform: translateY(-3px); }
+        .btn-bullish { background: linear-gradient(135deg, var(--success) 0%, #059669 100%); color: white; box-shadow: 0 6px 0 #047857; }
+        .btn-bearish { background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%); color: white; box-shadow: 0 6px 0 #b91c1c; }
+        .btn-neutral { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; box-shadow: 0 6px 0 #374151; }
+        .feedback-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .feedback-overlay.show { opacity: 1; pointer-events: all; }
+        .feedback-icon { font-size: 6em; margin-bottom: 20px; }
+        .start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, var(--dark) 0%, #1e1b4b 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; padding: 30px; text-align: center; }
+        .start-logo { font-size: 7em; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
+        .start-btn { padding: 20px 60px; font-size: 1.3em; background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; }
+        .level-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 90; padding: 30px; text-align: center; opacity: 0; pointer-events: none; }
+        .level-screen.show { opacity: 1; pointer-events: all; }
+        .hidden { display: none !important; }
+        @media (max-width: 600px) { .stats-bar { grid-template-columns: repeat(2, 1fr); } .button-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="start-screen" id="startScreen">
+            <div class="start-logo">🦉</div>
+            <h1 style="font-size: 2.2em; font-weight: 700; margin-bottom: 10px;">Pattern Master</h1>
+            <p style="font-size: 1.2em; color: #94a3b8; margin-bottom: 30px;">Master technical analysis. Identify candlestick patterns.</p>
+            <div class="age-badge" style="margin-bottom: 30px;">Ages 13+</div>
+            <button class="start-btn" onclick="startGame()">🎯 Start Training</button>
+        </div>
+
+        <div class="level-screen" id="levelScreen">
+            <div style="font-size: 5em; margin-bottom: 20px;">🏆</div>
+            <h2 style="font-size: 2em; font-weight: 700; margin-bottom: 15px;">Level Complete!</h2>
+            <p style="font-size: 1.2em; color: #6ee7b7; margin-bottom: 30px;" id="levelMessage">You're mastering the patterns!</p>
+            <button style="padding: 15px 40px; font-size: 1.2em; background: white; color: #065f46; border: none; border-radius: 30px; cursor: pointer; font-weight: 700;" onclick="continueGame()">Continue Training ➡️</button>
+        </div>
+
+        <div class="back-bar">
+            <a href="index.html" class="back-btn"><span>←</span> Back to Games</a>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.9em; opacity: 0.8;"><span>🦉</span> SamOwl Pattern Master</div>
+        </div>
+
+        <div class="header">
+            <div class="header-content">
+                <div class="logo">🦉</div>
+                <div><h1>Pattern Master</h1><p>Technical Analysis Training</p></div>
+            </div>
+            <div class="age-badge">Ages 13+</div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item"><div class="stat-label">Score</div><div class="stat-value score" id="score">0</div></div>
+            <div class="stat-item"><div class="stat-label">Streak</div><div class="stat-value streak" id="streak">0</div></div>
+            <div class="stat-item"><div class="stat-label">Level</div><div class="stat-value level" id="level">1</div></div>
+            <div class="stat-item"><div class="stat-label">Accuracy</div><div class="stat-value accuracy" id="accuracy">0%</div></div>
+        </div>
+
+        <div class="main-content">
+            <div class="game-card">
+                <div style="font-size: 1.2em; font-weight: 600; margin-bottom: 20px;">📊 Chart Pattern</div>
+                <div class="chart-container">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <span style="font-size: 0.9em; color: #94a3b8;">Price Action</span>
+                        <span style="font-size: 1.3em; font-weight: 700; color: var(--primary);" id="ticker">AAPL</span>
+                    </div>
+                    <div class="candlestick-chart" id="chart"></div>
+                </div>
+                <div class="pattern-info">
+                    <div class="pattern-name" id="patternName">Pattern Name</div>
+                    <div style="font-size: 0.95em; color: #cbd5e1; line-height: 1.6;" id="patternDesc">Pattern description...</div>
+                    <div style="margin-top: 15px; padding: 12px; background: rgba(251, 191, 36, 0.1); border-radius: 10px; font-size: 0.9em; color: #fbbf24; border: 1px dashed rgba(251, 191, 36, 0.3);" id="patternHint">💡 Hint...</div>
+                </div>
+            </div>
+
+            <div class="game-card">
+                <div style="text-align: center;">
+                    <p style="font-size: 1.2em; margin-bottom: 20px; color: #e2e8f0;">What does this pattern signal?</p>
+                    <div class="button-grid">
+                        <button class="answer-btn btn-bullish" onclick="makeGuess('bullish')"><span>📈</span><span>BULLISH</span></button>
+                        <button class="answer-btn btn-bearish" onclick="makeGuess('bearish')"><span>📉</span><span>BEARISH</span></button>
+                        <button class="answer-btn btn-neutral" onclick="makeGuess('neutral')"><span>➡️</span><span>NEUTRAL</span></button>
+                        <button class="answer-btn" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; box-shadow: 0 6px 0 #6d28d9;" onclick="makeGuess('continuation')"><span>🔄</span><span>CONTINUATION</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="feedback-overlay" id="feedbackOverlay">
+        <div class="feedback-icon" id="feedbackIcon">✅</div>
+        <div style="font-size: 2em; font-weight: 700; margin-bottom: 10px;" id="feedbackTitle">Correct!</div>
+        <div style="font-size: 1.2em; color: #cbd5e1; max-width: 400px; text-align: center;" id="feedbackText">Great pattern recognition!</div>
+    </div>
+
+    <script>
+        let gameState = { score: 0, streak: 0, level: 1, correct: 0, total: 0, correctInLevel: 0, currentPattern: null, isProcessing: false };
+        const tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'META', 'NVDA', 'NFLX'];
+        
+        const patterns = [
+            { id: 'doji', name: 'Doji', description: 'A Doji forms when the open and close are virtually equal. It shows indecision in the market.', hint: 'Look for a candle with almost no body - just a cross shape.', signal: 'neutral', candles: [{type:'bull',body:60},{type:'bear',body:50},{type:'doji',body:5,wickTop:40,wickBottom:40},{type:'mystery',body:30}] },
+            { id: 'hammer', name: 'Hammer', description: 'A Hammer has a small body at the top with a long lower wick. It appears at the bottom of a downtrend.', hint: 'Small body at the top, long tail below. Bullish reversal signal.', signal: 'bullish', candles: [{type:'bear',body:50},{type:'bear',body:60},{type:'bull',body:20,wickBottom:60},{type:'mystery',body:30}] },
+            { id: 'shooting_star', name: 'Shooting Star', description: 'A Shooting Star has a small body at the bottom with a long upper wick. Bearish reversal pattern.', hint: 'Small body at the bottom, long wick above. Bearish signal.', signal: 'bearish', candles: [{type:'bull',body:50},{type:'bull',body:60},{type:'bear',body:20,wickTop:60},{type:'mystery',body:30}] },
+            { id: 'engulfing_bull', name: 'Bullish Engulfing', description: 'A large green candle that completely engulfs the previous red candle. Strong bullish reversal.', hint: 'Big green candle swallows the small red one. Bullish!', signal: 'bullish', candles: [{type:'bear',body:30},{type:'bull',body:70},{type:'mystery',body:30}] },
+            { id: 'engulfing_bear', name: 'Bearish Engulfing', description: 'A large red candle that completely engulfs the previous green candle. Strong bearish reversal.', hint: 'Big red candle swallows the small green one. Bearish!', signal: 'bearish', candles: [{type:'bull',body:30},{type:'bear',body:70},{type:'mystery',body:30}] },
+            { id: 'morning_star', name: 'Morning Star', description: 'Three-candle bullish reversal: bearish, small indecision, then bullish. Signals trend reversal up.', hint: 'Down, small body, then up. Morning Star = Bullish reversal!', signal: 'bullish', candles: [{type:'bear',body:50},{type:'doji',body:10},{type:'bull',body:50},{type:'mystery',body:30}] },
+            { id: 'evening_star', name: 'Evening Star', description: 'Three-candle bearish reversal: bullish, small indecision, then bearish. Signals trend reversal down.', hint: 'Up, small body, then down. Evening Star = Bearish reversal!', signal: 'bearish', candles: [{type:'bull',body:50},{type:'doji',body:10},{type:'bear',body:50},{type:'mystery',body:30}] },
+            { id: 'three_soldiers', name: 'Three White Soldiers', description: 'Three consecutive bullish candles with higher closes. Strong bullish continuation pattern.', hint: 'Three green candles marching up. Bullish continuation!', signal: 'bullish', candles: [{type:'bull',body:40},{type:'bull',body:50},{type:'bull',body:60},{type:'mystery',body:30}] },
+            { id: 'three_crows', name: 'Three Black Crows', description: 'Three consecutive bearish candles with lower closes. Strong bearish continuation pattern.', hint: 'Three red candles marching down. Bearish continuation!', signal: 'bearish', candles: [{type:'bear',body:60},{type:'bear',body:50},{type:'bear',body:40},{type:'mystery',body:30}] }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            generateNewRound();
+            updateDisplay();
+        }
+
+        function generateNewRound() {
+            const chart = document.getElementById('chart');
+            chart.innerHTML = '';
+            
+            const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+            gameState.currentPattern = pattern;
+            
+            document.getElementById('ticker').textContent = tickers[Math.floor(Math.random() * tickers.length)];
+            document.getElementById('patternName').textContent = pattern.name;
+            document.getElementById('patternDesc').textContent = pattern.description;
+            document.getElementById('patternHint').textContent = '💡 ' + pattern.hint;
+            
+            pattern.candles.forEach((c, i) => {
+                const candle = document.createElement('div');
+                candle.className = `candlestick ${c.type}`;
+                const bodyHeight = c.body || 50;
+                const wickTop = c.wickTop || 15;
+                const wickBottom = c.wickBottom || 15;
+                
+                candle.innerHTML = `
+                    <div class="wick" style="height:${wickTop}px;"></div>
+                    <div class="candle-body" style="height:${bodyHeight}px;">${c.type === 'mystery' ? '?' : ''}</div>
+                    <div class="wick" style="height:${wickBottom}px;"></div>
+                `;
+                chart.appendChild(candle);
+            });
+            
+            gameState.isProcessing = false;
+        }
+
+        function makeGuess(signal) {
+            if (gameState.isProcessing) return;
+            gameState.isProcessing = true;
+            gameState.total++;
+            
+            const correct = signal === gameState.currentPattern.signal;
+            
+            if (correct) {
+                gameState.score += 100 + (gameState.streak * 20);
+                gameState.streak++;
+                gameState.correct++;
+                gameState.correctInLevel++;
+                showFeedback('✅', 'Correct!', 'Great pattern recognition!');
+                
+                if (gameState.correctInLevel >= 5) {
+                    setTimeout(() => showLevelUp(), 1500);
+                } else {
+                    setTimeout(() => { generateNewRound(); updateDisplay(); }, 1500);
+                }
+            } else {
+                gameState.streak = 0;
+                const correctSignal = gameState.currentPattern.signal.toUpperCase();
+                showFeedback('❌', 'Not quite!', `This was a ${correctSignal} pattern. Keep learning!`);
+                setTimeout(() => { generateNewRound(); updateDisplay(); }, 2000);
+            }
+        }
+
+        function showFeedback(icon, title, text) {
+            document.getElementById('feedbackIcon').textContent = icon;
+            document.getElementById('feedbackTitle').textContent = title;
+            document.getElementById('feedbackText').textContent = text;
+            document.getElementById('feedbackOverlay').classList.add('show');
+            setTimeout(() => document.getElementById('feedbackOverlay').classList.remove('show'), 1500);
+        }
+
+        function showLevelUp() {
+            document.getElementById('levelMessage').textContent = `Level ${gameState.level} complete! You're mastering ${gameState.currentPattern.name}!`;
+            document.getElementById('levelScreen').classList.add('show');
+        }
+
+        function continueGame() {
+            document.getElementById('levelScreen').classList.remove('show');
+            gameState.level++;
+            gameState.correctInLevel = 0;
+            generateNewRound();
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('streak').textContent = gameState.streak;
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('accuracy').textContent = gameState.total > 0 ? Math.round((gameState.correct / gameState.total) * 100) + '%' : '0%';
+        }
+    </script>
+</body>
+</html>
