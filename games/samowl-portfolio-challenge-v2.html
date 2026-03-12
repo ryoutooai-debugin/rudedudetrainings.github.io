@@ -494,16 +494,30 @@
     </div>
 
     <script>
-        // Supabase Setup (with fallback for tracking prevention)
+        // Supabase Setup - wait for library to load
         let supabase = null;
-        try {
-            if (window.supabase) {
-                const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
-                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        function initSupabase() {
+            try {
+                if (typeof window !== 'undefined' && window.supabase && window.supabase.createClient) {
+                    const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
+                    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                    console.log('Supabase initialized');
+                } else {
+                    console.log('Supabase library not available, running in offline mode');
+                }
+            } catch (e) {
+                console.log('Supabase init failed, running in offline mode:', e);
+                supabase = null;
             }
-        } catch (e) {
-            console.log('Supabase init failed, running in offline mode:', e);
+        }
+        
+        // Try to init now, or wait for load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSupabase);
+        } else {
+            initSupabase();
         }
 
         // Game State
