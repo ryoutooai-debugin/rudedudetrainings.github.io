@@ -748,7 +748,7 @@
         });
 
         // Execute trade
-        function executeTrade() {
+        async function executeTrade() {
             const shares = parseInt(document.getElementById('modalShares').value);
             if (!shares || shares <= 0) {
                 alert('Please enter a valid number of shares');
