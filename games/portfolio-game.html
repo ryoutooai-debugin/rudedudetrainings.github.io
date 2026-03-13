@@ -634,40 +634,48 @@
         }
 
         // Fetch real prices from Polygon.io (free tier: 5 calls/minute)
+        // Using CORS proxy to bypass browser restrictions
         async function fetchRealPrices() {
             try {
-                // Polygon free tier: 5 calls/minute, so we fetch one at a time with delay
-                // or batch them. Let's fetch individually with rate limiting.
                 console.log('Fetching real prices from Polygon.io...');
+                
+                // Use CORS proxy for Polygon API
+                const corsProxy = 'https://api.allorigins.win/get?url=';
                 
                 for (let i = 0; i < stocks.length; i++) {
                     const stock = stocks[i];
                     try {
-                        const response = await fetch(
+                        const polygonUrl = encodeURIComponent(
                             `https://api.polygon.io/v2/aggs/ticker/${stock.symbol}/prev?apiKey=${POLYGON_API_KEY}`
                         );
                         
+                        const response = await fetch(corsProxy + polygonUrl);
+                        
                         if (!response.ok) {
-                            console.log(`Rate limited on ${stock.symbol}, using cached price`);
+                            console.log(`Proxy error on ${stock.symbol}, using cached price`);
                             continue;
                         }
                         
-                        const data = await response.json();
+                        const proxyData = await response.json();
                         
-                        if (data.results && data.results.length > 0) {
-                            const result = data.results[0];
-                            stock.prevClose = stock.basePrice; // Store previous for change calc
-                            stock.basePrice = result.c; // Close price (most recent)
-                            console.log(`${stock.symbol}: $${stock.basePrice.toFixed(2)}`);
+                        // Parse the JSON content from the proxy response
+                        if (proxyData.contents) {
+                            const data = JSON.parse(proxyData.contents);
+                            
+                            if (data.results && data.results.length > 0) {
+                                const result = data.results[0];
+                                stock.prevClose = result.o; // Open price as reference
+                                stock.basePrice = result.c; // Close price (most recent)
+                                console.log(`${stock.symbol}: $${stock.basePrice.toFixed(2)}`);
+                            }
                         }
                         
-                        // Rate limit: wait 12 seconds between calls (5 calls/minute = 1 per 12s)
-                        // But for initial load, we'll go faster and rely on caching
+                        // Rate limit: 200ms between calls (5 calls/second to proxy)
                         if (i < stocks.length - 1) {
-                            await new Promise(resolve => setTimeout(resolve, 200)); // 200ms between calls initially
+                            await new Promise(resolve => setTimeout(resolve, 200));
                         }
                     } catch (e) {
-                        console.log(`Error fetching ${stock.symbol}:`, e);
+                        console.log(`Error fetching ${stock.symbol}:`, e.message);
                     }
                 }
                 
