@@ -491,6 +491,16 @@
                         <div class="card-title">🏆 Top Traders</div>
                         <button class="btn btn-buy" onclick="submitScore()">📤 Submit My Score</button>
                     </div>
+                    <div style="background: rgba(102,126,234,0.1); border-left: 4px solid var(--primary); padding: 12px 15px; margin: 15px 0; border-radius: 8px; font-size: 0.85em;">
+                        <strong>💡 How to compete:</strong> Submit your score, then export and share your leaderboard file with friends. Import their files to see combined rankings!
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button class="btn" onclick="exportLeaderboard()" style="background: rgba(255,255,255,0.1);">📥 Export</button>
+                        <label class="btn" style="background: rgba(255,255,255,0.1); cursor: pointer;">
+                            📤 Import
+                            <input type="file" accept=".json" onchange="importLeaderboard(this.files[0])" style="display: none;">
+                        </label>
+                    </div>
                     <div id="leaderboardList"></div>
                 </div>
             </div>
@@ -869,23 +879,32 @@
             }
         }
 
-        // Leaderboard API endpoint
-        // Railway deployment (replace with your actual Railway URL after deploy)
-        const LEADERBOARD_API = 'https://samowl-leaderboard-production.up.railway.app';
-        // Fallback to localhost for development
-        // const LEADERBOARD_API = window.location.hostname === 'localhost' 
-        //     ? 'http://localhost:8080' 
-        //     : 'https://samowl-leaderboard-production.up.railway.app';
+        // Leaderboard - stored in localStorage with export/import
+        const LEADERBOARD_KEY = 'portfolioLeaderboard';
         
-        // Update leaderboard from server or GitHub
-        async function updateLeaderboard() {
+        // Load leaderboard from localStorage
+        function loadLeaderboard() {
+            const saved = localStorage.getItem(LEADERBOARD_KEY);
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.log('Error loading leaderboard:', e);
+                }
+            }
+            return { entries: [] };
+        }
+        
+        // Save leaderboard to localStorage
+        function saveLeaderboard(data) {
+            localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(data));
+        }
+        
+        // Update leaderboard display
+        function updateLeaderboard() {
             try {
-                // Fetch leaderboard - use GitHub raw URL for public access
-                const url = typeof LEADERBOARD_API === 'string' && LEADERBOARD_API.includes('raw.githubusercontent.com')
-                    ? `${LEADERBOARD_API}?t=${Date.now()}`
-                    : `${LEADERBOARD_API}/leaderboard?t=${Date.now()}`;
-                const response = await fetch(url);
-                const data = await response.json();
+                const data = loadLeaderboard();
+                const players = data.entries || [];
                 
                 const players = data.entries || [];
                 
@@ -922,8 +941,8 @@
             }
         }
         
-        // Submit score to leaderboard
-        async function submitScore() {
+        // Submit score to localStorage leaderboard
+        function submitScore() {
             try {
                 let portfolioValue = gameState.cash;
                 for (const [symbol, h] of Object.entries(gameState.holdings)) {
@@ -935,50 +954,106 @@
                 
                 console.log(`Submitting score: ${gameState.playerName} - $${portfolioValue.toLocaleString()}`);
                 
-                // Check if we're on localhost (server available) or GitHub Pages
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                    // Local development - POST to local server
-                    try {
-                        const response = await fetch('http://localhost:8080/leaderboard', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                name: gameState.playerName,
-                                portfolio_value: portfolioValue,
-                                cash: gameState.cash
-                            })
-                        });
-                        
-                        const result = await response.json();
-                        if (result.status === 'ok') {
-                            showSubmitMessage(`✅ Rank #${result.rank}! Syncing...`);
-                            // Refresh leaderboard after a delay (GitHub needs time)
-                            setTimeout(updateLeaderboard, 30000);
-                        } else {
-                            showSubmitMessage('❌ Error submitting');
-                        }
-                    } catch (e) {
-                        showSubmitMessage('❌ Server not running');
+                // Load current leaderboard
+                const leaderboard = loadLeaderboard();
+                
+                // Check if player already exists
+                const existingIndex = leaderboard.entries.findIndex(e => e.name === gameState.playerName);
+                
+                if (existingIndex >= 0) {
+                    // Update if new score is higher
+                    if (portfolioValue > leaderboard.entries[existingIndex].portfolio_value) {
+                        leaderboard.entries[existingIndex].portfolio_value = portfolioValue;
+                        leaderboard.entries[existingIndex].cash = gameState.cash;
+                        leaderboard.entries[existingIndex].updated = new Date().toISOString();
+                        showSubmitMessage('✅ New high score!');
+                    } else {
+                        showSubmitMessage('ℹ️ Score not higher');
                     }
                 } else {
-                    // Production - show message about server requirement
-                    showSubmitMessage('📝 Score recorded locally');
-                    
-                    // Store locally
-                    const localScores = JSON.parse(localStorage.getItem('portfolioScores') || '[]');
-                    localScores.push({
+                    // Add new entry
+                    leaderboard.entries.push({
                         name: gameState.playerName,
                         portfolio_value: portfolioValue,
                         cash: gameState.cash,
-                        date: new Date().toISOString()
+                        updated: new Date().toISOString()
                     });
-                    localStorage.setItem('portfolioScores', JSON.stringify(localScores));
+                    showSubmitMessage('✅ Score submitted!');
                 }
+                
+                // Sort by portfolio value and keep top 100
+                leaderboard.entries.sort((a, b) => b.portfolio_value - a.portfolio_value);
+                leaderboard.entries = leaderboard.entries.slice(0, 100);
+                
+                // Save to localStorage
+                saveLeaderboard(leaderboard);
+                
+                // Refresh display
+                updateLeaderboard();
                 
             } catch (e) {
                 console.log('Could not submit score:', e);
                 showSubmitMessage('❌ Error');
             }
+        }
+        
+        // Export leaderboard to share
+        function exportLeaderboard() {
+            const data = loadLeaderboard();
+            const exportData = {
+                ...data,
+                exported_at: new Date().toISOString(),
+                source: gameState.playerName
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `samowl-leaderboard-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showSubmitMessage('📥 Leaderboard exported!');
+        }
+        
+        // Import leaderboard from file
+        function importLeaderboard(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.entries) {
+                        const current = loadLeaderboard();
+                        
+                        // Merge entries (keep highest score for each player)
+                        imported.entries.forEach(newEntry => {
+                            const existing = current.entries.find(e => e.name === newEntry.name);
+                            if (existing) {
+                                if (newEntry.portfolio_value > existing.portfolio_value) {
+                                    existing.portfolio_value = newEntry.portfolio_value;
+                                    existing.cash = newEntry.cash;
+                                    existing.updated = newEntry.updated;
+                                }
+                            } else {
+                                current.entries.push(newEntry);
+                            }
+                        });
+                        
+                        // Sort and save
+                        current.entries.sort((a, b) => b.portfolio_value - a.portfolio_value);
+                        current.entries = current.entries.slice(0, 100);
+                        saveLeaderboard(current);
+                        updateLeaderboard();
+                        showSubmitMessage('✅ Leaderboard imported!');
+                    }
+                } catch (err) {
+                    showSubmitMessage('❌ Invalid file');
+                }
+            };
+            reader.readAsText(file);
         }
         
         // Helper to show submit message
