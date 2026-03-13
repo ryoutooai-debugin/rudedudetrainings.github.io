@@ -637,17 +637,19 @@
         }
 
         // Fetch real prices from Polygon.io in batches with delays
-        // Free tier: 5 calls/minute = 1 call per 12 seconds
-        // We fetch 5 stocks, wait 12s, fetch 5 more, etc. = ~1 minute total
+        // Free tier: 5 calls/minute - we use 3 calls/minute to stay safe
+        // We fetch 3 stocks, wait 20s, fetch 3 more, etc. = ~2.5 minutes total
         async function fetchRealPrices() {
             console.log('Fetching real prices from Polygon.io...');
             
-            const batchSize = 5;
-            const delayMs = 12000; // 12 seconds between batches
+            const batchSize = 3;
+            const delayMs = 20000; // 20 seconds between batches (3 calls/minute)
             
             for (let i = 0; i < stocks.length; i += batchSize) {
                 const batch = stocks.slice(i, i + batchSize);
-                console.log(`Fetching batch ${Math.floor(i/batchSize) + 1}: ${batch.map(s => s.symbol).join(', ')}`);
+                const batchNum = Math.floor(i/batchSize) + 1;
+                const totalBatches = Math.ceil(stocks.length / batchSize);
+                console.log(`Fetching batch ${batchNum}/${totalBatches}: ${batch.map(s => s.symbol).join(', ')}`);
                 
                 // Fetch this batch
                 for (let stock of batch) {
@@ -655,7 +657,7 @@
                         const response = await fetch(`https://api.polygon.io/v2/aggs/ticker/${stock.symbol}/prev?apiKey=${POLYGON_API_KEY}`);
                         
                         if (response.status === 429) {
-                            console.log(`Rate limited on ${stock.symbol}`);
+                            console.log(`Rate limited on ${stock.symbol}, will retry next cycle`);
                             continue;
                         }
                         
@@ -675,9 +677,9 @@
                     }
                 }
                 
-                // Wait 12 seconds before next batch (respects 5 calls/minute)
+                // Wait 20 seconds before next batch (respects 3 calls/minute, safely under 5)
                 if (i + batchSize < stocks.length) {
-                    console.log(`Waiting 12s before next batch...`);
+                    console.log(`Waiting 20s before next batch...`);
                     await new Promise(r => setTimeout(r, delayMs));
                 }
             }
