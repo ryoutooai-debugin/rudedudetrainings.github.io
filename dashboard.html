@@ -286,20 +286,20 @@
         <!-- Summary Cards -->
         <div class="summary-cards">
             <div class="summary-card">
-                <div class="summary-value" id="total-bots">4</div>
+                <div class="summary-value" id="total-bots">3</div>
                 <div class="summary-label">Active Bots</div>
             </div>
             <div class="summary-card">
                 <div class="summary-value" id="open-positions">2</div>
-                <div class="summary-label">Open Positions</div>
+                <div class="summary-label">CC Positions</div>
             </div>
             <div class="summary-card">
                 <div class="summary-value positive" id="total-pnl">+3.63%</div>
-                <div class="summary-label">Total Return</div>
+                <div class="summary-label">CC Return</div>
             </div>
             <div class="summary-card">
                 <div class="summary-value" id="portfolio-value">$15,545</div>
-                <div class="summary-label">Portfolio Value</div>
+                <div class="summary-label">CC Portfolio</div>
             </div>
         </div>
         
@@ -395,67 +395,70 @@ PFE: New entry $27C exp 3/20</div>
             </div>
             
             <!-- Scalper Bot -->
-            <div class="bot-card inactive" id="scalper-card">
+            <div class="bot-card active" id="scalper-card">
                 <div class="bot-header">
                     <span class="bot-name">⚡ Scalper Bot</span>
-                    <span class="status-badge inactive" id="scalper-status">INACTIVE</span>
+                    <span class="status-badge active" id="scalper-status">ACTIVE</span>
                 </div>
                 <div class="bot-info">
                     <div class="info-row">
                         <span class="info-label">Strategy</span>
-                        <span class="info-value">Mean Reversion</span>
+                        <span class="info-value">VWAP Mean Reversion</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">Symbols</span>
-                        <span class="info-value">AAPL, TSLA, NVDA</span>
+                        <span class="info-label">Symbol</span>
+                        <span class="info-value">SPY</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Capital</span>
+                        <span class="info-value">$100,000 (paper)</span>
                     </div>
                     <div class="info-row">
                         <span class="info-label">Status</span>
-                        <span class="info-value">Not currently running</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Start Command</span>
-                        <span class="info-value"><code>python3 rudedude_tradebot.py</code></span>
+                        <span class="info-value">Scanning every 15 sec</span>
                     </div>
                 </div>
                 <div class="action-buttons">
-                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/rudedude_tradebot.py" class="btn btn-primary" target="_blank">View Code</a>
+                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/rudedude_tradebot_live.py" class="btn btn-primary" target="_blank">View Code</a>
                 </div>
-                <div class="console-output" id="scalper-console">Status: INACTIVE
-To start: python3 rudedude_tradebot.py
-Logs: logs/scalper.log</div>
+                <div class="console-output" id="scalper-console">⚡ LIVE SCALPER RUNNING
+Strategy: VWAP Mean Reversion
+Entry: Below VWAP + RSI < 40
+Exit: 0.5% stop / 1% target
+Tracking all trades in ledger...</div>
             </div>
             
-            <!-- EWO vs Scalper Comparison -->
+            <!-- EWO vs Contrarian Challenge -->
             <div class="bot-card active" id="compare-card">
                 <div class="bot-header">
-                    <span class="bot-name">🏆 Strategy Showdown</span>
+                    <span class="bot-name">🏆 EWO vs Contrarian</span>
                     <span class="status-badge active" id="compare-status">ACTIVE</span>
                 </div>
                 <div class="bot-info">
                     <div class="info-row">
-                        <span class="info-label">EWO Signals</span>
-                        <span class="info-value">22 (March 12)</span>
+                        <span class="info-label">Regular EWO</span>
+                        <span class="info-value">2 open positions</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">Scalper Signals</span>
-                        <span class="info-value">0 (today)</span>
+                        <span class="info-label">Contrarian EWO</span>
+                        <span class="info-value">0 open positions</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">Comparison</span>
-                        <span class="info-value">EWO vs Scalper running</span>
+                        <span class="info-label">Challenge</span>
+                        <span class="info-value">Trend vs Mean Reversion</span>
                     </div>
                     <div class="info-row">
-                        <span class="info-label">Run Command</span>
-                        <span class="info-value"><code>python3 scalper_vs_ewo.py</code></span>
+                        <span class="info-label">Symbols</span>
+                        <span class="info-value">SPY, QQQ</span>
                     </div>
                 </div>
                 <div class="action-buttons">
-                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/scalper_vs_ewo.py" class="btn btn-primary" target="_blank">View Code</a>
+                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/ewo_vs_continuous.py" class="btn btn-primary" target="_blank">View Code</a>
                 </div>
-                <div class="console-output" id="compare-console">EWO vs Scalper comparison active
-Tracking both strategies on same data
-Results logged to reports/</div>
+                <div class="console-output" id="compare-console">🏆 CHALLENGE ACTIVE
+Regular EWO: Buy green candles
+Contrarian: Buy red candles (reverse)
+Scanning every 2 minutes...</div>
             </div>
         </div>
         
@@ -465,23 +468,23 @@ Results logged to reports/</div>
                 <span class="bot-name">⌨️ Quick SSH Commands</span>
             </div>
             <div class="console-output">
-# Check if EWO tracker is running
-ps aux | grep simple_ewo_continuous
+# Check all bots
+ps aux | grep -E "simple_ewo|rudedude_tradebot|ewo_vs"
 
-# Start EWO tracker
-nohup python3 simple_ewo_continuous.py > logs/simple_ewo.log 2>&1 &
+# View EWO logs
+tail -f logs/simple_ewo.log
+
+# View Scalper logs
+tail -f logs/scalper_live.log
+
+# View EWO vs Challenge logs
+tail -f logs/ewo_vs.log
 
 # Check CC positions
 python3 cc_paper_trader.py status
 
 # View CC decision log
 python3 cc_paper_trader.py decisions
-
-# Start scalper bot
-python3 rudedude_tradebot.py
-
-# View any log
-tail -f logs/simple_ewo.log
             </div>
         </div>
     </div>
