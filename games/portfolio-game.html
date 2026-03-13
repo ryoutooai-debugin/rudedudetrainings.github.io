@@ -638,7 +638,7 @@
             renderMarket();
             updateDashboard();
             updateHoldings();
-            updateLeaderboard();
+            await updateLeaderboard();
             
             // Fetch real prices on start, then update every 5 minutes
             // Polygon free tier: 5 calls/minute = 1 call per 12 seconds
@@ -792,8 +792,8 @@
             saveGame();
             updateDashboard();
             updateHoldings();
-            submitScore(); // Submit score after trade
-            updateLeaderboard();
+            await submitScore(); // Submit score after trade
+            await updateLeaderboard();
             closeModal();
         }
 
@@ -879,11 +879,25 @@
             }
         }
 
-        // Leaderboard - stored in localStorage with export/import
+        // Leaderboard - Global server + localStorage backup
         const LEADERBOARD_KEY = 'portfolioLeaderboard';
+        const API_URL = 'https://rudedudetrainingsgithubio-production.up.railway.app';
         
-        // Load leaderboard from localStorage
-        function loadLeaderboard() {
+        // Load leaderboard from global server
+        async function loadLeaderboard() {
+            try {
+                const response = await fetch(`${API_URL}/leaderboard`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Also save locally as backup
+                    localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(data));
+                    return data;
+                }
+            } catch (e) {
+                console.log('Server unavailable, using local backup:', e);
+            }
+            
+            // Fallback to localStorage
             const saved = localStorage.getItem(LEADERBOARD_KEY);
             if (saved) {
                 try {
@@ -895,15 +909,15 @@
             return { entries: [] };
         }
         
-        // Save leaderboard to localStorage
+        // Save leaderboard to localStorage (backup only)
         function saveLeaderboard(data) {
             localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(data));
         }
         
         // Update leaderboard display
-        function updateLeaderboard() {
+        async function updateLeaderboard() {
             try {
-                const data = loadLeaderboard();
+                const data = await loadLeaderboard();
                 const players = data.entries || [];
                 
                 // Calculate current player's value
@@ -939,8 +953,8 @@
             }
         }
         
-        // Submit score to localStorage leaderboard
-        function submitScore() {
+        // Submit score to global leaderboard
+        async function submitScore() {
             try {
                 let portfolioValue = gameState.cash;
                 for (const [symbol, h] of Object.entries(gameState.holdings)) {
@@ -951,43 +965,59 @@
                 }
                 
                 console.log(`Submitting score: ${gameState.playerName} - $${portfolioValue.toLocaleString()}`);
+                showSubmitMessage('📤 Submitting...');
                 
-                // Load current leaderboard
-                const leaderboard = loadLeaderboard();
-                
-                // Check if player already exists
-                const existingIndex = leaderboard.entries.findIndex(e => e.name === gameState.playerName);
-                
-                if (existingIndex >= 0) {
-                    // Update if new score is higher
-                    if (portfolioValue > leaderboard.entries[existingIndex].portfolio_value) {
-                        leaderboard.entries[existingIndex].portfolio_value = portfolioValue;
-                        leaderboard.entries[existingIndex].cash = gameState.cash;
-                        leaderboard.entries[existingIndex].updated = new Date().toISOString();
-                        showSubmitMessage('✅ New high score!');
-                    } else {
-                        showSubmitMessage('ℹ️ Score not higher');
-                    }
-                } else {
-                    // Add new entry
-                    leaderboard.entries.push({
-                        name: gameState.playerName,
-                        portfolio_value: portfolioValue,
-                        cash: gameState.cash,
-                        updated: new Date().toISOString()
+                // Send to global server
+                try {
+                    const response = await fetch(`${API_URL}/leaderboard`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: gameState.playerName,
+                            portfolio_value: portfolioValue,
+                            cash: gameState.cash
+                        })
                     });
-                    showSubmitMessage('✅ Score submitted!');
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        showSubmitMessage(`✅ Rank #${result.rank || '?'} on global leaderboard!`);
+                    } else {
+                        throw new Error('Server error');
+                    }
+                } catch (serverError) {
+                    console.log('Server submit failed, using local:', serverError);
+                    
+                    // Fallback to localStorage
+                    const leaderboard = await loadLeaderboard();
+                    const existingIndex = leaderboard.entries.findIndex(e => e.name === gameState.playerName);
+                    
+                    if (existingIndex >= 0) {
+                        if (portfolioValue > leaderboard.entries[existingIndex].portfolio_value) {
+                            leaderboard.entries[existingIndex].portfolio_value = portfolioValue;
+                            leaderboard.entries[existingIndex].cash = gameState.cash;
+                            leaderboard.entries[existingIndex].updated = new Date().toISOString();
+                            showSubmitMessage('✅ Saved locally (server offline)');
+                        } else {
+                            showSubmitMessage('ℹ️ Score not higher');
+                        }
+                    } else {
+                        leaderboard.entries.push({
+                            name: gameState.playerName,
+                            portfolio_value: portfolioValue,
+                            cash: gameState.cash,
+                            updated: new Date().toISOString()
+                        });
+                        showSubmitMessage('✅ Saved locally (server offline)');
+                    }
+                    
+                    leaderboard.entries.sort((a, b) => b.portfolio_value - a.portfolio_value);
+                    leaderboard.entries = leaderboard.entries.slice(0, 100);
+                    saveLeaderboard(leaderboard);
                 }
                 
-                // Sort by portfolio value and keep top 100
-                leaderboard.entries.sort((a, b) => b.portfolio_value - a.portfolio_value);
-                leaderboard.entries = leaderboard.entries.slice(0, 100);
-                
-                // Save to localStorage
-                saveLeaderboard(leaderboard);
-                
                 // Refresh display
-                updateLeaderboard();
+                await updateLeaderboard();
                 
             } catch (e) {
                 console.log('Could not submit score:', e);
@@ -1020,11 +1050,11 @@
         // Import leaderboard from file
         function importLeaderboard(file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (imported.entries) {
-                        const current = loadLeaderboard();
+                        const current = await loadLeaderboard();
                         
                         // Merge entries (keep highest score for each player)
                         imported.entries.forEach(newEntry => {
@@ -1044,7 +1074,7 @@
                         current.entries.sort((a, b) => b.portfolio_value - a.portfolio_value);
                         current.entries = current.entries.slice(0, 100);
                         saveLeaderboard(current);
-                        updateLeaderboard();
+                        await updateLeaderboard();
                         showSubmitMessage('✅ Leaderboard imported!');
                     }
                 } catch (err) {
@@ -1067,7 +1097,7 @@
         }
 
         // Load saved game on page load
-        window.onload = function() {
+        window.onload = async function() {
             if (loadGame()) {
                 // Auto-resume saved game
                 document.getElementById('startScreen').classList.add('hidden');
@@ -1076,7 +1106,7 @@
                 renderMarket();
                 updateDashboard();
                 updateHoldings();
-                updateLeaderboard();
+                await updateLeaderboard();
                 fetchRealPrices();
                 // Update every 5 minutes for swing trading (was 30 seconds)
                 setInterval(updatePrices, 300000);
