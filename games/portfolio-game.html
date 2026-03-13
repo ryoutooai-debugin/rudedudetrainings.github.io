@@ -869,15 +869,21 @@
             }
         }
 
-        // Leaderboard API endpoint - uses GitHub raw URL for public access
-        const LEADERBOARD_URL = 'https://raw.githubusercontent.com/ryoutooai-debugin/rudedudetrainings.github.io/main/leaderboard.json';
-        const SUBMIT_API = 'https://api.github.com/repos/ryoutooai-debugin/rudedudetrainings.github.io/contents/leaderboard.json';
+        // Leaderboard API endpoint
+        // For local testing: http://localhost:8080
+        // For production, this needs to be a publicly accessible server
+        const LEADERBOARD_API = window.location.hostname === 'localhost' 
+            ? 'http://localhost:8080' 
+            : 'https://raw.githubusercontent.com/ryoutooai-debugin/rudedudetrainings.github.io/main/leaderboard.json';
         
-        // Update leaderboard from GitHub
+        // Update leaderboard from server or GitHub
         async function updateLeaderboard() {
             try {
-                // Fetch leaderboard from GitHub raw URL (public)
-                const response = await fetch(`${LEADERBOARD_URL}?t=${Date.now()}`);
+                // Fetch leaderboard - use GitHub raw URL for public access
+                const url = typeof LEADERBOARD_API === 'string' && LEADERBOARD_API.includes('raw.githubusercontent.com')
+                    ? `${LEADERBOARD_API}?t=${Date.now()}`
+                    : `${LEADERBOARD_API}/leaderboard?t=${Date.now()}`;
+                const response = await fetch(url);
                 const data = await response.json();
                 
                 const players = data.entries || [];
@@ -926,32 +932,63 @@
                     }
                 }
                 
-                // For now, show a message that score submission requires server
-                // In production, this would POST to a backend API
-                console.log(`Score ready to submit: ${gameState.playerName} - $${portfolioValue.toLocaleString()}`);
+                console.log(`Submitting score: ${gameState.playerName} - $${portfolioValue.toLocaleString()}`);
                 
-                // Show user a message
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '✅ Score Saved Locally!';
-                btn.style.background = '#10b981';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '';
-                }, 2000);
-                
-                // Store locally for now (until backend is connected)
-                const localScores = JSON.parse(localStorage.getItem('portfolioScores') || '[]');
-                localScores.push({
-                    name: gameState.playerName,
-                    portfolio_value: portfolioValue,
-                    cash: gameState.cash,
-                    date: new Date().toISOString()
-                });
-                localStorage.setItem('portfolioScores', JSON.stringify(localScores));
+                // Check if we're on localhost (server available) or GitHub Pages
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    // Local development - POST to local server
+                    try {
+                        const response = await fetch('http://localhost:8080/leaderboard', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                name: gameState.playerName,
+                                portfolio_value: portfolioValue,
+                                cash: gameState.cash
+                            })
+                        });
+                        
+                        const result = await response.json();
+                        if (result.status === 'ok') {
+                            showSubmitMessage(`✅ Rank #${result.rank}! Syncing...`);
+                            // Refresh leaderboard after a delay (GitHub needs time)
+                            setTimeout(updateLeaderboard, 30000);
+                        } else {
+                            showSubmitMessage('❌ Error submitting');
+                        }
+                    } catch (e) {
+                        showSubmitMessage('❌ Server not running');
+                    }
+                } else {
+                    // Production - show message about server requirement
+                    showSubmitMessage('📝 Score recorded locally');
+                    
+                    // Store locally
+                    const localScores = JSON.parse(localStorage.getItem('portfolioScores') || '[]');
+                    localScores.push({
+                        name: gameState.playerName,
+                        portfolio_value: portfolioValue,
+                        cash: gameState.cash,
+                        date: new Date().toISOString()
+                    });
+                    localStorage.setItem('portfolioScores', JSON.stringify(localScores));
+                }
                 
             } catch (e) {
                 console.log('Could not submit score:', e);
+                showSubmitMessage('❌ Error');
+            }
+        }
+        
+        // Helper to show submit message
+        function showSubmitMessage(msg) {
+            const btn = document.querySelector('button[onclick="submitScore()"]');
+            if (btn) {
+                const originalText = btn.textContent;
+                btn.textContent = msg;
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 3000);
             }
         }
 
