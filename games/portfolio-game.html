@@ -906,8 +906,6 @@
                 const data = loadLeaderboard();
                 const players = data.entries || [];
                 
-                const players = data.entries || [];
-                
                 // Calculate current player's value
                 let currentValue = gameState.cash;
                 for (const [symbol, h] of Object.entries(gameState.holdings)) {
