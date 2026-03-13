@@ -634,13 +634,22 @@
         }
 
         // Fetch real prices from Polygon.io (free tier: 5 calls/minute)
+        // For 24 tickers: fetch 5 per minute = 1 per 12 seconds
+        // Full refresh takes ~4.8 minutes
         async function fetchRealPrices() {
             try {
                 console.log('Fetching real prices from Polygon.io...');
                 
-                for (let stock of stocks) {
+                for (let i = 0; i < stocks.length; i++) {
+                    const stock = stocks[i];
                     try {
                         const response = await fetch(`https://api.polygon.io/v2/aggs/ticker/${stock.symbol}/prev?apiKey=${POLYGON_API_KEY}`);
+                        
+                        if (response.status === 429) {
+                            console.log(`Rate limited on ${stock.symbol}, skipping...`);
+                            continue;
+                        }
+                        
                         const data = await response.json();
                         
                         if (data.results && data.results[0]) {
@@ -648,11 +657,14 @@
                             stock.prevClose = data.results[0].o; // Open price for change calc
                             console.log(`${stock.symbol}: $${stock.basePrice.toFixed(2)}`);
                         }
-                        
-                        // Rate limiting - wait 200ms between calls (5 calls/sec max)
-                        await new Promise(r => setTimeout(r, 200));
                     } catch (e) {
                         console.log(`Could not fetch ${stock.symbol}, using cached price`);
+                    }
+                    
+                    // Rate limiting: 12 seconds between calls (5 calls/minute max)
+                    // Only wait if not the last stock
+                    if (i < stocks.length - 1) {
+                        await new Promise(r => setTimeout(r, 12000));
                     }
                 }
                 console.log('Prices updated from Polygon.io');
