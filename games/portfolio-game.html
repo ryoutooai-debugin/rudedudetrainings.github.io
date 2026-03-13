@@ -520,7 +520,7 @@
 
         let currentTrade = { symbol: '', action: '', price: 0 };
         // Polygon.io API Key (free tier - 5 calls/minute)
-        const POLYGON_API_KEY = 'Q5eRu3P2Y4wR5fP9eC1kK8mN7vB3hG1d';
+        const POLYGON_API_KEY = 'hZajhu43KW9bwuLMdpbtBww7KqeU1bad';
         
         // Diversified established companies for swing trading - 24 quality tickers
         const stocks = [
@@ -634,54 +634,30 @@
         }
 
         // Fetch real prices from Polygon.io (free tier: 5 calls/minute)
-        // Using CORS proxy to bypass browser restrictions
         async function fetchRealPrices() {
             try {
                 console.log('Fetching real prices from Polygon.io...');
                 
-                // Use CORS proxy for Polygon API
-                const corsProxy = 'https://api.allorigins.win/get?url=';
-                
-                for (let i = 0; i < stocks.length; i++) {
-                    const stock = stocks[i];
+                for (let stock of stocks) {
                     try {
-                        const polygonUrl = encodeURIComponent(
-                            `https://api.polygon.io/v2/aggs/ticker/${stock.symbol}/prev?apiKey=${POLYGON_API_KEY}`
-                        );
+                        const response = await fetch(`https://api.polygon.io/v2/aggs/ticker/${stock.symbol}/prev?apiKey=${POLYGON_API_KEY}`);
+                        const data = await response.json();
                         
-                        const response = await fetch(corsProxy + polygonUrl);
-                        
-                        if (!response.ok) {
-                            console.log(`Proxy error on ${stock.symbol}, using cached price`);
-                            continue;
+                        if (data.results && data.results[0]) {
+                            stock.basePrice = data.results[0].c; // Close price
+                            stock.prevClose = data.results[0].o; // Open price for change calc
+                            console.log(`${stock.symbol}: $${stock.basePrice.toFixed(2)}`);
                         }
                         
-                        const proxyData = await response.json();
-                        
-                        // Parse the JSON content from the proxy response
-                        if (proxyData.contents) {
-                            const data = JSON.parse(proxyData.contents);
-                            
-                            if (data.results && data.results.length > 0) {
-                                const result = data.results[0];
-                                stock.prevClose = result.o; // Open price as reference
-                                stock.basePrice = result.c; // Close price (most recent)
-                                console.log(`${stock.symbol}: $${stock.basePrice.toFixed(2)}`);
-                            }
-                        }
-                        
-                        // Rate limit: 200ms between calls (5 calls/second to proxy)
-                        if (i < stocks.length - 1) {
-                            await new Promise(resolve => setTimeout(resolve, 200));
-                        }
+                        // Rate limiting - wait 200ms between calls (5 calls/sec max)
+                        await new Promise(r => setTimeout(r, 200));
                     } catch (e) {
-                        console.log(`Error fetching ${stock.symbol}:`, e.message);
+                        console.log(`Could not fetch ${stock.symbol}, using cached price`);
                     }
                 }
-                
-                console.log('Real prices loaded from Polygon.io');
+                console.log('Prices updated from Polygon.io');
             } catch (e) {
-                console.log('Using cached prices (Polygon.io unavailable):', e);
+                console.log('Using cached prices (Polygon API limit reached)');
             }
             renderMarket();
             updateDashboard();
