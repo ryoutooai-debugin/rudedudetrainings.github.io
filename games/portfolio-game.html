@@ -870,11 +870,12 @@
         }
 
         // Leaderboard API endpoint
-        // For local testing: http://localhost:8080
-        // For production, this needs to be a publicly accessible server
-        const LEADERBOARD_API = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8080' 
-            : 'https://raw.githubusercontent.com/ryoutooai-debugin/rudedudetrainings.github.io/main/leaderboard.json';
+        // Railway deployment (replace with your actual Railway URL after deploy)
+        const LEADERBOARD_API = 'https://samowl-leaderboard-production.up.railway.app';
+        // Fallback to localhost for development
+        // const LEADERBOARD_API = window.location.hostname === 'localhost' 
+        //     ? 'http://localhost:8080' 
+        //     : 'https://samowl-leaderboard-production.up.railway.app';
         
         // Update leaderboard from server or GitHub
         async function updateLeaderboard() {

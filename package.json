@@ -1,14 +1,12 @@
 {
-  "name": "trading-leaderboard",
+  "name": "samowl-leaderboard",
   "version": "1.0.0",
-  "description": "Pseudonymous trading leaderboard",
+  "description": "SamOwl Portfolio Challenge Leaderboard API",
+  "main": "leaderboard_server.py",
   "scripts": {
-    "dev": "netlify dev"
+    "start": "python3 leaderboard_server.py"
   },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.39.0"
-  },
-  "devDependencies": {
-    "netlify-cli": "^17.0.0"
+  "engines": {
+    "python": "3.9"
   }
 }

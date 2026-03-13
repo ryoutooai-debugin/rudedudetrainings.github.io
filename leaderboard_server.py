@@ -7,14 +7,16 @@ Receives scores from players and commits to GitHub repo
 import json
 import time
 import subprocess
+import os
 from datetime import datetime
 from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Configuration
-REPO_DIR = Path('/root/rudedudetrainings.github.io')
+# Use Railway's persistent volume or local directory
+REPO_DIR = Path(os.environ.get('RAILWAY_VOLUME_MOUNT_PATH', '/root/rudedudetrainings.github.io'))
 LEADERBOARD_FILE = REPO_DIR / 'leaderboard.json'
-SERVER_PORT = 8080
+SERVER_PORT = int(os.environ.get('PORT', 8080))
 
 def load_leaderboard():
     """Load leaderboard from file"""
