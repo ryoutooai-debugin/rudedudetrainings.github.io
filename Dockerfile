@@ -2,12 +2,11 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Install git for committing to GitHub
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-
-# Copy files
+# Copy server file
 COPY leaderboard_server.py .
-COPY leaderboard.json .
+
+# Create empty leaderboard.json if it doesn't exist
+RUN echo '{"entries": [], "last_update": ""}' > leaderboard.json
 
 # Railway provides PORT env variable
 ENV PORT=8080
