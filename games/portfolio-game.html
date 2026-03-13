@@ -461,7 +461,7 @@
                         <div class="card-title">🌎 Market</div>
                     </div>
                     <div style="background: rgba(255,193,7,0.1); border-left: 4px solid #ffc107; padding: 12px 15px; margin-bottom: 15px; border-radius: 8px; font-size: 0.85em; color: #ffc107;">
-                        <strong>📊 Market Data:</strong> Real prices via Polygon.io. Updates every 4 minutes. Delayed ~15 min. Free tier: 5 API calls/minute.
+                        <strong>📊 Market Data:</strong> Real prices via Polygon.io. Updates every 5 minutes. Delayed ~15 min. 24 quality stocks across all sectors.
                     </div>
                     <div class="stock-list" id="marketList"></div>
                     <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px; font-size: 0.75em; color: #94a3b8; text-align: center;">
@@ -522,24 +522,38 @@
         // Polygon.io API Key (free tier - 5 calls/minute)
         const POLYGON_API_KEY = 'Q5eRu3P2Y4wR5fP9eC1kK8mN7vB3hG1d';
         
-        // Diversified established companies for swing trading
+        // Diversified established companies for swing trading - 24 quality tickers
         const stocks = [
+            // Tech Giants
             { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 175.50, prevClose: 175.50 },
             { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 380.25, prevClose: 380.25 },
             { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30, prevClose: 142.30 },
             { symbol: 'AMZN', name: 'Amazon.com', basePrice: 178.90, prevClose: 178.90 },
             { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 890.15, prevClose: 890.15 },
             { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75, prevClose: 505.75 },
+            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40, prevClose: 625.40 },
+            { symbol: 'TSLA', name: 'Tesla Inc.', basePrice: 175.00, prevClose: 175.00 },
+            // Financials
             { symbol: 'BRK-B', name: 'Berkshire Hathaway', basePrice: 412.50, prevClose: 412.50 },
-            { symbol: 'LLY', name: 'Eli Lilly', basePrice: 725.00, prevClose: 725.00 },
-            { symbol: 'V', name: 'Visa Inc.', basePrice: 285.00, prevClose: 285.00 },
             { symbol: 'JPM', name: 'JPMorgan Chase', basePrice: 195.00, prevClose: 195.00 },
-            { symbol: 'WMT', name: 'Walmart Inc.', basePrice: 168.00, prevClose: 168.00 },
+            { symbol: 'V', name: 'Visa Inc.', basePrice: 285.00, prevClose: 285.00 },
             { symbol: 'MA', name: 'Mastercard', basePrice: 445.00, prevClose: 445.00 },
-            { symbol: 'PG', name: 'Procter & Gamble', basePrice: 168.00, prevClose: 168.00 },
-            { symbol: 'HD', name: 'Home Depot', basePrice: 345.00, prevClose: 345.00 },
+            // Healthcare
+            { symbol: 'LLY', name: 'Eli Lilly', basePrice: 725.00, prevClose: 725.00 },
+            { symbol: 'JNJ', name: 'Johnson & Johnson', basePrice: 155.00, prevClose: 155.00 },
+            { symbol: 'UNH', name: 'UnitedHealth Group', basePrice: 485.00, prevClose: 485.00 },
+            { symbol: 'PFE', name: 'Pfizer Inc.', basePrice: 28.00, prevClose: 28.00 },
+            // Consumer & Retail
+            { symbol: 'WMT', name: 'Walmart Inc.', basePrice: 168.00, prevClose: 168.00 },
             { symbol: 'COST', name: 'Costco Wholesale', basePrice: 785.00, prevClose: 785.00 },
-            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40, prevClose: 625.40 }
+            { symbol: 'HD', name: 'Home Depot', basePrice: 345.00, prevClose: 345.00 },
+            { symbol: 'PG', name: 'Procter & Gamble', basePrice: 168.00, prevClose: 168.00 },
+            { symbol: 'KO', name: 'Coca-Cola Co.', basePrice: 62.00, prevClose: 62.00 },
+            { symbol: 'PEP', name: 'PepsiCo Inc.', basePrice: 168.00, prevClose: 168.00 },
+            // Industrial & Energy
+            { symbol: 'XOM', name: 'Exxon Mobil', basePrice: 118.00, prevClose: 118.00 },
+            { symbol: 'CAT', name: 'Caterpillar Inc.', basePrice: 335.00, prevClose: 335.00 },
+            { symbol: 'BA', name: 'Boeing Co.', basePrice: 175.00, prevClose: 175.00 }
         ];
 
         // Load saved game
@@ -612,11 +626,11 @@
             updateHoldings();
             updateLeaderboard();
             
-            // Fetch real prices on start, then update every 4 minutes
+            // Fetch real prices on start, then update every 5 minutes
             // Polygon free tier: 5 calls/minute = 1 call per 12 seconds
-            // 16 tickers * 12 seconds = ~3.2 minutes minimum between full refreshes
+            // 24 tickers * 12 seconds = ~4.8 minutes minimum between full refreshes
             fetchRealPrices();
-            setInterval(updatePrices, 240000); // 4 minutes
+            setInterval(updatePrices, 300000); // 5 minutes
         }
 
         // Fetch real prices from Polygon.io (free tier: 5 calls/minute)
