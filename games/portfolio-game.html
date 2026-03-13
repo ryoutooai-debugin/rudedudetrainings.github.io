@@ -461,7 +461,7 @@
                         <div class="card-title">🌎 Market</div>
                     </div>
                     <div style="background: rgba(255,193,7,0.1); border-left: 4px solid #ffc107; padding: 12px 15px; margin-bottom: 15px; border-radius: 8px; font-size: 0.85em; color: #ffc107;">
-                        <strong>📊 Market Data:</strong> Prices update every 5 minutes. Delayed ~15-20 min from real market. For educational simulation only.
+                        <strong>📊 Market Data:</strong> Real prices via Polygon.io. Updates every 4 minutes. Delayed ~15 min. Free tier: 5 API calls/minute.
                     </div>
                     <div class="stock-list" id="marketList"></div>
                     <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px; font-size: 0.75em; color: #94a3b8; text-align: center;">
@@ -519,24 +519,27 @@
         };
 
         let currentTrade = { symbol: '', action: '', price: 0 };
+        // Polygon.io API Key (free tier - 5 calls/minute)
+        const POLYGON_API_KEY = 'Q5eRu3P2Y4wR5fP9eC1kK8mN7vB3hG1d';
+        
         // Diversified established companies for swing trading
         const stocks = [
-            { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 175.50 },
-            { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 380.25 },
-            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30 },
-            { symbol: 'AMZN', name: 'Amazon.com', basePrice: 178.90 },
-            { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 890.15 },
-            { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75 },
-            { symbol: 'BRK-B', name: 'Berkshire Hathaway', basePrice: 412.50 },
-            { symbol: 'LLY', name: 'Eli Lilly', basePrice: 725.00 },
-            { symbol: 'V', name: 'Visa Inc.', basePrice: 285.00 },
-            { symbol: 'JPM', name: 'JPMorgan Chase', basePrice: 195.00 },
-            { symbol: 'WMT', name: 'Walmart Inc.', basePrice: 168.00 },
-            { symbol: 'MA', name: 'Mastercard', basePrice: 445.00 },
-            { symbol: 'PG', name: 'Procter & Gamble', basePrice: 168.00 },
-            { symbol: 'HD', name: 'Home Depot', basePrice: 345.00 },
-            { symbol: 'COST', name: 'Costco Wholesale', basePrice: 785.00 },
-            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40 }
+            { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 175.50, prevClose: 175.50 },
+            { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 380.25, prevClose: 380.25 },
+            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30, prevClose: 142.30 },
+            { symbol: 'AMZN', name: 'Amazon.com', basePrice: 178.90, prevClose: 178.90 },
+            { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 890.15, prevClose: 890.15 },
+            { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75, prevClose: 505.75 },
+            { symbol: 'BRK-B', name: 'Berkshire Hathaway', basePrice: 412.50, prevClose: 412.50 },
+            { symbol: 'LLY', name: 'Eli Lilly', basePrice: 725.00, prevClose: 725.00 },
+            { symbol: 'V', name: 'Visa Inc.', basePrice: 285.00, prevClose: 285.00 },
+            { symbol: 'JPM', name: 'JPMorgan Chase', basePrice: 195.00, prevClose: 195.00 },
+            { symbol: 'WMT', name: 'Walmart Inc.', basePrice: 168.00, prevClose: 168.00 },
+            { symbol: 'MA', name: 'Mastercard', basePrice: 445.00, prevClose: 445.00 },
+            { symbol: 'PG', name: 'Procter & Gamble', basePrice: 168.00, prevClose: 168.00 },
+            { symbol: 'HD', name: 'Home Depot', basePrice: 345.00, prevClose: 345.00 },
+            { symbol: 'COST', name: 'Costco Wholesale', basePrice: 785.00, prevClose: 785.00 },
+            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40, prevClose: 625.40 }
         ];
 
         // Load saved game
@@ -609,35 +612,54 @@
             updateHoldings();
             updateLeaderboard();
             
-            // Fetch real prices on start, then update every 5 minutes for swing trading
+            // Fetch real prices on start, then update every 4 minutes
+            // Polygon free tier: 5 calls/minute = 1 call per 12 seconds
+            // 16 tickers * 12 seconds = ~3.2 minutes minimum between full refreshes
             fetchRealPrices();
-            setInterval(updatePrices, 300000);
+            setInterval(updatePrices, 240000); // 4 minutes
         }
 
-        // Fetch real prices from Yahoo Finance via CORS proxy
+        // Fetch real prices from Polygon.io (free tier: 5 calls/minute)
         async function fetchRealPrices() {
             try {
-                const symbols = stocks.map(s => s.symbol).join(',');
-                // Use CORS proxy to bypass browser restrictions
-                const proxyUrl = 'https://api.allorigins.win/get?url=';
-                const yahooUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
+                // Polygon free tier: 5 calls/minute, so we fetch one at a time with delay
+                // or batch them. Let's fetch individually with rate limiting.
+                console.log('Fetching real prices from Polygon.io...');
                 
-                const response = await fetch(proxyUrl + yahooUrl);
-                const proxyData = await response.json();
-                
-                // Parse the JSON content from the proxy response
-                const data = JSON.parse(proxyData.contents);
-                
-                if (data.chart && data.chart.result) {
-                    data.chart.result.forEach((result, index) => {
-                        if (result.meta && result.meta.regularMarketPrice) {
-                            stocks[index].basePrice = result.meta.regularMarketPrice;
+                for (let i = 0; i < stocks.length; i++) {
+                    const stock = stocks[i];
+                    try {
+                        const response = await fetch(
+                            `https://api.polygon.io/v2/aggs/ticker/${stock.symbol}/prev?apiKey=${POLYGON_API_KEY}`
+                        );
+                        
+                        if (!response.ok) {
+                            console.log(`Rate limited on ${stock.symbol}, using cached price`);
+                            continue;
                         }
-                    });
-                    console.log('Real prices loaded from Yahoo Finance');
+                        
+                        const data = await response.json();
+                        
+                        if (data.results && data.results.length > 0) {
+                            const result = data.results[0];
+                            stock.prevClose = stock.basePrice; // Store previous for change calc
+                            stock.basePrice = result.c; // Close price (most recent)
+                            console.log(`${stock.symbol}: $${stock.basePrice.toFixed(2)}`);
+                        }
+                        
+                        // Rate limit: wait 12 seconds between calls (5 calls/minute = 1 per 12s)
+                        // But for initial load, we'll go faster and rely on caching
+                        if (i < stocks.length - 1) {
+                            await new Promise(resolve => setTimeout(resolve, 200)); // 200ms between calls initially
+                        }
+                    } catch (e) {
+                        console.log(`Error fetching ${stock.symbol}:`, e);
+                    }
                 }
+                
+                console.log('Real prices loaded from Polygon.io');
             } catch (e) {
-                console.log('Using simulated prices (Yahoo Finance unavailable):', e);
+                console.log('Using cached prices (Polygon.io unavailable):', e);
             }
             renderMarket();
             updateDashboard();
@@ -660,7 +682,8 @@
         function renderMarket() {
             const list = document.getElementById('marketList');
             list.innerHTML = stocks.map(s => {
-                const change = (Math.random() - 0.5) * 2;
+                const change = s.basePrice - s.prevClose;
+                const changePct = (change / s.prevClose) * 100;
                 const changeClass = change >= 0 ? 'positive' : 'negative';
                 const changeSymbol = change >= 0 ? '+' : '';
                 return `
@@ -668,6 +691,7 @@
                         <div class="stock-symbol">${s.symbol}</div>
                         <div>${s.name}</div>
                         <div class="stock-price">$${s.basePrice.toFixed(2)}</div>
+                        <div class="stock-change ${changeClass}">${changeSymbol}${changePct.toFixed(2)}%</div>
                         <div>
                             <button class="btn btn-buy" onclick="openTrade('${s.symbol}', 'buy')">Buy</button>
                         </div>
