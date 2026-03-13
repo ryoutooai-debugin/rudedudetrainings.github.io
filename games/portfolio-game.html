@@ -461,7 +461,7 @@
                         <div class="card-title">🌎 Market</div>
                     </div>
                     <div style="background: rgba(255,193,7,0.1); border-left: 4px solid #ffc107; padding: 12px 15px; margin-bottom: 15px; border-radius: 8px; font-size: 0.85em; color: #ffc107;">
-                        <strong>📊 Market Data:</strong> Real prices via Polygon.io. Updates every 5 minutes. Delayed ~15 min. 24 quality stocks across all sectors.
+                        <strong>📊 Market Data:</strong> Real prices via Polygon.io (batch API). Updates every 5 minutes. Delayed ~15 min. 24 quality stocks.
                     </div>
                     <div class="stock-list" id="marketList"></div>
                     <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px; font-size: 0.75em; color: #94a3b8; text-align: center;">
@@ -633,43 +633,55 @@
             setInterval(updatePrices, 300000); // 5 minutes
         }
 
-        // Fetch real prices from Polygon.io (free tier: 5 calls/minute)
-        // For 24 tickers: fetch 5 per minute = 1 per 12 seconds
-        // Full refresh takes ~4.8 minutes
+        // Fetch real prices from Polygon.io using batch endpoint (1 call for all tickers)
+        // Free tier: 5 calls/minute - we use 1 call per refresh
         async function fetchRealPrices() {
             try {
-                console.log('Fetching real prices from Polygon.io...');
+                console.log('Fetching real prices from Polygon.io (batch)...');
                 
-                for (let i = 0; i < stocks.length; i++) {
-                    const stock = stocks[i];
-                    try {
-                        const response = await fetch(`https://api.polygon.io/v2/aggs/ticker/${stock.symbol}/prev?apiKey=${POLYGON_API_KEY}`);
-                        
-                        if (response.status === 429) {
-                            console.log(`Rate limited on ${stock.symbol}, skipping...`);
-                            continue;
-                        }
-                        
-                        const data = await response.json();
-                        
-                        if (data.results && data.results[0]) {
-                            stock.basePrice = data.results[0].c; // Close price
-                            stock.prevClose = data.results[0].o; // Open price for change calc
+                // Get today's date in YYYY-MM-DD format
+                const today = new Date().toISOString().split('T')[0];
+                
+                // Fetch grouped daily bars for all stocks in one call
+                const response = await fetch(
+                    `https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/${today}?adjusted=true&apiKey=${POLYGON_API_KEY}`
+                );
+                
+                if (response.status === 429) {
+                    console.log('Rate limited, using cached prices');
+                    renderMarket();
+                    updateDashboard();
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (data.results) {
+                    // Create a map of ticker -> price data
+                    const priceMap = {};
+                    data.results.forEach(result => {
+                        priceMap[result.T] = {
+                            close: result.c,
+                            open: result.o,
+                            high: result.h,
+                            low: result.l,
+                            volume: result.v
+                        };
+                    });
+                    
+                    // Update all stocks from the batch data
+                    stocks.forEach(stock => {
+                        if (priceMap[stock.symbol]) {
+                            stock.prevClose = priceMap[stock.symbol].open;
+                            stock.basePrice = priceMap[stock.symbol].close;
                             console.log(`${stock.symbol}: $${stock.basePrice.toFixed(2)}`);
                         }
-                    } catch (e) {
-                        console.log(`Could not fetch ${stock.symbol}, using cached price`);
-                    }
+                    });
                     
-                    // Rate limiting: 12 seconds between calls (5 calls/minute max)
-                    // Only wait if not the last stock
-                    if (i < stocks.length - 1) {
-                        await new Promise(r => setTimeout(r, 12000));
-                    }
+                    console.log(`Updated ${stocks.length} stocks from Polygon.io batch`);
                 }
-                console.log('Prices updated from Polygon.io');
             } catch (e) {
-                console.log('Using cached prices (Polygon API limit reached)');
+                console.log('Using cached prices (Polygon API error):', e.message);
             }
             renderMarket();
             updateDashboard();
