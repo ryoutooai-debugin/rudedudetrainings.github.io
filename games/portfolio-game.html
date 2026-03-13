@@ -489,6 +489,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">🏆 Top Traders</div>
+                        <button class="btn btn-buy" onclick="submitScore()">📤 Submit My Score</button>
                     </div>
                     <div id="leaderboardList"></div>
                 </div>
@@ -781,6 +782,7 @@
             saveGame();
             updateDashboard();
             updateHoldings();
+            submitScore(); // Submit score after trade
             updateLeaderboard();
             closeModal();
         }
@@ -867,24 +869,17 @@
             }
         }
 
-        // Update leaderboard from Supabase
+        // Leaderboard API endpoint
+        const LEADERBOARD_API = 'http://localhost:8080';
+        
+        // Update leaderboard from server
         async function updateLeaderboard() {
-            if (!dbClient) {
-                // Offline mode - show local only
-                document.getElementById('dashRank').textContent = '#--';
-                document.getElementById('leaderboardList').innerHTML = '<div class="empty-state">Leaderboard unavailable in offline mode</div>';
-                return;
-            }
-            
             try {
-                // Fetch top 50 from Supabase
-                const { data: players, error } = await dbClient
-                    .from('portfolio_leaderboard')
-                    .select('*')
-                    .order('portfolio_value', { ascending: false })
-                    .limit(50);
+                // Fetch leaderboard from server
+                const response = await fetch(`${LEADERBOARD_API}/leaderboard`);
+                const data = await response.json();
                 
-                if (error) throw error;
+                const players = data.entries || [];
                 
                 // Calculate current player's value
                 let currentValue = gameState.cash;
@@ -896,7 +891,7 @@
                 }
                 
                 // Find player's rank
-                const rank = players.findIndex(p => p.player_name === gameState.playerName) + 1;
+                const rank = players.findIndex(p => p.name === gameState.playerName) + 1;
                 document.getElementById('dashRank').textContent = rank > 0 ? `#${rank}` : '#--';
                 
                 // Render leaderboard
@@ -905,7 +900,7 @@
                     list.innerHTML = players.map((p, i) => `
                         <div class="leaderboard-item">
                             <div class="leaderboard-rank">#${i + 1}</div>
-                            <div class="leaderboard-name">${p.player_name}</div>
+                            <div class="leaderboard-name">${p.name}</div>
                             <div class="leaderboard-value">$${p.portfolio_value.toLocaleString()}</div>
                         </div>
                     `).join('');
@@ -913,10 +908,39 @@
                     list.innerHTML = '<div class="empty-state">No traders yet. Be the first!</div>';
                 }
             } catch (e) {
-                console.log('Supabase error, falling back to localStorage:', e);
-                // Fallback to localStorage
+                console.log('Leaderboard error:', e);
                 const list = document.getElementById('leaderboardList');
                 list.innerHTML = '<div class="empty-state">Leaderboard unavailable. Playing in local mode.</div>';
+            }
+        }
+        
+        // Submit score to leaderboard
+        async function submitScore() {
+            try {
+                let portfolioValue = gameState.cash;
+                for (const [symbol, h] of Object.entries(gameState.holdings)) {
+                    const stock = stocks.find(s => s.symbol === symbol);
+                    if (stock) {
+                        portfolioValue += h.shares * stock.basePrice;
+                    }
+                }
+                
+                const response = await fetch(`${LEADERBOARD_API}/leaderboard`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: gameState.playerName,
+                        portfolio_value: portfolioValue,
+                        cash: gameState.cash
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('Score submitted successfully');
+                    updateLeaderboard();
+                }
+            } catch (e) {
+                console.log('Could not submit score:', e);
             }
         }
 
