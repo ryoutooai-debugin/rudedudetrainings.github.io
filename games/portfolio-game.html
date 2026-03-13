@@ -869,14 +869,15 @@
             }
         }
 
-        // Leaderboard API endpoint
-        const LEADERBOARD_API = 'http://localhost:8080';
+        // Leaderboard API endpoint - uses GitHub raw URL for public access
+        const LEADERBOARD_URL = 'https://raw.githubusercontent.com/ryoutooai-debugin/rudedudetrainings.github.io/main/leaderboard.json';
+        const SUBMIT_API = 'https://api.github.com/repos/ryoutooai-debugin/rudedudetrainings.github.io/contents/leaderboard.json';
         
-        // Update leaderboard from server
+        // Update leaderboard from GitHub
         async function updateLeaderboard() {
             try {
-                // Fetch leaderboard from server
-                const response = await fetch(`${LEADERBOARD_API}/leaderboard`);
+                // Fetch leaderboard from GitHub raw URL (public)
+                const response = await fetch(`${LEADERBOARD_URL}?t=${Date.now()}`);
                 const data = await response.json();
                 
                 const players = data.entries || [];
@@ -925,20 +926,30 @@
                     }
                 }
                 
-                const response = await fetch(`${LEADERBOARD_API}/leaderboard`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: gameState.playerName,
-                        portfolio_value: portfolioValue,
-                        cash: gameState.cash
-                    })
-                });
+                // For now, show a message that score submission requires server
+                // In production, this would POST to a backend API
+                console.log(`Score ready to submit: ${gameState.playerName} - $${portfolioValue.toLocaleString()}`);
                 
-                if (response.ok) {
-                    console.log('Score submitted successfully');
-                    updateLeaderboard();
-                }
+                // Show user a message
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Score Saved Locally!';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+                
+                // Store locally for now (until backend is connected)
+                const localScores = JSON.parse(localStorage.getItem('portfolioScores') || '[]');
+                localScores.push({
+                    name: gameState.playerName,
+                    portfolio_value: portfolioValue,
+                    cash: gameState.cash,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('portfolioScores', JSON.stringify(localScores));
+                
             } catch (e) {
                 console.log('Could not submit score:', e);
             }
