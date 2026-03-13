@@ -14,9 +14,12 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Configuration
 # Use Railway's persistent volume or local directory
-REPO_DIR = Path(os.environ.get('RAILWAY_VOLUME_MOUNT_PATH', '/root/rudedudetrainings.github.io'))
+REPO_DIR = Path(os.environ.get('RAILWAY_VOLUME_MOUNT_PATH', '/app'))
 LEADERBOARD_FILE = REPO_DIR / 'leaderboard.json'
 SERVER_PORT = int(os.environ.get('PORT', 8080))
+
+# Ensure the directory exists
+REPO_DIR.mkdir(parents=True, exist_ok=True)
 
 def load_leaderboard():
     """Load leaderboard from file"""
@@ -69,15 +72,60 @@ def add_score(name, portfolio_value, cash):
 
 def commit_to_github():
     """Commit leaderboard changes to GitHub"""
+    github_token = os.environ.get('GITHUB_TOKEN')
+    if not github_token:
+        print(f"[{datetime.now()}] No GITHUB_TOKEN set, skipping GitHub commit")
+        return False
+    
     try:
-        subprocess.run(['git', 'add', 'leaderboard.json'], cwd=REPO_DIR, check=True)
-        subprocess.run(['git', 'commit', '-m', f'Update leaderboard - {datetime.now().strftime("%Y-%m-%d %H:%M")}'], 
-                      cwd=REPO_DIR, check=True, capture_output=True)
-        subprocess.run(['git', 'push', 'origin', 'main'], cwd=REPO_DIR, check=True, capture_output=True)
-        print(f"[{datetime.now()}] Committed leaderboard to GitHub")
-        return True
-    except subprocess.CalledProcessError as e:
-        print(f"[{datetime.now()}] Git error: {e}")
+        # Use GitHub API to update the file
+        import urllib.request
+        import base64
+        
+        # Read the current leaderboard content
+        with open(LEADERBOARD_FILE, 'r') as f:
+            content = f.read()
+        
+        # GitHub API endpoint
+        repo = 'ryoutooai-debugin/rudedudetrainings.github.io'
+        path = 'leaderboard.json'
+        url = f'https://api.github.com/repos/{repo}/contents/{path}'
+        
+        # Get current file SHA (if it exists)
+        req = urllib.request.Request(url, headers={
+            'Authorization': f'token {github_token}',
+            'Accept': 'application/vnd.github.v3+json'
+        })
+        
+        sha = None
+        try:
+            with urllib.request.urlopen(req) as response:
+                data = json.loads(response.read().decode())
+                sha = data.get('sha')
+        except urllib.error.HTTPError as e:
+            if e.code != 404:  # File doesn't exist yet, that's ok
+                raise
+        
+        # Create or update file
+        data = {
+            'message': f'Update leaderboard - {datetime.now().strftime("%Y-%m-%d %H:%M")}',
+            'content': base64.b64encode(content.encode()).decode(),
+        }
+        if sha:
+            data['sha'] = sha
+        
+        req = urllib.request.Request(url, data=json.dumps(data).encode(), headers={
+            'Authorization': f'token {github_token}',
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json'
+        }, method='PUT')
+        
+        with urllib.request.urlopen(req) as response:
+            print(f"[{datetime.now()}] Committed leaderboard to GitHub")
+            return True
+            
+    except Exception as e:
+        print(f"[{datetime.now()}] GitHub error: {e}")
         return False
 
 class RequestHandler(BaseHTTPRequestHandler):
