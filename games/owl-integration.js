@@ -405,14 +405,197 @@ async function buyItem(itemId, item) {
     }
 }
 
+// Game descriptions for SamOwl's Hoot feature
+const GAME_DESCRIPTIONS = {
+    'color-match': {
+        title: '🎨 Color Match',
+        howToPlay: 'Tap the card that matches the target color! Each correct match earns stars. Build streaks for bonus points. Complete 5 correct matches to level up!',
+        benefits: 'Kids learn color recognition, pattern matching, and quick decision-making. Builds focus and rewards careful observation.',
+        ageGroup: 'Ages 4-6',
+        owlEarning: 'Earn 1 OWL per 50 stars, plus bonuses for streaks and leveling up!'
+    },
+    'market-match': {
+        title: '📊 Market Match', 
+        howToPlay: 'Look at the candlestick pattern and predict if the next candle will go UP or DOWN. Read the hint for clues! Get 5 right to level up!',
+        benefits: 'Teaches basic market patterns, trend recognition, and probability. Kids learn that markets move in patterns but aren\'t always predictable.',
+        ageGroup: 'Ages 7-9',
+        owlEarning: 'Earn 1 OWL per 100 coins, plus bonuses for accuracy and streaks!'
+    },
+    'trading-quest': {
+        title: '🏆 Trading Quest',
+        howToPlay: 'Buy low, sell high! Watch stock prices move in real-time. Buy shares when prices dip, sell when they rise. Complete quests to earn XP and rank up!',
+        benefits: 'Introduces real trading concepts: buying, selling, portfolio management, and patience. Teaches that timing matters in markets.',
+        ageGroup: 'Ages 10+',
+        owlEarning: 'Earn OWLs based on portfolio value, with big bonuses for $10k, $50k, and $100k milestones!'
+    },
+    'portfolio-challenge': {
+        title: '💼 Portfolio Challenge',
+        howToPlay: 'Build the best portfolio before time runs out! Research stocks, buy shares, and watch your portfolio grow. Compete on the global leaderboard!',
+        benefits: 'Teaches diversification, research skills, and risk management. Kids learn to balance different investments and think long-term.',
+        ageGroup: 'Ages 10+',
+        owlEarning: 'Earn OWLs for portfolio performance and leaderboard ranking!'
+    },
+    'bull-vs-bear': {
+        title: '🐂 Bull vs Bear',
+        howToPlay: 'Will the market go UP (Bull) or DOWN (Bear)? Study the clues and make your prediction. Collect farm animals as you earn coins!',
+        benefits: 'Introduces market sentiment (bullish/bearish), pattern recognition, and collecting rewards. Fun way to learn market direction concepts.',
+        ageGroup: 'Ages 6-10',
+        owlEarning: 'Earn 1 OWL per correct prediction, plus bonuses for high accuracy!'
+    },
+    'pattern-master': {
+        title: '📈 Pattern Master',
+        howToPlay: 'Study the candlestick patterns and identify what signal they show: Bullish (up), Bearish (down), or Neutral. Learn real trading patterns!',
+        benefits: 'Teaches technical analysis and real chart patterns used by traders. Kids learn to read price action and understand market psychology.',
+        ageGroup: 'Ages 10+',
+        owlEarning: 'Earn OWLs for points and learning new patterns!'
+    }
+};
+
+// Show SamOwl's Hoot (help message)
+function showSamOwlHoot() {
+    // Detect which game this is
+    const path = window.location.pathname;
+    let gameType = 'color-match';
+    if (path.includes('market-match')) gameType = 'market-match';
+    else if (path.includes('trading-quest')) gameType = 'trading-quest';
+    else if (path.includes('portfolio')) gameType = 'portfolio-challenge';
+    else if (path.includes('bull-vs-bear')) gameType = 'bull-vs-bear';
+    else if (path.includes('pattern-master')) gameType = 'pattern-master';
+    
+    const game = GAME_DESCRIPTIONS[gameType];
+    
+    // Remove existing hoot
+    const existing = document.getElementById('samowl-hoot');
+    if (existing) existing.remove();
+    
+    const hoot = document.createElement('div');
+    hoot.id = 'samowl-hoot';
+    hoot.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-radius: 25px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        border: 3px solid #e94560;
+        box-shadow: 0 25px 80px rgba(0,0,0,0.6);
+        z-index: 10002;
+        animation: hootPop 0.4s ease;
+    `;
+    
+    hoot.innerHTML = `
+        <div style="text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 60px; animation: float 3s ease-in-out infinite;">🦉</div>
+            <div style="font-size: 24px; font-weight: bold; color: #e94560; margin-top: 10px;">Hoot! Let me explain!</div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <div style="background: rgba(233, 69, 96, 0.2); padding: 15px; border-radius: 15px; margin-bottom: 15px;">
+                <div style="font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 5px;">${game.title}</div>
+                <div style="font-size: 12px; color: #f39c12;">👶 ${game.ageGroup}</div>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 14px; font-weight: bold; color: #e94560; margin-bottom: 8px;">🎮 How to Play</div>
+                <div style="font-size: 14px; color: #ddd; line-height: 1.6;">${game.howToPlay}</div>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 14px; font-weight: bold; color: #27ae60; margin-bottom: 8px;">🧠 What Kids Learn</div>
+                <div style="font-size: 14px; color: #ddd; line-height: 1.6;">${game.benefits}</div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, rgba(243, 156, 18, 0.2), rgba(231, 76, 60, 0.2)); padding: 15px; border-radius: 15px;">
+                <div style="font-size: 14px; font-weight: bold; color: #f39c12; margin-bottom: 8px;">🦉 Earn OWLs!</div>
+                <div style="font-size: 14px; color: #ddd; line-height: 1.6;">${game.owlEarning}</div>
+                <div style="font-size: 12px; color: #aaa; margin-top: 8px;">💡 OWLs are shared across ALL games! Play any game, spend in any game!</div>
+            </div>
+        </div>
+        
+        <button onclick="closeSamOwlHoot()" style="
+            width: 100%;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        ">Got it! Let's play! 🎮</button>
+    `;
+    
+    // Add overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'samowl-hoot-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 10001;
+    `;
+    overlay.onclick = closeSamOwlHoot;
+    
+    document.body.appendChild(overlay);
+    document.body.appendChild(hoot);
+}
+
+// Close SamOwl's Hoot
+function closeSamOwlHoot() {
+    const hoot = document.getElementById('samowl-hoot');
+    const overlay = document.getElementById('samowl-hoot-overlay');
+    if (hoot) hoot.remove();
+    if (overlay) overlay.remove();
+}
+
 // Create floating OWL button
 function createOwlButton() {
-    const button = document.createElement('button');
-    button.id = 'owl-store-floating-btn';
-    button.style.cssText = `
+    const container = document.createElement('div');
+    container.style.cssText = `
         position: fixed;
         bottom: 20px;
         right: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        z-index: 1000;
+    `;
+    
+    // Hoot button (help)
+    const hootBtn = document.createElement('button');
+    hootBtn.id = 'owl-hoot-btn';
+    hootBtn.style.cssText = `
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: transform 0.2s;
+        animation: hootWiggle 2s ease-in-out infinite;
+    `;
+    hootBtn.innerHTML = '🦉 Hoot! (Help)';
+    hootBtn.onclick = showSamOwlHoot;
+    
+    // Store button
+    const storeBtn = document.createElement('button');
+    storeBtn.id = 'owl-store-floating-btn';
+    storeBtn.style.cssText = `
         background: linear-gradient(135deg, #f39c12, #e74c3c);
         border: none;
         color: white;
@@ -422,21 +605,40 @@ function createOwlButton() {
         font-weight: bold;
         cursor: pointer;
         box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        z-index: 1000;
         display: flex;
         align-items: center;
         gap: 8px;
         transition: transform 0.2s;
     `;
-    button.innerHTML = `
-        🦉 <span class="owl-count">0</span> OWLs
+    storeBtn.innerHTML = `
+        🪙 <span class="owl-count">0</span> OWLs
     `;
-    button.onclick = openOwlStore;
+    storeBtn.onclick = openOwlStore;
     
-    document.body.appendChild(button);
+    container.appendChild(hootBtn);
+    container.appendChild(storeBtn);
+    document.body.appendChild(container);
     
     // Load initial balance
     loadOwlBalance();
+    
+    // Add hoot animation
+    const hootStyle = document.createElement('style');
+    hootStyle.textContent = `
+        @keyframes hootWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            10% { transform: rotate(-5deg); }
+            20% { transform: rotate(5deg); }
+            30% { transform: rotate(-5deg); }
+            40% { transform: rotate(5deg); }
+            50% { transform: rotate(0deg); }
+        }
+        @keyframes hootPop {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(hootStyle);
 }
 
 // Add animations
