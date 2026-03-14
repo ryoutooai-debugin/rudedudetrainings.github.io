@@ -484,8 +484,25 @@
 
         /* Responsive - Mobile */
         @media (max-width: 500px) {
+            body {
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+            }
+
+            .app-container {
+                height: 100vh;
+                max-height: 100vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
             .header {
-                padding: 12px;
+                padding: 10px;
+                flex-direction: column;
+                gap: 10px;
+                flex-shrink: 0;
             }
 
             .logo {
@@ -502,6 +519,8 @@
 
             .header-stats {
                 gap: 10px;
+                width: 100%;
+                justify-content: center;
             }
 
             .header-stat-value {
@@ -515,19 +534,31 @@
             .nav {
                 gap: 5px;
                 padding: 0 5px;
+                flex-shrink: 0;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .nav-btn {
                 padding: 10px 8px;
                 font-size: 0.75em;
+                white-space: nowrap;
             }
 
             .main-content {
                 padding: 10px;
+                flex: 1;
+                overflow-y: auto;
+                min-height: 0;
             }
 
             .section-title {
                 font-size: 1.3em;
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
 
             .stock-card {
@@ -535,7 +566,8 @@
             }
 
             .stock-header {
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: space-between;
                 gap: 5px;
             }
 
@@ -571,9 +603,9 @@
 
             .holding-item {
                 padding: 12px;
-                flex-direction: column;
+                flex-direction: row;
                 gap: 8px;
-                text-align: center;
+                text-align: left;
             }
 
             .holding-info h4 {
@@ -589,7 +621,7 @@
             }
 
             .dashboard-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
 
@@ -607,6 +639,13 @@
 
             .start-screen {
                 padding: 20px 15px;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                overflow-y: auto;
+                z-index: 100;
             }
 
             .start-screen h1 {
@@ -620,6 +659,8 @@
             .name-input {
                 padding: 12px;
                 font-size: 1em;
+                width: 90%;
+                max-width: 300px;
             }
 
             .start-btn {
@@ -641,6 +682,8 @@
             .modal {
                 padding: 20px;
                 margin: 10px;
+                max-height: 80vh;
+                overflow-y: auto;
             }
 
             .modal h2 {
