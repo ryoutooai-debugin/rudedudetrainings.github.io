@@ -1,11 +1,9 @@
-<!-- OWL Store Integration - Add before closing </body> tag in any game -->
-<script>
 // ============================================
 // OWL STORE INTEGRATION - Shared across all games
 // ============================================
 
 const OWL_CONFIG = {
-    apiUrl: 'https://samowl-leaderboard-production.up.railway.app', // Update with your Railway URL
+    apiUrl: 'https://samowl-leaderboard-production.up.railway.app',
     gameName: document.title || 'SamOwl Game'
 };
 
@@ -16,7 +14,6 @@ const SoundManager = {
     enabled: true,
     context: null,
     
-    // Initialize audio context (required for browsers)
     init() {
         if (!this.context) {
             this.context = new (window.AudioContext || window.webkitAudioContext)();
@@ -26,13 +23,11 @@ const SoundManager = {
         }
     },
     
-    // Toggle sound on/off
     toggle() {
         this.enabled = !this.enabled;
         return this.enabled;
     },
     
-    // Play a sound effect
     play(type) {
         if (!this.enabled || !this.context) return;
         
@@ -71,11 +66,9 @@ const SoundManager = {
     }
 };
 
-// Initialize sound on first user interaction
 document.addEventListener('click', () => SoundManager.init(), { once: true });
 document.addEventListener('touchstart', () => SoundManager.init(), { once: true });
 
-// Get or create user ID
 function getUserId() {
     let userId = localStorage.getItem('samowl_user_id');
     if (!userId) {
@@ -85,116 +78,65 @@ function getUserId() {
     return userId;
 }
 
-// Get display name
 function getDisplayName() {
     return localStorage.getItem('samowl_username') || getUserId();
 }
 
-// Set display name
 function setDisplayName(name) {
     localStorage.setItem('samowl_username', name);
 }
 
-// Calculate OWLs earned based on game performance
 function calculateOwls(gameType, score, level, streak, extras = {}) {
     let owls = 0;
     const reasons = [];
     
     switch(gameType) {
         case 'color-match':
-            // 1 OWL per 50 stars, bonus for streaks
             owls += Math.floor(score / 50);
             if (owls > 0) reasons.push(`+${owls} for ${score} stars`);
-            
-            if (streak >= 10) {
-                owls += 5;
-                reasons.push('+5 for 10+ streak!');
-            }
-            if (level >= 5) {
-                owls += 10;
-                reasons.push('+10 for reaching level 5!');
-            }
+            if (streak >= 10) { owls += 5; reasons.push('+5 for 10+ streak!'); }
+            if (level >= 5) { owls += 10; reasons.push('+10 for reaching level 5!'); }
             break;
-            
         case 'market-match':
-            // 1 OWL per 100 coins, bonus for accuracy
             owls += Math.floor(score / 100);
             if (owls > 0) reasons.push(`+${owls} for ${score} coins`);
-            
-            if (extras.accuracy >= 80) {
-                owls += 5;
-                reasons.push('+5 for 80%+ accuracy!');
-            }
-            if (streak >= 5) {
-                owls += 3;
-                reasons.push('+3 for 5+ streak!');
-            }
+            if (extras.accuracy >= 80) { owls += 5; reasons.push('+5 for 80%+ accuracy!'); }
+            if (streak >= 5) { owls += 3; reasons.push('+3 for 5+ streak!'); }
             break;
-            
         case 'trading-quest':
-            // Portfolio-based: 1 OWL per $1000, big bonuses for milestones
             const portfolio = extras.portfolio || score;
             owls += Math.floor(portfolio / 1000);
             if (owls > 0) reasons.push(`+${owls} for $${portfolio.toLocaleString()} portfolio`);
-            
-            if (portfolio >= 100000 && !extras.milestone100k) {
-                owls += 250;
-                reasons.push('+250 for $100k milestone! 🎉');
-            } else if (portfolio >= 50000 && !extras.milestone50k) {
-                owls += 100;
-                reasons.push('+100 for $50k milestone! 🎉');
-            } else if (portfolio >= 10000 && !extras.milestone10k) {
-                owls += 50;
-                reasons.push('+50 for $10k milestone! 🎉');
-            }
-            
-            if (extras.profitableTrades >= 10) {
-                owls += 25;
-                reasons.push('+25 for 10 profitable trades!');
-            }
+            if (portfolio >= 100000 && !extras.milestone100k) { owls += 250; reasons.push('+250 for $100k milestone!'); }
+            else if (portfolio >= 50000 && !extras.milestone50k) { owls += 100; reasons.push('+100 for $50k milestone!'); }
+            else if (portfolio >= 10000 && !extras.milestone10k) { owls += 50; reasons.push('+50 for $10k milestone!'); }
+            if (extras.profitableTrades >= 10) { owls += 25; reasons.push('+25 for 10 profitable trades!'); }
             break;
-            
         case 'portfolio-challenge':
-            // Time-based challenge: faster = more OWLs
             const timeBonus = Math.max(0, 300 - (extras.timeElapsed || 0));
             owls += Math.floor(score / 500) + Math.floor(timeBonus / 60);
             if (owls > 0) reasons.push(`+${owls} for challenge completion`);
-            
             if (extras.rank && extras.rank <= 3) {
                 const rankBonus = extras.rank === 1 ? 50 : extras.rank === 2 ? 30 : 20;
                 owls += rankBonus;
                 reasons.push(`+${rankBonus} for ${['1st', '2nd', '3rd'][extras.rank - 1]} place!`);
             }
             break;
-            
         case 'bull-vs-bear':
-            // Prediction accuracy
             const correct = extras.correctPredictions || 0;
             const total = extras.totalPredictions || 1;
             const accuracy = (correct / total) * 100;
-            
-            owls += correct; // 1 per correct prediction
+            owls += correct;
             if (correct > 0) reasons.push(`+${correct} for ${correct} correct predictions`);
-            
-            if (accuracy >= 70 && total >= 10) {
-                owls += 10;
-                reasons.push('+10 for 70%+ accuracy!');
-            }
+            if (accuracy >= 70 && total >= 10) { owls += 10; reasons.push('+10 for 70%+ accuracy!'); }
             break;
-            
         case 'pattern-master':
-            // Pattern recognition
             owls += Math.floor(score / 200);
             if (owls > 0) reasons.push(`+${owls} for ${score} points`);
-            
-            if (extras.patternsLearned >= 5) {
-                owls += 15;
-                reasons.push('+15 for learning 5+ patterns!');
-            }
+            if (extras.patternsLearned >= 5) { owls += 15; reasons.push('+15 for learning 5+ patterns!'); }
             break;
     }
     
-    // Daily play bonus (first play of the day)
     const lastPlay = localStorage.getItem('samowl_last_play');
     const today = new Date().toDateString();
     if (lastPlay !== today) {
@@ -206,15 +148,12 @@ function calculateOwls(gameType, score, level, streak, extras = {}) {
     return { owls, reasons };
 }
 
-// Submit score and earn OWLs
 async function submitScore(gameType, score, level, streak, extras = {}) {
     const userId = getUserId();
     const displayName = getDisplayName();
-    
     const { owls, reasons } = calculateOwls(gameType, score, level, streak, extras);
     
     try {
-        // Submit to leaderboard
         const response = await fetch(`${OWL_CONFIG.apiUrl}/leaderboard`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -227,7 +166,6 @@ async function submitScore(gameType, score, level, streak, extras = {}) {
         
         const data = await response.json();
         
-        // Show OWL earnings
         if (owls > 0) {
             showOwlNotification(owls, reasons);
             updateOwlButton(owls);
@@ -241,9 +179,7 @@ async function submitScore(gameType, score, level, streak, extras = {}) {
     }
 }
 
-// Show OWL earning notification
 function showOwlNotification(owls, reasons) {
-    // Remove existing notification
     const existing = document.getElementById('owl-notification');
     if (existing) existing.remove();
     
@@ -284,7 +220,6 @@ function showOwlNotification(owls, reasons) {
     }, 4000);
 }
 
-// Update OWL button display
 function updateOwlButton(additionalOwls = 0) {
     const button = document.getElementById('owl-store-floating-btn');
     if (button) {
@@ -294,7 +229,6 @@ function updateOwlButton(additionalOwls = 0) {
     }
 }
 
-// Load user's OWL balance
 async function loadOwlBalance() {
     const userId = getUserId();
     
@@ -315,12 +249,10 @@ async function loadOwlBalance() {
     }
 }
 
-// Open OWL store
 function openOwlStore() {
     const userId = getUserId();
     const displayName = getDisplayName();
     
-    // Create store modal
     const modal = document.createElement('div');
     modal.id = 'owl-store-modal';
     modal.style.cssText = `
@@ -396,21 +328,17 @@ function openOwlStore() {
     `;
     
     document.body.appendChild(modal);
-    
-    // Load store data
     loadStoreItems();
     loadOwlBalance().then(owls => {
         document.getElementById('store-owl-balance').textContent = owls.toLocaleString();
     });
 }
 
-// Close OWL store
 function closeOwlStore() {
     const modal = document.getElementById('owl-store-modal');
     if (modal) modal.remove();
 }
 
-// Load store items
 async function loadStoreItems() {
     try {
         const response = await fetch(`${OWL_CONFIG.apiUrl}/store`);
@@ -446,7 +374,6 @@ async function loadStoreItems() {
     }
 }
 
-// Buy item
 async function buyItem(itemId, item) {
     const userId = getUserId();
     
@@ -474,7 +401,6 @@ async function buyItem(itemId, item) {
     }
 }
 
-// Game descriptions for SamOwl's Hoot feature
 const GAME_DESCRIPTIONS = {
     'color-match': {
         title: '🎨 Color Match',
@@ -484,7 +410,7 @@ const GAME_DESCRIPTIONS = {
         owlEarning: 'Earn 1 OWL per 50 stars, plus bonuses for streaks and leveling up!'
     },
     'market-match': {
-        title: '📊 Market Match', 
+        title: '📊 Market Match',
         howToPlay: 'Look at the candlestick pattern and predict if the next candle will go UP or DOWN. Read the hint for clues! Get 5 right to level up!',
         benefits: 'Teaches basic market patterns, trend recognition, and probability. Kids learn that markets move in patterns but aren\'t always predictable.',
         ageGroup: 'Ages 7-9',
@@ -520,11 +446,9 @@ const GAME_DESCRIPTIONS = {
     }
 };
 
-// Show SamOwl's Hoot (help message)
 function showSamOwlHoot() {
     SoundManager.play('hoot');
     
-    // Detect which game this is
     const path = window.location.pathname;
     let gameType = 'color-match';
     if (path.includes('market-match')) gameType = 'market-match';
@@ -535,7 +459,6 @@ function showSamOwlHoot() {
     
     const game = GAME_DESCRIPTIONS[gameType];
     
-    // Remove existing hoot
     const existing = document.getElementById('samowl-hoot');
     if (existing) existing.remove();
     
@@ -601,7 +524,6 @@ function showSamOwlHoot() {
         ">Got it! Let's play! 🎮</button>
     `;
     
-    // Add overlay
     const overlay = document.createElement('div');
     overlay.id = 'samowl-hoot-overlay';
     overlay.style.cssText = `
@@ -619,7 +541,6 @@ function showSamOwlHoot() {
     document.body.appendChild(hoot);
 }
 
-// Close SamOwl's Hoot
 function closeSamOwlHoot() {
     const hoot = document.getElementById('samowl-hoot');
     const overlay = document.getElementById('samowl-hoot-overlay');
@@ -627,7 +548,6 @@ function closeSamOwlHoot() {
     if (overlay) overlay.remove();
 }
 
-// Create floating OWL button
 function createOwlButton() {
     const container = document.createElement('div');
     container.style.cssText = `
@@ -641,7 +561,6 @@ function createOwlButton() {
         z-index: 1000;
     `;
     
-    // Hoot button (help)
     const hootBtn = document.createElement('button');
     hootBtn.id = 'owl-hoot-btn';
     hootBtn.style.cssText = `
@@ -663,7 +582,6 @@ function createOwlButton() {
     hootBtn.innerHTML = '🦉 Hoot! (Help)';
     hootBtn.onclick = showSamOwlHoot;
     
-    // Store button
     const storeBtn = document.createElement('button');
     storeBtn.id = 'owl-store-floating-btn';
     storeBtn.style.cssText = `
@@ -681,12 +599,9 @@ function createOwlButton() {
         gap: 8px;
         transition: transform 0.2s;
     `;
-    storeBtn.innerHTML = `
-        🪙 <span class="owl-count">0</span> OWLs
-    `;
+    storeBtn.innerHTML = '🪙 <span class="owl-count">0</span> OWLs';
     storeBtn.onclick = openOwlStore;
     
-    // Sound toggle button
     const soundBtn = document.createElement('button');
     soundBtn.id = 'owl-sound-btn';
     soundBtn.style.cssText = `
@@ -715,10 +630,8 @@ function createOwlButton() {
     container.appendChild(storeBtn);
     document.body.appendChild(container);
     
-    // Load initial balance
     loadOwlBalance();
     
-    // Add hoot animation
     const hootStyle = document.createElement('style');
     hootStyle.textContent = `
         @keyframes hootWiggle {
@@ -737,7 +650,6 @@ function createOwlButton() {
     document.head.appendChild(hootStyle);
 }
 
-// Add animations
 const style = document.createElement('style');
 style.textContent = `
     @keyframes owlSlideIn {
@@ -751,10 +663,8 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initialize when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', createOwlButton);
 } else {
     createOwlButton();
 }
-</script>
