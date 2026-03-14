@@ -1,0 +1,584 @@
+<!-- OWL Store Component - Add this to any game HTML file -->
+<style>
+.owl-store-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.owl-store-overlay.active {
+    display: flex;
+}
+
+.owl-store-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 2px solid #e94560;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.owl-store-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e94560;
+}
+
+.owl-store-title {
+    font-size: 28px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.owl-balance {
+    background: linear-gradient(135deg, #f39c12, #e74c3c);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.owl-store-close {
+    background: #e94560;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.owl-store-close:hover {
+    transform: scale(1.1);
+}
+
+.store-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.store-tab {
+    background: #0f3460;
+    border: none;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.store-tab:hover {
+    background: #e94560;
+}
+
+.store-tab.active {
+    background: #e94560;
+}
+
+.store-content {
+    display: none;
+}
+
+.store-content.active {
+    display: block;
+}
+
+.store-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.store-item {
+    background: #0f3460;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 2px solid transparent;
+}
+
+.store-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(233, 69, 96, 0.3);
+}
+
+.store-item.owned {
+    border-color: #27ae60;
+    opacity: 0.8;
+}
+
+.store-item-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.store-item-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.store-item-desc {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 15px;
+    min-height: 30px;
+}
+
+.store-item-price {
+    background: linear-gradient(135deg, #f39c12, #e74c3c);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+}
+
+.store-item-owned {
+    background: #27ae60;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+}
+
+.store-item button {
+    background: #e94560;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+.store-item button:hover:not(:disabled) {
+    background: #ff6b6b;
+}
+
+.store-item button:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+.inventory-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.inventory-item {
+    background: #0f3460;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid #27ae60;
+}
+
+.inventory-item-icon {
+    font-size: 36px;
+    margin-bottom: 5px;
+}
+
+.inventory-item-name {
+    font-size: 14px;
+    color: #fff;
+}
+
+.owl-rules {
+    background: #0f3460;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.owl-rules h3 {
+    color: #e94560;
+    margin-bottom: 15px;
+}
+
+.owl-rules ul {
+    list-style: none;
+    padding: 0;
+}
+
+.owl-rules li {
+    padding: 8px 0;
+    border-bottom: 1px solid #1a1a2e;
+    display: flex;
+    justify-content: space-between;
+}
+
+.owl-rules li:last-child {
+    border-bottom: none;
+}
+
+.owl-store-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #f39c12, #e74c3c);
+    border: none;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s;
+}
+
+.owl-store-button:hover {
+    transform: scale(1.05);
+}
+
+.toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #27ae60;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 2000;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+</style>
+
+<!-- OWL Store Button -->
+<button class="owl-store-button" onclick="openOwlStore()">
+    🦉 <span id="owl-balance-display">0</span> OWLs
+</button>
+
+<!-- OWL Store Overlay -->
+<div id="owl-store-overlay" class="owl-store-overlay">
+    <div class="owl-store-container">
+        <div class="owl-store-header">
+            <div class="owl-store-title">
+                🦉 OWL Store
+            </div>
+            <div class="owl-balance">
+                🪙 <span id="store-owl-balance">0</span> OWLs
+            </div>
+            <button class="owl-store-close" onclick="closeOwlStore()">×</button>
+        </div>
+        
+        <div class="store-tabs">
+            <button class="store-tab active" onclick="switchTab('shop')">🛒 Shop</button>
+            <button class="store-tab" onclick="switchTab('inventory')">🎒 Inventory</button>
+            <button class="store-tab" onclick="switchTab('earn')">💰 How to Earn</button>
+        </div>
+        
+        <div id="shop-tab" class="store-content active">
+            <div class="store-grid" id="store-items">
+                <!-- Items loaded dynamically -->
+            </div>
+        </div>
+        
+        <div id="inventory-tab" class="store-content">
+            <div id="inventory-content">
+                <p style="text-align: center; color: #aaa;">Loading your items...</p>
+            </div>
+        </div>
+        
+        <div id="earn-tab" class="store-content">
+            <div class="owl-rules">
+                <h3>How to Earn OWLs</h3>
+                <ul id="owl-rules-list">
+                    <!-- Rules loaded dynamically -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// OWL Store Configuration
+const OWL_STORE_CONFIG = {
+    apiUrl: 'https://your-railway-app.railway.app', // Update this!
+    userId: localStorage.getItem('traderUserId') || generateUserId()
+};
+
+// Generate unique user ID if not exists
+function generateUserId() {
+    const id = 'trader_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('traderUserId', id);
+    return id;
+}
+
+// Get user's display name
+function getUserName() {
+    const user = localStorage.getItem('traderUser');
+    if (user) {
+        const parsed = JSON.parse(user);
+        return parsed.name || parsed.display_name || OWL_STORE_CONFIG.userId;
+    }
+    return OWL_STORE_CONFIG.userId;
+}
+
+// Open store
+function openOwlStore() {
+    document.getElementById('owl-store-overlay').classList.add('active');
+    loadStoreData();
+    loadUserOwls();
+}
+
+// Close store
+function closeOwlStore() {
+    document.getElementById('owl-store-overlay').classList.remove('active');
+}
+
+// Switch tabs
+function switchTab(tab) {
+    document.querySelectorAll('.store-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.store-content').forEach(c => c.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById(tab + '-tab').classList.add('active');
+    
+    if (tab === 'inventory') {
+        loadInventory();
+    } else if (tab === 'earn') {
+        loadOwlRules();
+    }
+}
+
+// Load store items
+async function loadStoreData() {
+    try {
+        const response = await fetch(`${OWL_STORE_CONFIG.apiUrl}/store`);
+        const data = await response.json();
+        renderStoreItems(data.items);
+    } catch (error) {
+        console.error('Failed to load store:', error);
+        document.getElementById('store-items').innerHTML = 
+            '<p style="text-align: center; color: #aaa;">Failed to load store. Please try again.</p>';
+    }
+}
+
+// Render store items
+function renderStoreItems(items) {
+    const container = document.getElementById('store-items');
+    container.innerHTML = '';
+    
+    for (const [id, item] of Object.entries(items)) {
+        const div = document.createElement('div');
+        div.className = 'store-item';
+        div.id = `item-${id}`;
+        div.innerHTML = `
+            <div class="store-item-icon">${item.name.split(' ')[0]}</div>
+            <div class="store-item-name">${item.name.split(' ').slice(1).join(' ')}</div>
+            <div class="store-item-desc">${item.description}</div>
+            <div class="store-item-price">🪙 ${item.price}</div>
+            <button onclick="buyItem('${id}', ${item.price})">Buy</button>
+        `;
+        container.appendChild(div);
+    }
+}
+
+// Load user's OWL balance
+async function loadUserOwls() {
+    try {
+        const userName = getUserName();
+        const response = await fetch(`${OWL_STORE_CONFIG.apiUrl}/owls?user_id=${encodeURIComponent(userName)}`);
+        const data = await response.json();
+        
+        document.getElementById('owl-balance-display').textContent = data.owls;
+        document.getElementById('store-owl-balance').textContent = data.owls;
+    } catch (error) {
+        console.error('Failed to load OWLs:', error);
+    }
+}
+
+// Buy item
+async function buyItem(itemId, price) {
+    const userName = getUserName();
+    
+    try {
+        const response = await fetch(`${OWL_STORE_CONFIG.apiUrl}/buy`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: userName,
+                item_id: itemId
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast(`🎉 ${data.message}`);
+            loadUserOwls();
+            
+            // Mark item as owned
+            const itemEl = document.getElementById(`item-${itemId}`);
+            if (itemEl) {
+                itemEl.classList.add('owned');
+                itemEl.querySelector('button').disabled = true;
+                itemEl.querySelector('button').textContent = 'Owned';
+                itemEl.querySelector('.store-item-price').className = 'store-item-owned';
+                itemEl.querySelector('.store-item-owned').textContent = '✓ Owned';
+            }
+        } else {
+            showToast(`❌ ${data.error}`, 'error');
+        }
+    } catch (error) {
+        console.error('Purchase failed:', error);
+        showToast('❌ Purchase failed. Try again.', 'error');
+    }
+}
+
+// Load inventory
+async function loadInventory() {
+    const userName = getUserName();
+    const container = document.getElementById('inventory-content');
+    
+    try {
+        const response = await fetch(`${OWL_STORE_CONFIG.apiUrl}/inventory?user_id=${encodeURIComponent(userName)}`);
+        const data = await response.json();
+        
+        if (data.inventory.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #aaa;">Your inventory is empty. Visit the shop to buy items!</p>';
+            return;
+        }
+        
+        container.innerHTML = '<div class="inventory-grid"></div>';
+        const grid = container.querySelector('.inventory-grid');
+        
+        data.inventory.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'inventory-item';
+            div.innerHTML = `
+                <div class="inventory-item-icon">${item.name.split(' ')[0]}</div>
+                <div class="inventory-item-name">${item.name.split(' ').slice(1).join(' ')}</div>
+            `;
+            grid.appendChild(div);
+        });
+    } catch (error) {
+        console.error('Failed to load inventory:', error);
+        container.innerHTML = '<p style="text-align: center; color: #aaa;">Failed to load inventory.</p>';
+    }
+}
+
+// Load OWL earning rules
+async function loadOwlRules() {
+    try {
+        const response = await fetch(`${OWL_STORE_CONFIG.apiUrl}/store`);
+        const data = await response.json();
+        
+        const list = document.getElementById('owl-rules-list');
+        list.innerHTML = '';
+        
+        const ruleLabels = {
+            'trade': 'Make a trade',
+            'profit_trade': 'Make a profitable trade',
+            'reach_10k': 'Reach $10,000 portfolio',
+            'reach_50k': 'Reach $50,000 portfolio',
+            'reach_100k': 'Reach $100,000 portfolio',
+            'top_10_leaderboard': 'Reach top 10 on leaderboard',
+            'streak_7_days': 'Play 7 days in a row',
+            'streak_30_days': 'Play 30 days in a row'
+        };
+        
+        for (const [key, value] of Object.entries(data.rules)) {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${ruleLabels[key] || key}</span>
+                <span>+${value} 🪙</span>
+            `;
+            list.appendChild(li);
+        }
+    } catch (error) {
+        console.error('Failed to load rules:', error);
+    }
+}
+
+// Show toast notification
+function showToast(message, type = 'success') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.style.background = type === 'error' ? '#e74c3c' : '#27ae60';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// Submit score and earn OWLs
+async function submitScoreWithOwls(name, portfolioValue, cash) {
+    try {
+        const response = await fetch(`${OWL_STORE_CONFIG.apiUrl}/leaderboard`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: name,
+                portfolio_value: portfolioValue,
+                cash: cash
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.owls_earned > 0) {
+            showToast(`🦉 +${data.owls_earned} OWLs earned!`);
+            loadUserOwls();
+        }
+        
+        return data;
+    } catch (error) {
+        console.error('Failed to submit score:', error);
+        throw error;
+    }
+}
+
+// Initialize OWL balance on page load
+document.addEventListener('DOMContentLoaded', loadUserOwls);
+</script>
