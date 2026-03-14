@@ -695,8 +695,9 @@ function createOwlButton() {
         transition: transform 0.2s;
         white-space: nowrap;
     `;
-    storeBtn.innerHTML = isMobile ? '🪙 <span class="owl-count">0</span>' : '🪙 <span class="owl-count">0</span> OWLs';
-    storeBtn.onclick = openOwlStore;
+    // OWL STORE TEMPORARILY DISABLED - caching/sync issues
+    // storeBtn.innerHTML = isMobile ? '🪙 <span class="owl-count">0</span>' : '🪙 <span class="owl-count">0</span> OWLs';
+    // storeBtn.onclick = openOwlStore;
     
     const soundBtn = document.createElement('button');
     soundBtn.id = 'owl-sound-btn';
@@ -724,7 +725,7 @@ function createOwlButton() {
     
     container.appendChild(soundBtn);
     container.appendChild(hootBtn);
-    container.appendChild(storeBtn);
+    // container.appendChild(storeBtn);  // DISABLED - see above
     document.body.appendChild(container);
     
     // Set initial balance from localStorage (source of truth)
