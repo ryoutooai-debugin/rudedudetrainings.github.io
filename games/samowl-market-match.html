@@ -448,6 +448,7 @@
                 gameState.correctInLevel++;
                 
                 showFeedback('✅', 'Great prediction! 🎯');
+                if (typeof SoundManager !== 'undefined') SoundManager.play('correct');
                 
                 if (gameState.correctInLevel >= 5) {
                     setTimeout(() => showLevelUp(), 1500);
@@ -460,6 +461,7 @@
             } else {
                 gameState.streak = 0;
                 showFeedback('❌', 'Markets are tricky! Try again! 🎲');
+                if (typeof SoundManager !== 'undefined') SoundManager.play('wrong');
                 
                 setTimeout(() => {
                     generateNewRound();
@@ -505,6 +507,6 @@
 
         updateDisplay();
     </script>
-    <script src="owl-integration-v4.js"></script>
+    <script src="owl-integration.js"></script>
 </body>
 </html>

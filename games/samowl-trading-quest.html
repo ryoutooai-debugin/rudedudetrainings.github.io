@@ -940,6 +940,22 @@
                 selectStock(stocks[nextIndex]);
             }
         }, 30000);
+
+        // Update prices every 3 seconds for active trading feel
+        setInterval(() => {
+            stocks.forEach(symbol => {
+                const priceChange = (Math.random() - 0.5) * 5; // Smaller moves
+                gameState.stockPrices[symbol].current = Math.max(10, gameState.stockPrices[symbol].current + priceChange);
+                gameState.stockPrices[symbol].history.push(priceChange > 0);
+                gameState.stockPrices[symbol].history.shift();
+            });
+            // Refresh display if price changed significantly
+            if (gameState.currentStock) {
+                selectStock(gameState.currentStock);
+                updateDisplay();
+                renderHoldings();
+            }
+        }, 3000);
         
         // Submit score periodically to earn OWLs
         setInterval(() => {
@@ -957,6 +973,6 @@
             submitScore('trading-quest', portfolioValue, gameState.xp, 0, extras);
         }, 60000); // Every minute
     </script>
-    <script src="owl-integration-v4.js"></script>
+    <script src="owl-integration.js"></script>
 </body>
 </html>
