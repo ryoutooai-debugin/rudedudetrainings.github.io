@@ -215,6 +215,13 @@
         function showLevelUp() {
             document.getElementById('levelMessage').textContent = `Level ${gameState.level} complete! You're mastering ${gameState.currentPattern.name}!`;
             document.getElementById('levelScreen').classList.add('show');
+            
+            // Submit score and earn OWLs
+            const extras = {
+                accuracy: gameState.total > 0 ? Math.round((gameState.correct / gameState.total) * 100) : 0,
+                patternsLearned: gameState.level
+            };
+            submitScore('pattern-master', gameState.score, gameState.level, gameState.streak, extras);
         }
 
         function continueGame() {
@@ -232,5 +239,6 @@
             document.getElementById('accuracy').textContent = gameState.total > 0 ? Math.round((gameState.correct / gameState.total) * 100) + '%' : '0%';
         }
     </script>
+    <script src="owl-integration.js"></script>
 </body>
 </html>

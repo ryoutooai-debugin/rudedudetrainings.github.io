@@ -18,9 +18,8 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
-            overflow-y: auto;
+            align-items: center;
+            overflow: hidden;
         }
         
         .game-container {
@@ -29,9 +28,11 @@
             background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%);
             border-radius: 30px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.4);
-            overflow: hidden;
+            overflow-y: auto;
             position: relative;
-            min-height: 700px;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
         }
         
         /* Header with SamOwl */
@@ -172,7 +173,8 @@
         /* Game Area */
         .game-area {
             padding: 25px;
-            min-height: 350px;
+            flex: 1;
+            overflow-y: auto;
         }
         
         .instruction {
@@ -571,7 +573,6 @@
     </style>
 </head>
 <body>
-    <a href="index.html" style="position: fixed; top: 10px; left: 10px; color: white; text-decoration: none; font-size: 0.85em; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; z-index: 1000;">← Back to Games</a>
     <div class="game-container">
         <!-- Start Screen -->
         <div class="start-screen" id="startScreen">
@@ -595,6 +596,13 @@
             <div class="level-message" id="levelMessage">You're amazing!</div>
             <div class="reward-display" id="rewardDisplay"></div>
             <button class="continue-btn" onclick="continueGame()">Continue ➡️</button>
+        </div>
+
+        <!-- Back Button -->
+        <div style="padding: 10px 15px; background: rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="color: #495057; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; gap: 5px; padding: 8px 15px; background: rgba(102, 126, 234, 0.1); border-radius: 20px; transition: all 0.3s ease;">
+                <span>←</span> Back to Games
+            </a>
         </div>
 
         <!-- Header -->
@@ -828,6 +836,9 @@
             
             document.getElementById('levelScreen').classList.add('show');
             createConfetti();
+            
+            // Submit score and earn OWLs
+            submitScore('color-match', gameState.stars, gameState.level, gameState.streak);
         }
 
         function continueGame() {
@@ -868,5 +879,6 @@
         // Initialize
         updateDisplay();
     </script>
+    <script src="owl-integration.js"></script>
 </body>
 </html>

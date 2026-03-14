@@ -290,7 +290,6 @@
     </style>
 </head>
 <body>
-    <a href="index.html" style="position: fixed; top: 10px; left: 10px; color: white; text-decoration: none; font-size: 0.85em; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; z-index: 1000;">← Back to Games</a>
     <div class="game-container">
         <div class="start-screen" id="startScreen">
             <div style="font-size: 5em; margin-bottom: 20px;">🐂 🦉 🐻</div>
@@ -312,6 +311,13 @@
             <p style="font-size: 1.1em; color: #28a745; margin: 15px 0;">You're becoming a pattern master!</p>
             <div style="font-size: 4em; margin: 20px 0;" id="newReward">🏆</div>
             <button class="continue-btn" onclick="continueGame()">Keep Trading! ➡️</button>
+        </div>
+
+        <!-- Back Button -->
+        <div style="padding: 10px 15px; background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="color: #333; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; gap: 5px; padding: 8px 15px; background: rgba(255,255,255,0.9); border-radius: 20px; transition: all 0.3s ease;">
+                <span>←</span> Back to Games
+            </a>
         </div>
 
         <div class="header">
@@ -474,6 +480,12 @@
             const rewards = ['🏆', '📊', '💎', '🚀', '👑', '🦉'];
             document.getElementById('newReward').textContent = rewards[Math.min(gameState.level - 1, rewards.length - 1)];
             document.getElementById('levelScreen').classList.remove('hidden');
+            
+            // Submit score and earn OWLs
+            const extras = {
+                accuracy: gameState.total > 0 ? Math.round((gameState.correct / gameState.total) * 100) : 0
+            };
+            submitScore('market-match', gameState.coins, gameState.level, gameState.streak, extras);
         }
 
         function continueGame() {
@@ -493,5 +505,6 @@
 
         updateDisplay();
     </script>
+    <script src="owl-integration.js"></script>
 </body>
 </html>

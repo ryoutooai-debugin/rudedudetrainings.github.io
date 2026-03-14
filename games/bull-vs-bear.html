@@ -419,6 +419,13 @@
             <button class="start-btn" onclick="continueGame()" ontouchstart="continueGame()">Continue ➡️</button>
         </div>
 
+        <!-- Back Button -->
+        <div style="padding: 10px 15px; background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="color: #333; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; gap: 5px; padding: 8px 15px; background: rgba(255,255,255,0.9); border-radius: 20px; transition: all 0.3s ease;">
+                <span>←</span> Back to Games
+            </a>
+        </div>
+
         <!-- Header -->
         <div class="header">
             <h1>🐂 Bull vs Bear 🐻</h1>
@@ -793,6 +800,13 @@
             
             // Play victory sound
             playLevelUpSound();
+            
+            // Submit score and earn OWLs
+            const extras = {
+                correctPredictions: gameState.correctAnswers,
+                totalPredictions: gameState.totalAnswers
+            };
+            submitScore('bull-vs-bear', gameState.coins, gameState.level, gameState.streak, extras);
         }
 
         function continueGame() {
@@ -828,5 +842,6 @@
         // Initialize
         updateDisplay();
     </script>
+    <script src="owl-integration.js"></script>
 </body>
 </html>
