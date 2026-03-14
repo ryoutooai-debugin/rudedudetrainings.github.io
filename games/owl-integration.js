@@ -9,6 +9,72 @@ const OWL_CONFIG = {
     gameName: document.title || 'SamOwl Game'
 };
 
+// ============================================
+// SOUND EFFECTS MANAGER
+// ============================================
+const SoundManager = {
+    enabled: true,
+    context: null,
+    
+    // Initialize audio context (required for browsers)
+    init() {
+        if (!this.context) {
+            this.context = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.context.state === 'suspended') {
+            this.context.resume();
+        }
+    },
+    
+    // Toggle sound on/off
+    toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+    },
+    
+    // Play a sound effect
+    play(type) {
+        if (!this.enabled || !this.context) return;
+        
+        const sounds = {
+            correct: { freq: 880, type: 'sine', duration: 0.15, slide: 1100 },
+            wrong: { freq: 200, type: 'sawtooth', duration: 0.3, slide: 150 },
+            levelUp: { freq: 523, type: 'sine', duration: 0.4, slide: 880 },
+            coin: { freq: 1200, type: 'sine', duration: 0.1, slide: 1800 },
+            click: { freq: 600, type: 'sine', duration: 0.05, slide: 600 },
+            hoot: { freq: 400, type: 'sine', duration: 0.3, slide: 350 },
+            buy: { freq: 660, type: 'sine', duration: 0.2, slide: 990 },
+            earn: { freq: 523, type: 'sine', duration: 0.15, slide: 784 }
+        };
+        
+        const sound = sounds[type];
+        if (!sound) return;
+        
+        const osc = this.context.createOscillator();
+        const gain = this.context.createGain();
+        
+        osc.type = sound.type;
+        osc.frequency.setValueAtTime(sound.freq, this.context.currentTime);
+        
+        if (sound.slide) {
+            osc.frequency.exponentialRampToValueAtTime(sound.slide, this.context.currentTime + sound.duration);
+        }
+        
+        gain.gain.setValueAtTime(0.3, this.context.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + sound.duration);
+        
+        osc.connect(gain);
+        gain.connect(this.context.destination);
+        
+        osc.start(this.context.currentTime);
+        osc.stop(this.context.currentTime + sound.duration);
+    }
+};
+
+// Initialize sound on first user interaction
+document.addEventListener('click', () => SoundManager.init(), { once: true });
+document.addEventListener('touchstart', () => SoundManager.init(), { once: true });
+
 // Get or create user ID
 function getUserId() {
     let userId = localStorage.getItem('samowl_user_id');
@@ -165,6 +231,7 @@ async function submitScore(gameType, score, level, streak, extras = {}) {
         if (owls > 0) {
             showOwlNotification(owls, reasons);
             updateOwlButton(owls);
+            SoundManager.play('earn');
         }
         
         return { ...data, owlsEarned: owls, owlReasons: reasons };
@@ -397,8 +464,10 @@ async function buyItem(itemId, item) {
             document.getElementById('store-owl-balance').textContent = data.remaining_owls.toLocaleString();
             updateOwlButton(0);
             loadOwlBalance();
+            SoundManager.play('buy');
         } else {
             alert(data.error);
+            SoundManager.play('wrong');
         }
     } catch (error) {
         console.error('Purchase failed:', error);
@@ -453,6 +522,8 @@ const GAME_DESCRIPTIONS = {
 
 // Show SamOwl's Hoot (help message)
 function showSamOwlHoot() {
+    SoundManager.play('hoot');
+    
     // Detect which game this is
     const path = window.location.pathname;
     let gameType = 'color-match';
@@ -615,6 +686,31 @@ function createOwlButton() {
     `;
     storeBtn.onclick = openOwlStore;
     
+    // Sound toggle button
+    const soundBtn = document.createElement('button');
+    soundBtn.id = 'owl-sound-btn';
+    soundBtn.style.cssText = `
+        background: rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.3);
+        color: white;
+        padding: 10px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s;
+    `;
+    soundBtn.innerHTML = '🔊 Sound On';
+    soundBtn.onclick = () => {
+        const enabled = SoundManager.toggle();
+        soundBtn.innerHTML = enabled ? '🔊 Sound On' : '🔇 Sound Off';
+        soundBtn.style.opacity = enabled ? '1' : '0.6';
+        SoundManager.play('click');
+    };
+    
+    container.appendChild(soundBtn);
     container.appendChild(hootBtn);
     container.appendChild(storeBtn);
     document.body.appendChild(container);
