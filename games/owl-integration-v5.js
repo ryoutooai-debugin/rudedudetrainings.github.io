@@ -245,35 +245,33 @@ async function loadOwlBalance() {
     const userId = getUserId();
     const localOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
     
+    // Always use localStorage as the source of truth for display
+    // This ensures consistency between game and store
+    const button = document.getElementById('owl-store-floating-btn');
+    if (button) {
+        button.dataset.owls = localOwls;
+        button.querySelector('.owl-count').textContent = localOwls.toLocaleString();
+    }
+    
+    // Try to sync with server in background (but don't override local progress)
     try {
         const response = await fetch(`${OWL_CONFIG.apiUrl}/owls?user_id=${encodeURIComponent(userId)}`);
         const data = await response.json();
         
-        // Use the higher of server or local balance (don't lose progress!)
-        const totalOwls = Math.max(data.owls || 0, localOwls);
-        
-        // Update localStorage with server value if it's higher
-        if (data.owls > localOwls) {
+        // Only update localStorage if server has MORE owls (never lose progress!)
+        if (data.owls && data.owls > localOwls) {
             localStorage.setItem('samowl_owls', data.owls);
+            if (button) {
+                button.dataset.owls = data.owls;
+                button.querySelector('.owl-count').textContent = data.owls.toLocaleString();
+            }
+            return data.owls;
         }
-        
-        const button = document.getElementById('owl-store-floating-btn');
-        if (button) {
-            button.dataset.owls = totalOwls;
-            button.querySelector('.owl-count').textContent = totalOwls.toLocaleString();
-        }
-        
-        return totalOwls;
     } catch (error) {
-        console.error('Failed to load OWLs:', error);
-        // Use localStorage when server is down
-        const button = document.getElementById('owl-store-floating-btn');
-        if (button) {
-            button.dataset.owls = localOwls;
-            button.querySelector('.owl-count').textContent = localOwls.toLocaleString();
-        }
-        return localOwls;
+        console.error('Server sync failed, using local balance:', error);
     }
+    
+    return localOwls;
 }
 
 function openOwlStore() {
@@ -356,6 +354,12 @@ function openOwlStore() {
     
     document.body.appendChild(modal);
     loadStoreItems();
+    
+    // Show local balance immediately for consistency
+    const localOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
+    document.getElementById('store-owl-balance').textContent = localOwls.toLocaleString();
+    
+    // Sync with server in background
     loadOwlBalance().then(owls => {
         document.getElementById('store-owl-balance').textContent = owls.toLocaleString();
     });
