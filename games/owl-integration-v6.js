@@ -242,33 +242,17 @@ function updateOwlButton(additionalOwls = 0) {
 }
 
 async function loadOwlBalance() {
-    const userId = getUserId();
+    // DISABLED: Server sync was causing OWL balance to reset unexpectedly
+    // Kids were losing their earned OWLs when opening the store
+    // Now using localStorage ONLY as the source of truth
+    
     const localOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
     
-    // Always use localStorage as the source of truth for display
-    // This ensures consistency between game and store
+    // Update display from localStorage only
     const button = document.getElementById('owl-store-floating-btn');
     if (button) {
         button.dataset.owls = localOwls;
         button.querySelector('.owl-count').textContent = localOwls.toLocaleString();
-    }
-    
-    // Try to sync with server in background (but don't override local progress)
-    try {
-        const response = await fetch(`${OWL_CONFIG.apiUrl}/owls?user_id=${encodeURIComponent(userId)}`);
-        const data = await response.json();
-        
-        // Only update localStorage if server has MORE owls (never lose progress!)
-        if (data.owls && data.owls > localOwls) {
-            localStorage.setItem('samowl_owls', data.owls);
-            if (button) {
-                button.dataset.owls = data.owls;
-                button.querySelector('.owl-count').textContent = data.owls.toLocaleString();
-            }
-            return data.owls;
-        }
-    } catch (error) {
-        console.error('Server sync failed, using local balance:', error);
     }
     
     return localOwls;
@@ -430,10 +414,21 @@ async function buyItem(itemId, item) {
         const data = await response.json();
         
         if (data.success) {
+            // Update localStorage with new balance (deduct item price)
+            const currentOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
+            const newBalance = Math.max(0, currentOwls - item.price);
+            localStorage.setItem('samowl_owls', newBalance);
+            
             showOwlNotification(0, [`Purchased ${item.name}!`]);
-            document.getElementById('store-owl-balance').textContent = data.remaining_owls.toLocaleString();
-            updateOwlButton(0);
-            loadOwlBalance();
+            document.getElementById('store-owl-balance').textContent = newBalance.toLocaleString();
+            
+            // Update floating button
+            const button = document.getElementById('owl-store-floating-btn');
+            if (button) {
+                button.dataset.owls = newBalance;
+                button.querySelector('.owl-count').textContent = newBalance.toLocaleString();
+            }
+            
             SoundManager.play('buy');
         } else {
             alert(data.error);
