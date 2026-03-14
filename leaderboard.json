@@ -2,27 +2,27 @@
   "entries": [
     {
       "name": "owl_jn3ci47dd",
-      "portfolio_value": 190,
+      "portfolio_value": 70,
       "cash": 0,
-      "updated": "2026-03-14T17:00:55.300585"
+      "updated": "2026-03-14T17:15:38.291344"
     }
   ],
-  "last_update": "2026-03-14T17:00:55.300592",
+  "last_update": "2026-03-14T17:15:38.291351",
   "users": {
     "owl_jn3ci47dd": {
       "name": "owl_jn3ci47dd",
-      "portfolio_value": 190,
+      "portfolio_value": 70,
       "cash": 0,
-      "owls": 12,
+      "owls": 6,
       "inventory": [],
       "stats": {
-        "trades": 2,
-        "profit_trades": 2,
+        "trades": 1,
+        "profit_trades": 1,
         "streak_days": 0,
         "last_played": null
       },
-      "created": "2026-03-14T17:00:38.660897",
-      "updated": "2026-03-14T17:00:55.300580"
+      "created": "2026-03-14T17:15:38.291328",
+      "updated": "2026-03-14T17:15:38.291341"
     }
   }
 }
