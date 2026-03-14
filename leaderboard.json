@@ -1,11 +1,28 @@
 {
   "entries": [
     {
-      "name": "Rudedude",
-      "portfolio_value": 100769.58637168503,
-      "cash": 90623.23637168502,
-      "updated": "2026-03-13T20:36:12.567615"
+      "name": "owl_4k67zahy7",
+      "portfolio_value": 1900,
+      "cash": 0,
+      "updated": "2026-03-14T15:45:27.418235"
     }
   ],
-  "last_update": "2026-03-13T20:36:12.567623"
+  "last_update": "2026-03-14T15:45:27.418241",
+  "users": {
+    "owl_4k67zahy7": {
+      "name": "owl_4k67zahy7",
+      "portfolio_value": 1900,
+      "cash": 0,
+      "owls": 12,
+      "inventory": [],
+      "stats": {
+        "trades": 2,
+        "profit_trades": 2,
+        "streak_days": 0,
+        "last_played": null
+      },
+      "created": "2026-03-14T15:45:03.543832",
+      "updated": "2026-03-14T15:45:27.418230"
+    }
+  }
 }
