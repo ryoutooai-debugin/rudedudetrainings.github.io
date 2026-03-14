@@ -587,14 +587,17 @@ function closeSamOwlHoot() {
 
 function createOwlButton() {
     const container = document.createElement('div');
+    // Check if mobile for positioning
+    const isMobile = window.innerWidth <= 500;
+
     container.style.cssText = `
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: ${isMobile ? '80px' : '20px'};
+        right: ${isMobile ? '10px' : '20px'};
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        gap: 10px;
+        gap: ${isMobile ? '5px' : '10px'};
         z-index: 1000;
     `;
     
@@ -604,19 +607,20 @@ function createOwlButton() {
         background: linear-gradient(135deg, #667eea, #764ba2);
         border: none;
         color: white;
-        padding: 12px 20px;
+        padding: ${isMobile ? '8px 12px' : '12px 20px'};
         border-radius: 25px;
-        font-size: 14px;
+        font-size: ${isMobile ? '11px' : '14px'};
         font-weight: bold;
         cursor: pointer;
         box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: ${isMobile ? '4px' : '8px'};
         transition: transform 0.2s;
         animation: hootWiggle 2s ease-in-out infinite;
+        white-space: nowrap;
     `;
-    hootBtn.innerHTML = '🦉 Hoot! (Help)';
+    hootBtn.innerHTML = isMobile ? '🦉 Help' : '🦉 Hoot! (Help)';
     hootBtn.onclick = showSamOwlHoot;
     
     const storeBtn = document.createElement('button');
@@ -625,36 +629,38 @@ function createOwlButton() {
         background: linear-gradient(135deg, #f39c12, #e74c3c);
         border: none;
         color: white;
-        padding: 15px 25px;
+        padding: ${isMobile ? '8px 12px' : '15px 25px'};
         border-radius: 50px;
-        font-size: 16px;
+        font-size: ${isMobile ? '12px' : '16px'};
         font-weight: bold;
         cursor: pointer;
         box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: ${isMobile ? '4px' : '8px'};
         transition: transform 0.2s;
+        white-space: nowrap;
     `;
-    storeBtn.innerHTML = '🪙 <span class="owl-count">0</span> OWLs';
+    storeBtn.innerHTML = isMobile ? '🪙 <span class="owl-count">0</span>' : '🪙 <span class="owl-count">0</span> OWLs';
     storeBtn.onclick = openOwlStore;
     
     const soundBtn = document.createElement('button');
     soundBtn.id = 'owl-sound-btn';
     soundBtn.style.cssText = `
-        background: rgba(255,255,255,0.2);
-        border: 2px solid rgba(255,255,255,0.3);
-        color: white;
-        padding: 10px 15px;
+        background: rgba(255,255,255,0.9);
+        border: 2px solid rgba(0,0,0,0.1);
+        color: #333;
+        padding: ${isMobile ? '6px 10px' : '10px 15px'};
         border-radius: 20px;
-        font-size: 12px;
+        font-size: ${isMobile ? '10px' : '12px'};
         cursor: pointer;
         display: flex;
         align-items: center;
         gap: 5px;
         transition: all 0.2s;
+        white-space: nowrap;
     `;
-    soundBtn.innerHTML = '🔊 Sound On';
+    soundBtn.innerHTML = isMobile ? '🔊 On' : '🔊 Sound On';
     soundBtn.onclick = () => {
         const enabled = SoundManager.toggle();
         soundBtn.innerHTML = enabled ? '🔊 Sound On' : '🔇 Sound Off';
