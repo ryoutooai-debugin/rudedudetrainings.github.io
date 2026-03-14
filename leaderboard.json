@@ -2,16 +2,16 @@
   "entries": [
     {
       "name": "owl_4k67zahy7",
-      "portfolio_value": 360,
+      "portfolio_value": 580,
       "cash": 0,
-      "updated": "2026-03-14T18:03:56.466941"
+      "updated": "2026-03-14T18:04:11.101850"
     }
   ],
-  "last_update": "2026-03-14T18:03:56.466947",
+  "last_update": "2026-03-14T18:04:11.101858",
   "users": {
     "owl_4k67zahy7": {
       "name": "owl_4k67zahy7",
-      "portfolio_value": 360,
+      "portfolio_value": 580,
       "cash": 0,
       "owls": 6,
       "inventory": [],
@@ -21,8 +21,8 @@
         "streak_days": 0,
         "last_played": null
       },
-      "created": "2026-03-14T18:03:56.466930",
-      "updated": "2026-03-14T18:03:56.466939"
+      "created": "2026-03-14T18:04:11.101836",
+      "updated": "2026-03-14T18:04:11.101848"
     }
   }
 }
