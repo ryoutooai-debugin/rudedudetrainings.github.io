@@ -355,14 +355,16 @@ function openOwlStore() {
     document.body.appendChild(modal);
     loadStoreItems();
     
-    // Show local balance immediately for consistency
+    // Show local balance immediately for consistency - this is the source of truth
     const localOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
     document.getElementById('store-owl-balance').textContent = localOwls.toLocaleString();
     
-    // Sync with server in background
-    loadOwlBalance().then(owls => {
-        document.getElementById('store-owl-balance').textContent = owls.toLocaleString();
-    });
+    // Update the floating button too
+    const button = document.getElementById('owl-store-floating-btn');
+    if (button) {
+        button.dataset.owls = localOwls;
+        button.querySelector('.owl-count').textContent = localOwls.toLocaleString();
+    }
 }
 
 function closeOwlStore() {
@@ -677,7 +679,10 @@ function createOwlButton() {
     container.appendChild(storeBtn);
     document.body.appendChild(container);
     
-    loadOwlBalance();
+    // Set initial balance from localStorage (source of truth)
+    const localOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
+    storeBtn.dataset.owls = localOwls;
+    storeBtn.querySelector('.owl-count').textContent = localOwls.toLocaleString();
     
     const hootStyle = document.createElement('style');
     hootStyle.textContent = `
