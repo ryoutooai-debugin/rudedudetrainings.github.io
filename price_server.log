@@ -1,0 +1,4143 @@
+============================================================
+🦉 Yahoo Finance Price Server Starting
+Stocks: 24
+Update interval: 300 seconds (5.0 minutes)
+============================================================
+[2026-03-13 20:28:29.329176] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 20:28:29.760573] Fetched 24 stocks
+[2026-03-13 20:28:29.760969] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 20:28:29.760977] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 20:33:29.761055] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 20:33:29.997213] Fetched 24 stocks
+[2026-03-13 20:33:29.997537] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 20:33:29.997543] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 20:38:29.997621] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 20:38:30.277681] Fetched 24 stocks
+[2026-03-13 20:38:30.278144] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 20:38:30.278152] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 20:43:30.278231] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 20:43:31.014470] Fetched 24 stocks
+[2026-03-13 20:43:31.014943] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 20:43:31.014952] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 20:48:31.015021] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 20:48:31.274629] Fetched 24 stocks
+[2026-03-13 20:48:31.275014] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 20:48:31.275021] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 20:53:31.275102] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 20:53:31.540721] Fetched 24 stocks
+[2026-03-13 20:53:31.541244] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 20:53:31.541251] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 20:58:31.541331] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 20:58:31.781087] Fetched 24 stocks
+[2026-03-13 20:58:31.781530] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 20:58:31.781537] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:03:31.781615] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:03:32.042514] Fetched 24 stocks
+[2026-03-13 21:03:32.043007] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:03:32.043015] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:08:32.043095] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:08:32.354447] Fetched 24 stocks
+[2026-03-13 21:08:32.354843] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:08:32.354849] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:13:32.354945] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:13:32.624075] Fetched 24 stocks
+[2026-03-13 21:13:32.624554] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:13:32.624563] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:18:32.624654] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:18:32.898192] Fetched 24 stocks
+[2026-03-13 21:18:32.898614] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:18:32.898620] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:23:32.898696] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:23:35.284553] Fetched 24 stocks
+[2026-03-13 21:23:35.285033] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:23:35.285041] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:28:35.285106] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:28:35.729004] Fetched 24 stocks
+[2026-03-13 21:28:35.729482] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:28:35.729489] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:33:35.729565] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:33:35.989700] Fetched 24 stocks
+[2026-03-13 21:33:35.990171] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:33:35.990184] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:38:35.990260] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:38:36.234056] Fetched 24 stocks
+[2026-03-13 21:38:36.235116] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:38:36.235127] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:43:36.235200] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:43:36.454336] Fetched 24 stocks
+[2026-03-13 21:43:36.454766] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:43:36.454772] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:48:36.454860] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:48:36.920236] Fetched 24 stocks
+[2026-03-13 21:48:36.920891] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:48:36.920903] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:53:36.920979] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:53:37.288527] Fetched 24 stocks
+[2026-03-13 21:53:37.288999] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:53:37.289007] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 21:58:37.289076] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 21:58:37.668813] Fetched 24 stocks
+[2026-03-13 21:58:37.669238] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 21:58:37.669245] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:03:37.669325] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:03:37.940888] Fetched 24 stocks
+[2026-03-13 22:03:37.941381] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:03:37.941389] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:08:37.941465] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:08:38.179525] Fetched 24 stocks
+[2026-03-13 22:08:38.179881] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:08:38.179887] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:13:38.179965] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:13:38.477360] Fetched 24 stocks
+[2026-03-13 22:13:38.477898] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:13:38.477907] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:18:38.477983] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:18:38.756670] Fetched 24 stocks
+[2026-03-13 22:18:38.757097] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:18:38.757104] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:23:38.757179] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:23:39.053485] Fetched 24 stocks
+[2026-03-13 22:23:39.053855] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:23:39.053861] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:28:39.053935] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:28:39.372176] Fetched 24 stocks
+[2026-03-13 22:28:39.372698] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:28:39.372716] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:33:39.372792] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:33:39.683346] Fetched 24 stocks
+[2026-03-13 22:33:39.683673] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:33:39.683678] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:38:39.683755] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:38:40.038067] Fetched 24 stocks
+[2026-03-13 22:38:40.038461] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:38:40.038469] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:43:40.038551] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:43:40.253126] Fetched 24 stocks
+[2026-03-13 22:43:40.253540] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:43:40.253546] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:48:40.253622] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:48:40.711133] Fetched 24 stocks
+[2026-03-13 22:48:40.711532] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:48:40.711539] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:53:40.711613] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:53:40.940409] Fetched 24 stocks
+[2026-03-13 22:53:40.940954] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:53:40.940964] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 22:58:40.941055] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 22:58:41.289974] Fetched 24 stocks
+[2026-03-13 22:58:41.290472] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 22:58:41.290480] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:03:41.290569] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:03:41.512698] Fetched 24 stocks
+[2026-03-13 23:03:41.513201] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:03:41.513208] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:08:41.513289] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:08:41.814698] Fetched 24 stocks
+[2026-03-13 23:08:41.815034] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:08:41.815039] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:13:41.815119] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:13:42.099015] Fetched 24 stocks
+[2026-03-13 23:13:42.099499] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:13:42.099510] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:18:42.099580] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:18:42.351922] Fetched 24 stocks
+[2026-03-13 23:18:42.352421] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:18:42.352429] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:23:42.352500] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:23:42.605716] Fetched 24 stocks
+[2026-03-13 23:23:42.606075] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:23:42.606081] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:28:42.606156] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:28:42.969200] Fetched 24 stocks
+[2026-03-13 23:28:42.969546] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:28:42.969552] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:33:42.969637] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:33:43.266081] Fetched 24 stocks
+[2026-03-13 23:33:43.266593] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:33:43.266616] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:38:43.266700] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:38:43.521905] Fetched 24 stocks
+[2026-03-13 23:38:43.522374] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:38:43.522382] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:43:43.522478] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:43:43.808257] Fetched 24 stocks
+[2026-03-13 23:43:43.808752] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:43:43.808760] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:48:43.808846] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:48:44.059272] Fetched 24 stocks
+[2026-03-13 23:48:44.059696] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:48:44.059702] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:53:44.059781] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:53:44.351537] Fetched 24 stocks
+[2026-03-13 23:53:44.352075] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:53:44.352082] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-13 23:58:44.352161] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-13 23:58:44.631212] Fetched 24 stocks
+[2026-03-13 23:58:44.631623] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-13 23:58:44.631630] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:03:44.631706] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:03:45.470515] Fetched 24 stocks
+[2026-03-14 00:03:45.470974] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:03:45.470992] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:08:45.471076] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:08:45.721236] Fetched 24 stocks
+[2026-03-14 00:08:45.721692] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:08:45.721701] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:13:45.721775] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:13:46.042625] Fetched 24 stocks
+[2026-03-14 00:13:46.043071] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:13:46.043079] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:18:46.043167] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:18:46.295371] Fetched 24 stocks
+[2026-03-14 00:18:46.295896] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:18:46.295905] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:23:46.295981] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:23:46.514695] Fetched 24 stocks
+[2026-03-14 00:23:46.515279] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:23:46.515296] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:28:46.515370] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:28:46.750988] Fetched 24 stocks
+[2026-03-14 00:28:46.751432] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:28:46.751447] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:33:46.751533] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:33:47.036918] Fetched 24 stocks
+[2026-03-14 00:33:47.037234] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:33:47.037240] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:38:47.037324] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:38:47.310504] Fetched 24 stocks
+[2026-03-14 00:38:47.310998] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:38:47.311007] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:43:47.311091] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:43:47.591526] Fetched 24 stocks
+[2026-03-14 00:43:47.591986] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:43:47.591995] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:48:47.592074] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:48:47.841050] Fetched 24 stocks
+[2026-03-14 00:48:47.841540] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:48:47.841547] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:53:47.841633] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:53:48.109680] Fetched 24 stocks
+[2026-03-14 00:53:48.110094] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:53:48.110102] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 00:58:48.110175] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 00:58:48.348985] Fetched 24 stocks
+[2026-03-14 00:58:48.349413] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 00:58:48.349423] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:03:48.349507] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:03:48.572200] Fetched 24 stocks
+[2026-03-14 01:03:48.572544] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:03:48.572549] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:08:48.572626] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:08:48.869231] Fetched 24 stocks
+[2026-03-14 01:08:48.869756] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:08:48.869765] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:13:48.869842] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:13:49.135763] Fetched 24 stocks
+[2026-03-14 01:13:49.136143] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:13:49.136150] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:18:49.136223] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:18:49.521698] Fetched 24 stocks
+[2026-03-14 01:18:49.522057] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:18:49.522063] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:23:49.522148] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:23:49.766259] Fetched 24 stocks
+[2026-03-14 01:23:49.766554] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:23:49.766559] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:28:49.766645] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:28:50.052293] Fetched 24 stocks
+[2026-03-14 01:28:50.052738] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:28:50.052744] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:33:50.052820] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:33:50.311133] Fetched 24 stocks
+[2026-03-14 01:33:50.311547] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:33:50.311555] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:38:50.311633] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:38:50.575245] Fetched 24 stocks
+[2026-03-14 01:38:50.575771] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:38:50.575778] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:43:50.575856] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:43:50.829545] Fetched 24 stocks
+[2026-03-14 01:43:50.830014] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:43:50.830022] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:48:50.830097] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:48:51.083312] Fetched 24 stocks
+[2026-03-14 01:48:51.083669] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:48:51.083676] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:53:51.083752] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:53:51.334064] Fetched 24 stocks
+[2026-03-14 01:53:51.334570] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:53:51.334578] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 01:58:51.334655] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 01:58:51.576644] Fetched 24 stocks
+[2026-03-14 01:58:51.577158] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 01:58:51.577165] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:03:51.577234] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:03:51.940535] Fetched 24 stocks
+[2026-03-14 02:03:51.940970] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:03:51.940976] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:08:51.941054] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:08:52.239962] Fetched 24 stocks
+[2026-03-14 02:08:52.240481] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:08:52.240489] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:13:52.240564] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:13:52.605149] Fetched 24 stocks
+[2026-03-14 02:13:52.605618] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:13:52.605626] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:18:52.605698] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:18:52.901746] Fetched 24 stocks
+[2026-03-14 02:18:52.902083] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:18:52.902088] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:23:52.902166] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:23:53.168670] Fetched 24 stocks
+[2026-03-14 02:23:53.169287] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:23:53.169298] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:28:53.169374] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:28:53.500714] Fetched 24 stocks
+[2026-03-14 02:28:53.501226] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:28:53.501234] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:33:53.501322] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:33:53.717808] Fetched 24 stocks
+[2026-03-14 02:33:53.718282] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:33:53.718291] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:38:53.718371] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:38:53.970021] Fetched 24 stocks
+[2026-03-14 02:38:53.970502] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:38:53.970509] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:43:53.970580] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:43:54.284451] Fetched 24 stocks
+[2026-03-14 02:43:54.284914] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:43:54.284921] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:48:54.285003] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:48:54.604997] Fetched 24 stocks
+[2026-03-14 02:48:54.605353] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:48:54.605360] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:53:54.605437] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:53:54.905825] Fetched 24 stocks
+[2026-03-14 02:53:54.906337] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:53:54.906345] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 02:58:54.906421] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 02:58:55.904917] Fetched 24 stocks
+[2026-03-14 02:58:55.905353] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 02:58:55.905359] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:03:55.905435] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:03:56.170259] Fetched 24 stocks
+[2026-03-14 03:03:56.170898] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:03:56.170910] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:08:56.170974] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:08:56.414419] Fetched 24 stocks
+[2026-03-14 03:08:56.414880] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:08:56.414887] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:13:56.414973] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:13:56.672977] Fetched 24 stocks
+[2026-03-14 03:13:56.673416] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:13:56.673423] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:18:56.673499] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:18:57.216639] Fetched 24 stocks
+[2026-03-14 03:18:57.216981] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:18:57.216987] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:23:57.217064] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:23:57.481841] Fetched 24 stocks
+[2026-03-14 03:23:57.482184] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:23:57.482197] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:28:57.482272] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:28:57.736473] Fetched 24 stocks
+[2026-03-14 03:28:57.736911] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:28:57.736918] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:33:57.736985] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:33:57.971104] Fetched 24 stocks
+[2026-03-14 03:33:57.971535] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:33:57.971542] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:38:57.971616] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:38:58.210806] Fetched 24 stocks
+[2026-03-14 03:38:58.211240] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:38:58.211247] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:43:58.211327] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:43:58.485328] Fetched 24 stocks
+[2026-03-14 03:43:58.485869] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:43:58.485881] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:48:58.485955] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:48:58.753226] Fetched 24 stocks
+[2026-03-14 03:48:58.753755] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:48:58.753764] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:53:58.753855] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:53:59.000725] Fetched 24 stocks
+[2026-03-14 03:53:59.001185] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:53:59.001193] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 03:58:59.001280] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 03:58:59.248918] Fetched 24 stocks
+[2026-03-14 03:58:59.249237] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 03:58:59.249243] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:03:59.249321] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:03:59.499321] Fetched 24 stocks
+[2026-03-14 04:03:59.499858] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:03:59.499868] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:08:59.499946] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:08:59.749900] Fetched 24 stocks
+[2026-03-14 04:08:59.750247] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:08:59.750253] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:13:59.750327] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:13:59.997523] Fetched 24 stocks
+[2026-03-14 04:13:59.997883] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:13:59.997889] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:18:59.997963] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:19:00.347956] Fetched 24 stocks
+[2026-03-14 04:19:00.348351] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:19:00.348357] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:24:00.348457] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:24:01.381330] Fetched 24 stocks
+[2026-03-14 04:24:01.381827] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:24:01.381837] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:29:01.381927] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:29:01.711664] Fetched 24 stocks
+[2026-03-14 04:29:01.712213] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:29:01.712223] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:34:01.712303] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:34:01.952323] Fetched 24 stocks
+[2026-03-14 04:34:01.952869] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:34:01.952878] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:39:01.952951] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:39:02.219311] Fetched 24 stocks
+[2026-03-14 04:39:02.219723] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:39:02.219730] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:44:02.219794] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:44:02.555278] Fetched 24 stocks
+[2026-03-14 04:44:02.555694] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:44:02.555705] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:49:02.555786] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:49:02.823711] Fetched 24 stocks
+[2026-03-14 04:49:02.824072] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:49:02.824078] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:54:02.824154] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:54:03.082867] Fetched 24 stocks
+[2026-03-14 04:54:03.083364] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:54:03.083372] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 04:59:03.083445] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 04:59:03.325216] Fetched 24 stocks
+[2026-03-14 04:59:03.325582] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 04:59:03.325589] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:04:03.325662] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:04:03.551940] Fetched 24 stocks
+[2026-03-14 05:04:03.552359] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:04:03.552374] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:09:03.552455] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:09:03.960213] Fetched 24 stocks
+[2026-03-14 05:09:03.960566] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:09:03.960572] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:14:03.960643] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:14:04.230343] Fetched 24 stocks
+[2026-03-14 05:14:04.230830] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:14:04.230839] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:19:04.230914] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:19:04.537180] Fetched 24 stocks
+[2026-03-14 05:19:04.537669] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:19:04.537679] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:24:04.537796] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:24:04.777488] Fetched 24 stocks
+[2026-03-14 05:24:04.777955] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:24:04.777962] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:29:04.778046] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:29:05.034501] Fetched 24 stocks
+[2026-03-14 05:29:05.034942] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:29:05.034949] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:34:05.035092] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:34:05.261411] Fetched 24 stocks
+[2026-03-14 05:34:05.261828] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:34:05.261848] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:39:05.261926] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:39:05.538777] Fetched 24 stocks
+[2026-03-14 05:39:05.539237] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:39:05.539244] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:44:05.539315] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:44:05.787406] Fetched 24 stocks
+[2026-03-14 05:44:05.787829] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:44:05.787835] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:49:05.787905] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:49:06.024262] Fetched 24 stocks
+[2026-03-14 05:49:06.024766] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:49:06.024774] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:54:06.024855] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:54:06.230889] Fetched 24 stocks
+[2026-03-14 05:54:06.231214] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:54:06.231221] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 05:59:06.231298] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 05:59:06.521393] Fetched 24 stocks
+[2026-03-14 05:59:06.521889] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 05:59:06.521896] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:04:06.521968] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:04:06.860161] Fetched 24 stocks
+[2026-03-14 06:04:06.860537] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:04:06.860544] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:09:06.860611] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:09:07.136515] Fetched 24 stocks
+[2026-03-14 06:09:07.136957] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:09:07.136964] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:14:07.137043] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:14:07.397148] Fetched 24 stocks
+[2026-03-14 06:14:07.397524] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:14:07.397531] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:19:07.397608] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:19:07.702615] Fetched 24 stocks
+[2026-03-14 06:19:07.703327] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:19:07.703381] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:24:07.703461] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:24:08.016706] Fetched 24 stocks
+[2026-03-14 06:24:08.017227] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:24:08.017238] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:29:08.017323] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:29:08.270806] Fetched 24 stocks
+[2026-03-14 06:29:08.271277] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:29:08.271284] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:34:08.271365] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:34:08.511273] Fetched 24 stocks
+[2026-03-14 06:34:08.511635] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:34:08.511641] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:39:08.511708] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:39:08.760506] Fetched 24 stocks
+[2026-03-14 06:39:08.760950] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:39:08.760958] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:44:08.761034] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:44:09.002765] Fetched 24 stocks
+[2026-03-14 06:44:09.003194] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:44:09.003200] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:49:09.003277] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:49:09.239037] Fetched 24 stocks
+[2026-03-14 06:49:09.239520] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:49:09.239526] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:54:09.239610] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:54:09.514474] Fetched 24 stocks
+[2026-03-14 06:54:09.515013] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:54:09.515021] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 06:59:09.515107] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 06:59:09.782419] Fetched 24 stocks
+[2026-03-14 06:59:09.782923] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 06:59:09.782931] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:04:09.782965] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:04:10.033024] Fetched 24 stocks
+[2026-03-14 07:04:10.033442] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:04:10.033448] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:09:10.033519] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:09:10.244031] Fetched 24 stocks
+[2026-03-14 07:09:10.244655] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:09:10.244662] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:14:10.244743] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:14:10.486153] Fetched 24 stocks
+[2026-03-14 07:14:10.486540] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:14:10.486546] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:19:10.486625] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:19:10.742332] Fetched 24 stocks
+[2026-03-14 07:19:10.742741] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:19:10.742749] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:24:10.742827] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:24:11.036079] Fetched 24 stocks
+[2026-03-14 07:24:11.036589] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:24:11.036598] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:29:11.036672] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:29:11.296854] Fetched 24 stocks
+[2026-03-14 07:29:11.297320] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:29:11.297327] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:34:11.297405] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:34:11.581964] Fetched 24 stocks
+[2026-03-14 07:34:11.582494] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:34:11.582502] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:39:11.582576] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:39:11.800146] Fetched 24 stocks
+[2026-03-14 07:39:11.800553] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:39:11.800560] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:44:11.800643] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:44:12.126178] Fetched 24 stocks
+[2026-03-14 07:44:12.126689] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:44:12.126696] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:49:12.126774] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:49:12.370371] Fetched 24 stocks
+[2026-03-14 07:49:12.370866] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:49:12.370874] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:54:12.370952] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:54:12.596086] Fetched 24 stocks
+[2026-03-14 07:54:12.596557] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:54:12.596566] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 07:59:12.596641] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 07:59:12.851549] Fetched 24 stocks
+[2026-03-14 07:59:12.851893] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 07:59:12.851899] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 08:04:12.851969] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 08:04:13.077185] Fetched 24 stocks
+[2026-03-14 08:04:13.077598] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 08:04:13.077604] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 08:09:13.077682] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 08:09:13.300857] Fetched 24 stocks
+[2026-03-14 08:09:13.301308] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 08:09:13.301315] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 08:14:13.301389] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
+  KO: $77.34
+  PEP: $159.88
+  XOM: $156.12
+  CAT: $693.99
+  BA: $209.89
+[2026-03-14 08:14:13.592542] Fetched 24 stocks
+[2026-03-14 08:14:13.593003] Saved 24 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-14 08:14:13.593011] Sleeping for 300 seconds...
+------------------------------------------------------------
+[2026-03-14 08:19:13.593096] Fetching prices from Yahoo Finance...
+  AAPL: $250.12
+  MSFT: $395.55
+  GOOGL: $302.28
+  AMZN: $207.67
+  NVDA: $180.25
+  META: $613.71
+  NFLX: $95.31
+  TSLA: $391.20
+  JPM: $283.44
+  V: $307.14
+  MA: $497.99
+  LLY: $985.08
+  JNJ: $241.52
+  UNH: $282.09
+  PFE: $26.58
+  WMT: $126.52
+  COST: $1008.43
+  HD: $339.03
+  PG: $150.65
