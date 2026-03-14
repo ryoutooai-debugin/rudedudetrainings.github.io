@@ -509,6 +509,282 @@
         }
         
         .hidden { display: none !important; }
+
+        /* Responsive - Tablet */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .game-container {
+                max-width: 100%;
+                border-radius: 20px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .samowl-logo {
+                font-size: 2.5em;
+            }
+
+            .brand-text h1 {
+                font-size: 1.4em;
+            }
+
+            .stats-bar {
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .stat-box {
+                padding: 10px;
+            }
+
+            .stat-value {
+                font-size: 1.2em;
+            }
+
+            .stat-label {
+                font-size: 0.65em;
+            }
+
+            .game-area {
+                padding: 15px;
+            }
+
+            .stock-header {
+                padding: 12px;
+            }
+
+            .stock-name {
+                font-size: 1.1em;
+            }
+
+            .stock-price {
+                font-size: 1.3em;
+            }
+
+            #chartCanvas {
+                height: 120px;
+            }
+
+            .trade-buttons {
+                gap: 12px;
+            }
+
+            .trade-btn {
+                padding: 15px;
+                font-size: 1em;
+            }
+
+            .tab-btn {
+                padding: 10px 15px;
+                font-size: 0.8em;
+            }
+
+            .start-mascot {
+                font-size: 4em;
+            }
+
+            .start-title {
+                font-size: 1.8em;
+            }
+
+            .start-btn {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 500px) {
+            body {
+                padding: 0;
+            }
+
+            .game-container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .header {
+                padding: 12px 10px;
+            }
+
+            .samowl-logo {
+                font-size: 2em;
+            }
+
+            .brand-text h1 {
+                font-size: 1.2em;
+            }
+
+            .brand-text p {
+                font-size: 0.8em;
+            }
+
+            .age-badge {
+                font-size: 0.75em;
+                padding: 4px 12px;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(3, 1fr);
+                padding: 10px;
+                gap: 6px;
+            }
+
+            .stat-box {
+                padding: 8px;
+                border-radius: 12px;
+            }
+
+            .stat-value {
+                font-size: 1.1em;
+            }
+
+            .stat-label {
+                font-size: 0.6em;
+            }
+
+            .game-area {
+                padding: 12px;
+            }
+
+            .stock-header {
+                padding: 10px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .stock-name {
+                font-size: 1em;
+            }
+
+            .stock-price {
+                font-size: 1.2em;
+            }
+
+            #chartCanvas {
+                height: 100px;
+            }
+
+            .trade-buttons {
+                gap: 10px;
+            }
+
+            .trade-btn {
+                padding: 12px;
+                font-size: 0.9em;
+                border-radius: 12px;
+            }
+
+            .nav-tabs {
+                padding: 0 10px;
+            }
+
+            .tab-btn {
+                padding: 8px 10px;
+                font-size: 0.75em;
+            }
+
+            .tab-content {
+                padding: 12px;
+            }
+
+            .portfolio-value {
+                font-size: 2em;
+            }
+
+            .start-screen {
+                padding: 20px;
+            }
+
+            .start-mascot {
+                font-size: 3.5em;
+            }
+
+            .start-title {
+                font-size: 1.6em;
+            }
+
+            .start-subtitle {
+                font-size: 0.9em;
+            }
+
+            .start-instructions {
+                padding: 15px;
+            }
+
+            .start-instructions li {
+                font-size: 0.85em;
+                margin: 6px 0;
+            }
+
+            .start-btn {
+                padding: 12px 25px;
+                font-size: 0.95em;
+                width: 90%;
+                max-width: 280px;
+            }
+
+            .feedback-popup {
+                padding: 20px;
+                min-width: 200px;
+            }
+
+            .feedback-popup .emoji {
+                font-size: 3em;
+            }
+
+            .feedback-popup h3 {
+                font-size: 1.3em;
+            }
+
+            .holding-item {
+                padding: 12px;
+            }
+
+            .quest-item {
+                padding: 12px;
+            }
+        }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 375px) {
+            .samowl-logo {
+                font-size: 1.8em;
+            }
+
+            .brand-text h1 {
+                font-size: 1.1em;
+            }
+
+            .stats-bar {
+                gap: 5px;
+            }
+
+            .stat-box {
+                padding: 6px;
+            }
+
+            .stat-value {
+                font-size: 1em;
+            }
+
+            .trade-btn {
+                padding: 10px;
+                font-size: 0.85em;
+            }
+
+            .tab-btn {
+                padding: 6px 8px;
+                font-size: 0.7em;
+            }
+        }
     </style>
 </head>
 <body>

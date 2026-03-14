@@ -367,6 +367,307 @@
             padding: 40px;
             opacity: 0.6;
         }
+
+        /* Responsive - Tablet */
+        @media (max-width: 1024px) {
+            .app-container {
+                max-width: 100%;
+            }
+
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 2.5em;
+            }
+
+            .brand-text h1 {
+                font-size: 1.3em;
+            }
+
+            .header-stats {
+                width: 100%;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .nav {
+                padding: 0 10px;
+            }
+
+            .nav-btn {
+                padding: 12px 15px;
+                font-size: 0.85em;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .market-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stock-card {
+                padding: 15px;
+            }
+
+            .stock-header h3 {
+                font-size: 1.1em;
+            }
+
+            .stock-price {
+                font-size: 1.5em;
+            }
+
+            .trade-buttons {
+                gap: 8px;
+            }
+
+            .trade-btn {
+                padding: 10px;
+                font-size: 0.85em;
+            }
+
+            .start-screen {
+                padding: 30px 20px;
+            }
+
+            .start-screen h1 {
+                font-size: 2em;
+            }
+
+            .name-input {
+                width: 90%;
+                max-width: 300px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-value {
+                font-size: 1.5em;
+            }
+
+            .leaderboard-table {
+                font-size: 0.85em;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 10px 8px;
+            }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 500px) {
+            .header {
+                padding: 12px;
+            }
+
+            .logo {
+                font-size: 2em;
+            }
+
+            .brand-text h1 {
+                font-size: 1.1em;
+            }
+
+            .brand-text p {
+                font-size: 0.8em;
+            }
+
+            .header-stats {
+                gap: 10px;
+            }
+
+            .header-stat-value {
+                font-size: 1.1em;
+            }
+
+            .header-stat-label {
+                font-size: 0.65em;
+            }
+
+            .nav {
+                gap: 5px;
+                padding: 0 5px;
+            }
+
+            .nav-btn {
+                padding: 10px 8px;
+                font-size: 0.75em;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+            }
+
+            .stock-card {
+                padding: 12px;
+            }
+
+            .stock-header {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .stock-header h3 {
+                font-size: 1em;
+            }
+
+            .stock-symbol {
+                font-size: 0.75em;
+            }
+
+            .stock-price {
+                font-size: 1.3em;
+            }
+
+            .price-change {
+                font-size: 0.8em;
+            }
+
+            .trade-buttons {
+                gap: 6px;
+            }
+
+            .trade-btn {
+                padding: 8px;
+                font-size: 0.8em;
+                border-radius: 8px;
+            }
+
+            .holdings-list {
+                gap: 8px;
+            }
+
+            .holding-item {
+                padding: 12px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .holding-info h4 {
+                font-size: 1em;
+            }
+
+            .holding-shares {
+                font-size: 0.8em;
+            }
+
+            .holding-value {
+                font-size: 1.1em;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px;
+            }
+
+            .stat-value {
+                font-size: 1.3em;
+            }
+
+            .stat-label {
+                font-size: 0.8em;
+            }
+
+            .start-screen {
+                padding: 20px 15px;
+            }
+
+            .start-screen h1 {
+                font-size: 1.8em;
+            }
+
+            .start-screen p {
+                font-size: 1em;
+            }
+
+            .name-input {
+                padding: 12px;
+                font-size: 1em;
+            }
+
+            .start-btn {
+                padding: 12px 25px;
+                font-size: 1em;
+                width: 90%;
+                max-width: 280px;
+            }
+
+            .leaderboard-table {
+                font-size: 0.8em;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 8px 5px;
+            }
+
+            .modal {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .modal h2 {
+                font-size: 1.3em;
+            }
+        }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 375px) {
+            .nav-btn {
+                padding: 8px 6px;
+                font-size: 0.7em;
+            }
+
+            .stock-price {
+                font-size: 1.2em;
+            }
+
+            .trade-btn {
+                padding: 6px;
+                font-size: 0.75em;
+            }
+
+            .stat-value {
+                font-size: 1.2em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -529,8 +830,12 @@
                 try {
                     const parsed = JSON.parse(saved);
                     // Validate the saved data has required fields
-                    if (parsed.playerName && parsed.cash !== undefined) {
+                    if (parsed.cash !== undefined) {
                         gameState = parsed;
+                        // Ensure playerName exists (for backwards compatibility)
+                        if (!gameState.playerName) {
+                            gameState.playerName = 'Trader';
+                        }
                         return true;
                     }
                 } catch (e) {

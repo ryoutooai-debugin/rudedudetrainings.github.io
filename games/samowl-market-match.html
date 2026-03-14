@@ -287,6 +287,186 @@
             margin-top: 15px;
             font-weight: bold;
         }
+
+        /* Responsive - Tablet */
+        @media (max-width: 768px) {
+            .game-container {
+                max-width: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .logo {
+                font-size: 2.5em;
+            }
+
+            .brand h1 {
+                font-size: 1.3em;
+            }
+
+            .brand p {
+                font-size: 0.9em;
+            }
+
+            .stats {
+                gap: 15px;
+            }
+
+            .stat {
+                padding: 8px 12px;
+            }
+
+            .stat-value {
+                font-size: 1.3em;
+            }
+
+            .game-area {
+                padding: 15px;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            .prediction-buttons {
+                gap: 15px;
+            }
+
+            .pred-btn {
+                padding: 15px 30px;
+                font-size: 1.1em;
+            }
+
+            .start-title {
+                font-size: 2em;
+            }
+
+            .start-btn {
+                padding: 15px 40px;
+                font-size: 1.1em;
+            }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 500px) {
+            .header {
+                padding: 12px;
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 2em;
+            }
+
+            .brand h1 {
+                font-size: 1.1em;
+            }
+
+            .brand p {
+                font-size: 0.8em;
+            }
+
+            .stats {
+                width: 100%;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .stat {
+                padding: 6px 10px;
+            }
+
+            .stat-label {
+                font-size: 0.7em;
+            }
+
+            .stat-value {
+                font-size: 1.1em;
+            }
+
+            .game-area {
+                padding: 12px;
+            }
+
+            .level-badge {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+
+            .chart-container {
+                height: 150px;
+            }
+
+            .prediction-section h3 {
+                font-size: 1em;
+            }
+
+            .prediction-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .pred-btn {
+                padding: 12px 25px;
+                font-size: 1em;
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .start-screen {
+                padding: 20px;
+            }
+
+            .start-title {
+                font-size: 1.8em;
+            }
+
+            .start-subtitle {
+                font-size: 1em;
+            }
+
+            .start-instructions {
+                padding: 15px;
+                font-size: 0.9em;
+            }
+
+            .start-btn {
+                padding: 12px 30px;
+                font-size: 1em;
+                width: 90%;
+                max-width: 280px;
+            }
+
+            .feedback-emoji {
+                font-size: 4em;
+            }
+
+            .feedback-text {
+                font-size: 1.3em;
+            }
+        }
+
+        /* Responsive - Small Mobile */
+        @media (max-width: 375px) {
+            .stat-value {
+                font-size: 1em;
+            }
+
+            .chart-container {
+                height: 130px;
+            }
+
+            .pred-btn {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
     </style>
 </head>
 <body>
