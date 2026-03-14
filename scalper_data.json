@@ -1,0 +1,20 @@
+{
+  "status": "idle",
+  "total_trades": 0,
+  "wins": 0,
+  "losses": 0,
+  "total_pnl": 0,
+  "trades": [],
+  "current_position": null,
+  "metrics": {
+    "spy_price": 0,
+    "rsi": 0,
+    "atr": 0,
+    "ema9": 0,
+    "ema21": 0,
+    "signal": "WAIT"
+  },
+  "price_history": [],
+  "last_update": "2026-03-14T23:00:00Z",
+  "message": "Waiting for Monday market open..."
+}

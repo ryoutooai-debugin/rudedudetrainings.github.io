@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦉 Samuel's Trading Bot Dashboard</title>
+    <title>🎯 Scalper Live Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <style>
         * {
             margin: 0;
@@ -12,10 +14,10 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: white;
             min-height: 100vh;
-            color: #fff;
             padding: 20px;
         }
         
@@ -27,475 +29,613 @@
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         .header p {
-            color: #888;
+            color: #a0a0a0;
+            font-size: 1.1em;
         }
         
-        .dashboard {
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .status-live {
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-paused {
+            background: #f59e0b;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
             max-width: 1400px;
             margin: 0 auto;
         }
         
-        .bot-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .bot-card {
+        .card {
             background: rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 24px;
+            border-radius: 15px;
+            padding: 20px;
             border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
         }
         
-        .bot-card:hover {
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
+        .card h2 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #fbbf24;
         }
         
-        .bot-card.inactive {
-            border-color: #e74c3c;
-            background: rgba(231, 76, 60, 0.1);
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
         }
         
-        .bot-card.active {
-            border-color: #2ecc71;
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
         }
         
-        .bot-header {
+        .stat-label {
+            font-size: 0.8em;
+            color: #a0a0a0;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .positive { color: #4ade80; }
+        .negative { color: #f87171; }
+        .neutral { color: #fbbf24; }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+        
+        .trades-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .trade-item {
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+        
+        .trade-long { border-left-color: #22c55e; }
+        .trade-short { border-left-color: #ef4444; }
+        
+        .trade-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-        }
-        
-        .bot-name {
-            font-size: 1.3em;
-            font-weight: 600;
-        }
-        
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 500;
-        }
-        
-        .status-badge.active {
-            background: #2ecc71;
-            color: #000;
-        }
-        
-        .status-badge.inactive {
-            background: #e74c3c;
-            color: #fff;
-        }
-        
-        .bot-info {
-            margin-bottom: 16px;
-        }
-        
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .info-row:last-child {
-            border-bottom: none;
-        }
-        
-        .info-label {
-            color: #888;
-        }
-        
-        .info-value {
-            font-weight: 500;
-        }
-        
-        .positions-table {
-            width: 100%;
-            margin-top: 16px;
-            border-collapse: collapse;
-        }
-        
-        .positions-table th,
-        .positions-table td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .positions-table th {
-            color: #888;
-            font-weight: 500;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            flex: 1;
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
-        
-        .btn-primary {
-            background: #3498db;
-            color: #fff;
-        }
-        
-        .btn-primary:hover {
-            background: #2980b9;
-        }
-        
-        .btn-success {
-            background: #2ecc71;
-            color: #000;
-        }
-        
-        .btn-success:hover {
-            background: #27ae60;
-        }
-        
-        .btn-danger {
-            background: #e74c3c;
-            color: #fff;
-        }
-        
-        .btn-danger:hover {
-            background: #c0392b;
-        }
-        
-        .console-output {
-            background: #0a0a0a;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 16px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            max-height: 200px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            color: #0f0;
-        }
-        
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 30px;
-        }
-        
-        .summary-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .summary-value {
-            font-size: 2em;
-            font-weight: 700;
             margin-bottom: 5px;
         }
         
-        .summary-label {
-            color: #888;
+        .trade-symbol {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .trade-pnl {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .trade-details {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .metric-box {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-name {
+            font-size: 0.75em;
+            color: #a0a0a0;
+        }
+        
+        .metric-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .refresh-info {
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+        
+        .current-position {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .position-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .position-status {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 15px;
             font-size: 0.9em;
         }
         
-        .positive {
-            color: #2ecc71;
+        .position-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
         }
         
-        .negative {
-            color: #e74c3c;
+        .position-stat {
+            text-align: center;
         }
         
-        .refresh-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #3498db;
-            border: none;
-            color: #fff;
+        .position-label {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+        
+        .position-value {
             font-size: 1.5em;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
-            transition: all 0.3s;
-        }
-        
-        .refresh-btn:hover {
-            transform: scale(1.1);
-            background: #2980b9;
-        }
-        
-        .note {
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border-left: 4px solid #3498db;
-        }
-        
-        .note h3 {
-            margin-bottom: 8px;
-            color: #3498db;
-        }
-        
-        .note p {
-            color: #aaa;
-            line-height: 1.6;
+            font-weight: bold;
+            margin-top: 3px;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🦉 Samuel's Trading Bot Dashboard</h1>
-        <p>Real-time monitoring and control center</p>
+        <h1>🎯 Scalper Live Dashboard</h1>
+        <p>Real-time trade visualization & metrics</p>
+        <span class="status-badge status-live" id="statusBadge">● LIVE</span>
     </div>
     
-    <div class="dashboard">
-        <!-- Info Note -->
-        <div class="note">
-            <h3>ℹ️ About This Dashboard</h3>
-            <p>This dashboard displays static data from the last update. For live bot control (restart, stop, view real-time logs), 
-            SSH into the server and run: <code>./start_dashboard.sh</code> or check individual bot status with the commands below.</p>
-        </div>
-        
-        <!-- Summary Cards -->
-        <div class="summary-cards">
-            <div class="summary-card">
-                <div class="summary-value" id="total-bots">3</div>
-                <div class="summary-label">Active Bots</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-value" id="open-positions">2</div>
-                <div class="summary-label">CC Positions</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-value positive" id="total-pnl">+3.63%</div>
-                <div class="summary-label">CC Return</div>
-            </div>
-            <div class="summary-card">
-                <div class="summary-value" id="portfolio-value">$15,545</div>
-                <div class="summary-label">CC Portfolio</div>
+    <div class="grid">
+        <!-- Stats Overview -->
+        <div class="card full-width">
+            <h2>📊 Session Performance</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Total Trades</div>
+                    <div class="stat-value neutral" id="totalTrades">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value neutral" id="winRate">0%</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Total P&L</div>
+                    <div class="stat-value neutral" id="totalPnL">$0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Avg Trade</div>
+                    <div class="stat-value neutral" id="avgTrade">$0</div>
+                </div>
             </div>
         </div>
         
-        <!-- Bot Cards -->
-        <div class="bot-grid">
-            <!-- EWO Tracker -->
-            <div class="bot-card active" id="ewo-card">
-                <div class="bot-header">
-                    <span class="bot-name">📊 EWO Tracker</span>
-                    <span class="status-badge active" id="ewo-status">ACTIVE</span>
+        <!-- Current Position -->
+        <div class="card full-width" id="positionCard" style="display: none;">
+            <div class="current-position">
+                <div class="position-header">
+                    <span class="position-title">🎯 Active Position</span>
+                    <span class="position-status">IN TRADE</span>
                 </div>
-                <div class="bot-info">
-                    <div class="info-row">
-                        <span class="info-label">Strategy</span>
-                        <span class="info-value">2-Min EWO Signals</span>
+                <div class="position-details">
+                    <div class="position-stat">
+                        <div class="position-label">Symbol</div>
+                        <div class="position-value" id="posSymbol">-</div>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Symbols</span>
-                        <span class="info-value">SPY, QQQ</span>
+                    <div class="position-stat">
+                        <div class="position-label">Direction</div>
+                        <div class="position-value" id="posDirection">-</div>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Status</span>
-                        <span class="info-value">Scanning every 2 min</span>
+                    <div class="position-stat">
+                        <div class="position-label">Entry Price</div>
+                        <div class="position-value" id="posEntry">-</div>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Check Command</span>
-                        <span class="info-value"><code>ps aux | grep simple_ewo</code></span>
+                    <div class="position-stat">
+                        <div class="position-label">Current P&L</div>
+                        <div class="position-value" id="posPnL">-</div>
                     </div>
-                </div>
-                <div class="action-buttons">
-                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/simple_ewo_tracker.py" class="btn btn-primary" target="_blank">View Code</a>
-                </div>
-                <div class="console-output" id="ewo-console">Last update: March 13, 2026
-Status: Running
-Scanning SPY and QQQ every 2 minutes during market hours.</div>
-            </div>
-            
-            <!-- CC Paper Trader -->
-            <div class="bot-card active" id="cc-card">
-                <div class="bot-header">
-                    <span class="bot-name">💰 CC Paper Trader</span>
-                    <span class="status-badge active" id="cc-status">ACTIVE</span>
-                </div>
-                <div class="bot-info">
-                    <div class="info-row">
-                        <span class="info-label">Strategy</span>
-                        <span class="info-value">Covered Calls</span>
+                    <div class="position-stat">
+                        <div class="position-label">Stop Loss</div>
+                        <div class="position-value" id="posStop">-</div>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Cash</span>
-                        <span class="info-value">$2,881</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Invested</span>
-                        <span class="info-value">$12,664</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Return</span>
-                        <span class="info-value positive">+3.63%</span>
+                    <div class="position-stat">
+                        <div class="position-label">Take Profit</div>
+                        <div class="position-value" id="posTarget">-</div>
                     </div>
                 </div>
-                <table class="positions-table">
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Shares</th>
-                            <th>Call</th>
-                            <th>Expiry</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>PFE</td>
-                            <td>100 @ $26.92</td>
-                            <td>$27C</td>
-                            <td>3/20</td>
-                        </tr>
-                        <tr>
-                            <td>SBUX</td>
-                            <td>100 @ $99.72</td>
-                            <td>$100C</td>
-                            <td>3/20</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="action-buttons">
-                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/cc_paper_trader.py" class="btn btn-primary" target="_blank">View Code</a>
-                </div>
-                <div class="console-output" id="cc-console">Positions updated: March 13, 2026
-VZ: EXERCISED (+$126)
-SBUX: Rolled to $100C (+$220 premium)
-PFE: New entry $27C exp 3/20</div>
-            </div>
-            
-            <!-- Scalper Bot -->
-            <div class="bot-card active" id="scalper-card">
-                <div class="bot-header">
-                    <span class="bot-name">⚡ Scalper Bot</span>
-                    <span class="status-badge active" id="scalper-status">ACTIVE</span>
-                </div>
-                <div class="bot-info">
-                    <div class="info-row">
-                        <span class="info-label">Strategy</span>
-                        <span class="info-value">VWAP Mean Reversion</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Symbol</span>
-                        <span class="info-value">SPY</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Capital</span>
-                        <span class="info-value">$100,000 (paper)</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Status</span>
-                        <span class="info-value">Scanning every 15 sec</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/rudedude_tradebot_live.py" class="btn btn-primary" target="_blank">View Code</a>
-                </div>
-                <div class="console-output" id="scalper-console">⚡ LIVE SCALPER RUNNING
-Strategy: VWAP Mean Reversion
-Entry: Below VWAP + RSI < 40
-Exit: 0.5% stop / 1% target
-Tracking all trades in ledger...</div>
-            </div>
-            
-            <!-- EWO vs Contrarian Challenge -->
-            <div class="bot-card active" id="compare-card">
-                <div class="bot-header">
-                    <span class="bot-name">🏆 EWO vs Contrarian</span>
-                    <span class="status-badge active" id="compare-status">ACTIVE</span>
-                </div>
-                <div class="bot-info">
-                    <div class="info-row">
-                        <span class="info-label">Regular EWO</span>
-                        <span class="info-value">2 open positions</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Contrarian EWO</span>
-                        <span class="info-value">0 open positions</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Challenge</span>
-                        <span class="info-value">Trend vs Mean Reversion</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Symbols</span>
-                        <span class="info-value">SPY, QQQ</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <a href="https://github.com/rudeai49-hash/Samuels-work/blob/main/ewo_vs_continuous.py" class="btn btn-primary" target="_blank">View Code</a>
-                </div>
-                <div class="console-output" id="compare-console">🏆 CHALLENGE ACTIVE
-Regular EWO: Buy green candles
-Contrarian: Buy red candles (reverse)
-Scanning every 2 minutes...</div>
             </div>
         </div>
         
-        <!-- Quick Commands -->
-        <div class="bot-card">
-            <div class="bot-header">
-                <span class="bot-name">⌨️ Quick SSH Commands</span>
+        <!-- Price Chart with Trades -->
+        <div class="card">
+            <h2>📈 Price Chart with Trades</h2>
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
             </div>
-            <div class="console-output">
-# Check all bots
-ps aux | grep -E "simple_ewo|rudedude_tradebot|ewo_vs"
-
-# View EWO logs
-tail -f logs/simple_ewo.log
-
-# View Scalper logs
-tail -f logs/scalper_live.log
-
-# View EWO vs Challenge logs
-tail -f logs/ewo_vs.log
-
-# Check CC positions
-python3 cc_paper_trader.py status
-
-# View CC decision log
-python3 cc_paper_trader.py decisions
+        </div>
+        
+        <!-- Recent Trades -->
+        <div class="card">
+            <h2>📋 Recent Trades</h2>
+            <div class="trades-list" id="tradesList">
+                <p style="text-align: center; color: #a0a0a0; padding: 40px;">No trades yet today...</p>
+            </div>
+        </div>
+        
+        <!-- Live Metrics -->
+        <div class="card">
+            <h2>📊 Live Market Metrics</h2>
+            <div class="metrics-grid" id="metricsGrid">
+                <div class="metric-box">
+                    <div class="metric-name">SPY Price</div>
+                    <div class="metric-value" id="spyPrice">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">RSI (14)</div>
+                    <div class="metric-value" id="rsiValue">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">ATR</div>
+                    <div class="metric-value" id="atrValue">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">EMA9</div>
+                    <div class="metric-value" id="ema9Value">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">EMA21</div>
+                    <div class="metric-value" id="ema21Value">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">Signal</div>
+                    <div class="metric-value" id="signalValue">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trade Distribution -->
+        <div class="card">
+            <h2>🎯 Trade Distribution</h2>
+            <div class="chart-container">
+                <canvas id="distributionChart"></canvas>
             </div>
         </div>
     </div>
     
-    <button class="refresh-btn" onclick="location.reload()" title="Refresh">↻</button>
-    
+    <div class="refresh-info">
+        Auto-refresh every 5 seconds | Last update: <span id="lastUpdate">-</span>
+    </div>
+
     <script>
-        // Auto-refresh every 60 seconds
-        setInterval(() => {
-            location.reload();
-        }, 60000);
+        // Chart instances
+        let priceChart = null;
+        let distributionChart = null;
+        
+        // Data storage
+        let trades = [];
+        let currentPosition = null;
+        let priceHistory = [];
+        
+        // Data source - change this to your data endpoint
+        // For GitHub Pages, we'll use a JSON file that gets updated
+        const DATA_URL = './scalper_data.json';
+        
+        // Initialize charts
+        function initCharts() {
+            // Price chart
+            const priceCtx = document.getElementById('priceChart').getContext('2d');
+            priceChart = new Chart(priceCtx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'SPY Price',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'EMA9',
+                        data: [],
+                        borderColor: '#fbbf24',
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }, {
+                        label: 'EMA21',
+                        data: [],
+                        borderColor: '#f472b6',
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute',
+                                displayFormats: {
+                                    minute: 'HH:mm'
+                                }
+                            },
+                            ticks: { color: '#a0a0a0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#a0a0a0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+            
+            // Distribution chart
+            const distCtx = document.getElementById('distributionChart').getContext('2d');
+            distributionChart = new Chart(distCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Wins', 'Losses'],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#22c55e', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: 'white' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Fetch data from JSON file
+        async function fetchScalperData() {
+            try {
+                const response = await fetch(DATA_URL + '?t=' + Date.now()); // Cache buster
+                if (!response.ok) throw new Error('Data not available');
+                const data = await response.json();
+                return data;
+            } catch (e) {
+                console.log('Using demo data:', e);
+                // Return demo data if file not available
+                return {
+                    status: 'idle',
+                    total_trades: 0,
+                    wins: 0,
+                    losses: 0,
+                    total_pnl: 0,
+                    trades: [],
+                    current_position: null,
+                    metrics: {
+                        spy_price: 0,
+                        rsi: 0,
+                        atr: 0,
+                        ema9: 0,
+                        ema21: 0,
+                        signal: 'WAIT'
+                    },
+                    price_history: [],
+                    last_update: new Date().toISOString()
+                };
+            }
+        }
+        
+        // Update dashboard
+        async function updateDashboard() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+            
+            const data = await fetchScalperData();
+            
+            updateStats(data);
+            updateCharts(data);
+            updateTrades(data.trades || []);
+            updateMetrics(data.metrics || {});
+            updatePosition(data.current_position);
+            updateStatus(data.status);
+        }
+        
+        function updateStatus(status) {
+            const badge = document.getElementById('statusBadge');
+            if (status === 'trading') {
+                badge.textContent = '● IN TRADE';
+                badge.className = 'status-badge status-live';
+            } else if (status === 'scanning') {
+                badge.textContent = '● SCANNING';
+                badge.className = 'status-badge status-live';
+            } else {
+                badge.textContent = '○ IDLE';
+                badge.className = 'status-badge status-paused';
+            }
+        }
+        
+        function updateStats(data) {
+            const totalTrades = data.total_trades || 0;
+            const wins = data.wins || 0;
+            const losses = data.losses || 0;
+            const totalPnL = data.total_pnl || 0;
+            
+            document.getElementById('totalTrades').textContent = totalTrades;
+            
+            const winRate = totalTrades > 0 ? (wins / totalTrades * 100).toFixed(1) : 0;
+            document.getElementById('winRate').textContent = winRate + '%';
+            
+            const pnlEl = document.getElementById('totalPnL');
+            pnlEl.textContent = (totalPnL >= 0 ? '+' : '') + '$' + totalPnL.toFixed(2);
+            pnlEl.className = 'stat-value ' + (totalPnL >= 0 ? 'positive' : 'negative');
+            
+            const avgTrade = totalTrades > 0 ? totalPnL / totalTrades : 0;
+            const avgEl = document.getElementById('avgTrade');
+            avgEl.textContent = (avgTrade >= 0 ? '+' : '') + '$' + avgTrade.toFixed(2);
+            avgEl.className = 'stat-value ' + (avgTrade >= 0 ? 'positive' : 'negative');
+        }
+        
+        function updateCharts(data) {
+            const history = data.price_history || [];
+            
+            // Update price chart
+            priceChart.data.datasets[0].data = history.map(h => ({ 
+                x: new Date(h.time), 
+                y: h.price 
+            }));
+            priceChart.data.datasets[1].data = history.map(h => ({ 
+                x: new Date(h.time), 
+                y: h.ema9 
+            }));
+            priceChart.data.datasets[2].data = history.map(h => ({ 
+                x: new Date(h.time), 
+                y: h.ema21 
+            }));
+            priceChart.update('none');
+            
+            // Update distribution chart
+            const wins = data.wins || 0;
+            const losses = data.losses || 0;
+            distributionChart.data.datasets[0].data = [wins, losses];
+            distributionChart.update('none');
+        }
+        
+        function updateTrades(trades) {
+            const container = document.getElementById('tradesList');
+            
+            if (!trades || trades.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #a0a0a0; padding: 40px;">No trades yet today...</p>';
+                return;
+            }
+            
+            container.innerHTML = trades.slice().reverse().map(trade => `
+                <div class="trade-item trade-${trade.direction.toLowerCase()}">
+                    <div class="trade-header">
+                        <span class="trade-symbol">${trade.symbol} ${trade.direction === 'LONG' ? '📈' : '📉'}</span>
+                        <span class="trade-pnl ${trade.pnl >= 0 ? 'positive' : 'negative'}">${trade.pnl >= 0 ? '+' : ''}$${trade.pnl.toFixed(2)}</span>
+                    </div>
+                    <div class="trade-details">
+                        Entry: $${trade.entry.toFixed(2)} → Exit: $${trade.exit.toFixed(2)} | ${trade.time} | ${trade.exitReason}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateMetrics(metrics) {
+            document.getElementById('spyPrice').textContent = metrics.spy_price ? '$' + metrics.spy_price.toFixed(2) : '-';
+            document.getElementById('rsiValue').textContent = metrics.rsi ? metrics.rsi.toFixed(1) : '-';
+            document.getElementById('atrValue').textContent = metrics.atr ? metrics.atr.toFixed(2) : '-';
+            document.getElementById('ema9Value').textContent = metrics.ema9 ? metrics.ema9.toFixed(2) : '-';
+            document.getElementById('ema21Value').textContent = metrics.ema21 ? metrics.ema21.toFixed(2) : '-';
+            
+            const signalEl = document.getElementById('signalValue');
+            const signal = metrics.signal || 'WAIT';
+            signalEl.textContent = signal;
+            signalEl.style.color = signal === 'LONG' ? '#4ade80' : 
+                                   signal === 'SHORT' ? '#f87171' : '#fbbf24';
+        }
+        
+        function updatePosition(position) {
+            const card = document.getElementById('positionCard');
+            
+            if (!position) {
+                card.style.display = 'none';
+                return;
+            }
+            
+            card.style.display = 'block';
+            document.getElementById('posSymbol').textContent = position.symbol;
+            document.getElementById('posDirection').textContent = position.direction;
+            document.getElementById('posDirection').style.color = position.direction === 'LONG' ? '#4ade80' : '#f87171';
+            document.getElementById('posEntry').textContent = '$' + position.entry.toFixed(2);
+            document.getElementById('posPnL').textContent = (position.pnl >= 0 ? '+' : '') + '$' + position.pnl.toFixed(2);
+            document.getElementById('posPnL').style.color = position.pnl >= 0 ? '#4ade80' : '#f87171';
+            document.getElementById('posStop').textContent = '$' + position.stop.toFixed(2);
+            document.getElementById('posTarget').textContent = '$' + position.target.toFixed(2);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateDashboard();
+            setInterval(updateDashboard, 5000); // Refresh every 5 seconds
+        });
     </script>
 </body>
 </html>
