@@ -2,27 +2,27 @@
   "entries": [
     {
       "name": "owl_4k67zahy7",
-      "portfolio_value": 190,
+      "portfolio_value": 360,
       "cash": 0,
-      "updated": "2026-03-14T15:42:15.826334"
+      "updated": "2026-03-14T15:42:33.616305"
     }
   ],
-  "last_update": "2026-03-14T15:42:15.826341",
+  "last_update": "2026-03-14T15:42:33.616311",
   "users": {
     "owl_4k67zahy7": {
       "name": "owl_4k67zahy7",
-      "portfolio_value": 190,
+      "portfolio_value": 360,
       "cash": 0,
-      "owls": 12,
+      "owls": 6,
       "inventory": [],
       "stats": {
-        "trades": 2,
-        "profit_trades": 2,
+        "trades": 1,
+        "profit_trades": 1,
         "streak_days": 0,
         "last_played": null
       },
-      "created": "2026-03-14T15:42:00.362613",
-      "updated": "2026-03-14T15:42:15.826329"
+      "created": "2026-03-14T15:42:33.616295",
+      "updated": "2026-03-14T15:42:33.616303"
     }
   }
 }
