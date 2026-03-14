@@ -325,6 +325,30 @@ function openOwlStore() {
             </div>
             
             <div style="padding: 20px;">
+                <!-- Restore OWLs Section -->
+                <div id="restore-section" style="
+                    background: rgba(255, 193, 7, 0.1);
+                    border: 2px dashed #ffc107;
+                    border-radius: 15px;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    text-align: center;
+                ">
+                    <div style="color: #ffc107; font-size: 14px; margin-bottom: 10px;">
+                        🦉 Lost your OWLs? Click below to get 50 starter OWLs!
+                    </div>
+                    <button onclick="restoreOwls()" style="
+                        background: linear-gradient(135deg, #ffc107, #ff9800);
+                        border: none;
+                        color: #333;
+                        padding: 10px 20px;
+                        border-radius: 20px;
+                        font-weight: bold;
+                        cursor: pointer;
+                        font-size: 14px;
+                    ">✨ Get 50 Starter OWLs</button>
+                </div>
+                
                 <div id="store-items" style="
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -354,6 +378,28 @@ function openOwlStore() {
 function closeOwlStore() {
     const modal = document.getElementById('owl-store-modal');
     if (modal) modal.remove();
+}
+
+function restoreOwls() {
+    // Give 50 starter OWLs to help kids who lost their progress
+    localStorage.setItem('samowl_owls', '50');
+    
+    // Update displays
+    document.getElementById('store-owl-balance').textContent = '50';
+    const button = document.getElementById('owl-store-floating-btn');
+    if (button) {
+        button.dataset.owls = '50';
+        button.querySelector('.owl-count').textContent = '50';
+    }
+    
+    // Hide the restore section
+    const restoreSection = document.getElementById('restore-section');
+    if (restoreSection) {
+        restoreSection.innerHTML = '<div style="color: #28a745; font-weight: bold;">✅ 50 OWLs added! Happy shopping! 🦉</div>';
+    }
+    
+    // Play a happy sound
+    if (typeof SoundManager !== 'undefined') SoundManager.play('earn');
 }
 
 async function loadStoreItems() {
