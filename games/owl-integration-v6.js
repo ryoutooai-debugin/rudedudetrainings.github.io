@@ -449,39 +449,46 @@ async function loadStoreItems() {
 
 async function buyItem(itemId, item) {
     const userId = getUserId();
+    const currentOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
     
+    // Check if user has enough OWLs
+    if (currentOwls < item.price) {
+        alert(`Not enough OWLs! You need ${item.price} but only have ${currentOwls}.`);
+        SoundManager.play('wrong');
+        return;
+    }
+    
+    // Deduct price locally
+    const newBalance = currentOwls - item.price;
+    localStorage.setItem('samowl_owls', newBalance);
+    
+    // Track purchased items locally
+    let purchasedItems = JSON.parse(localStorage.getItem('samowl_purchased') || '[]');
+    purchasedItems.push({ id: itemId, name: item.name, date: new Date().toISOString() });
+    localStorage.setItem('samowl_purchased', JSON.stringify(purchasedItems));
+    
+    // Update displays
+    showOwlNotification(0, [`Purchased ${item.name}! 🎉`]);
+    document.getElementById('store-owl-balance').textContent = newBalance.toLocaleString();
+    
+    const button = document.getElementById('owl-store-floating-btn');
+    if (button) {
+        button.dataset.owls = newBalance;
+        button.querySelector('.owl-count').textContent = newBalance.toLocaleString();
+    }
+    
+    SoundManager.play('buy');
+    
+    // Try to sync with server (but don't fail if server doesn't know user)
     try {
-        const response = await fetch(`${OWL_CONFIG.apiUrl}/buy`, {
+        await fetch(`${OWL_CONFIG.apiUrl}/buy`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id: userId, item_id: itemId })
         });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            // Update localStorage with new balance (deduct item price)
-            const currentOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
-            const newBalance = Math.max(0, currentOwls - item.price);
-            localStorage.setItem('samowl_owls', newBalance);
-            
-            showOwlNotification(0, [`Purchased ${item.name}!`]);
-            document.getElementById('store-owl-balance').textContent = newBalance.toLocaleString();
-            
-            // Update floating button
-            const button = document.getElementById('owl-store-floating-btn');
-            if (button) {
-                button.dataset.owls = newBalance;
-                button.querySelector('.owl-count').textContent = newBalance.toLocaleString();
-            }
-            
-            SoundManager.play('buy');
-        } else {
-            alert(data.error);
-            SoundManager.play('wrong');
-        }
     } catch (error) {
-        console.error('Purchase failed:', error);
+        // Server sync failed, but purchase already completed locally
+        console.log('Server sync failed, but item purchased locally');
     }
 }
 
