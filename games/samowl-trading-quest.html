@@ -774,18 +774,22 @@
                     gameState.cash -= total;
                     gameState.holdings[symbol] = (gameState.holdings[symbol] || 0) + quantity;
                     showFeedback('✅', 'Stock Purchased!', `Bought ${quantity} shares of ${symbol}`);
+                    if (typeof SoundManager !== 'undefined') SoundManager.play('correct');
                     updateQuests('trades');
                 } else {
                     showFeedback('❌', 'Not Enough Cash!', 'You need more money to buy');
+                    if (typeof SoundManager !== 'undefined') SoundManager.play('wrong');
                 }
             } else {
                 if (gameState.holdings[symbol] >= quantity) {
                     gameState.cash += total;
                     gameState.holdings[symbol] -= quantity;
                     showFeedback('💰', 'Stock Sold!', `Sold ${quantity} shares of ${symbol}`);
+                    if (typeof SoundManager !== 'undefined') SoundManager.play('correct');
                     updateQuests('profit');
                 } else {
                     showFeedback('❌', 'No Shares!', `You don't own enough ${symbol}`);
+                    if (typeof SoundManager !== 'undefined') SoundManager.play('wrong');
                 }
             }
 
@@ -973,6 +977,6 @@
             submitScore('trading-quest', portfolioValue, gameState.xp, 0, extras);
         }, 60000); // Every minute
     </script>
-    <script src="owl-integration.js"></script>
+    <script src="owl-integration-v5.js"></script>
 </body>
 </html>

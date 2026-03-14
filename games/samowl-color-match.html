@@ -791,7 +791,8 @@
                 }
                 
                 showFeedback('✅', message);
-                
+                if (typeof SoundManager !== 'undefined') SoundManager.play('correct');
+
                 // Check for level up
                 if (gameState.correctInLevel >= 5) {
                     setTimeout(() => showLevelComplete(), 1500);
@@ -807,7 +808,8 @@
                 gameState.streak = 0;
                 
                 showFeedback('❌', `That's ${color.label}. Try again! 🦉`);
-                
+                if (typeof SoundManager !== 'undefined') SoundManager.play('wrong');
+
                 setTimeout(() => {
                     cardElement.classList.remove('wrong');
                     gameState.isProcessing = false;
