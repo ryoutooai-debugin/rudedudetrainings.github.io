@@ -3,7 +3,7 @@
 // ============================================
 
 const OWL_CONFIG = {
-    apiUrl: 'https://samowl-leaderboard-production.up.railway.app',
+    apiUrl: 'https://rudedudetrainingsgithubio-production.up.railway.app',
     gameName: document.title || 'SamOwl Game'
 };
 
@@ -68,6 +68,10 @@ const SoundManager = {
 
 document.addEventListener('click', () => SoundManager.init(), { once: true });
 document.addEventListener('touchstart', () => SoundManager.init(), { once: true });
+document.addEventListener('keydown', () => SoundManager.init(), { once: true });
+
+// Also try to init immediately (might work if page was already interacted with)
+setTimeout(() => SoundManager.init(), 100);
 
 function getUserId() {
     let userId = localStorage.getItem('samowl_user_id');
@@ -175,7 +179,15 @@ async function submitScore(gameType, score, level, streak, extras = {}) {
         return { ...data, owlsEarned: owls, owlReasons: reasons };
     } catch (error) {
         console.error('Failed to submit score:', error);
-        return { error: error.message };
+        // Still award OWLs locally even if server is down
+        if (owls > 0) {
+            const currentOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
+            localStorage.setItem('samowl_owls', currentOwls + owls);
+            showOwlNotification(owls, [...reasons, '(saved locally - server down)']);
+            updateOwlButton(owls);
+            SoundManager.play('earn');
+        }
+        return { error: error.message, owlsEarned: owls, owlReasons: reasons };
     }
 }
 
@@ -225,27 +237,51 @@ function updateOwlButton(additionalOwls = 0) {
     if (button) {
         const current = parseInt(button.dataset.owls || 0);
         button.dataset.owls = current + additionalOwls;
-        button.querySelector('.owl-count').textContent = (current + additionalOwls).toLocaleString();
+        const owlCountSpan = button.querySelector('.owl-count');
+        if (owlCountSpan) {
+            owlCountSpan.textContent = (current + additionalOwls).toLocaleString();
+        }
     }
 }
 
 async function loadOwlBalance() {
     const userId = getUserId();
+    const localOwls = parseInt(localStorage.getItem('samowl_owls') || 0);
     
     try {
         const response = await fetch(`${OWL_CONFIG.apiUrl}/owls?user_id=${encodeURIComponent(userId)}`);
         const data = await response.json();
         
-        const button = document.getElementById('owl-store-floating-btn');
-        if (button) {
-            button.dataset.owls = data.owls;
-            button.querySelector('.owl-count').textContent = data.owls.toLocaleString();
+        // Use the higher of server or local balance (don't lose progress!)
+        const totalOwls = Math.max(data.owls || 0, localOwls);
+        
+        // Update localStorage with server value if it's higher
+        if (data.owls > localOwls) {
+            localStorage.setItem('samowl_owls', data.owls);
         }
         
-        return data.owls;
+        const button = document.getElementById('owl-store-floating-btn');
+        if (button) {
+            button.dataset.owls = totalOwls;
+            const owlCountSpan = button.querySelector('.owl-count');
+            if (owlCountSpan) {
+                owlCountSpan.textContent = totalOwls.toLocaleString();
+            }
+        }
+        
+        return totalOwls;
     } catch (error) {
         console.error('Failed to load OWLs:', error);
-        return 0;
+        // Use localStorage when server is down
+        const button = document.getElementById('owl-store-floating-btn');
+        if (button) {
+            button.dataset.owls = localOwls;
+            const owlCountSpan = button.querySelector('.owl-count');
+            if (owlCountSpan) {
+                owlCountSpan.textContent = localOwls.toLocaleString();
+            }
+        }
+        return localOwls;
     }
 }
 
@@ -371,6 +407,16 @@ async function loadStoreItems() {
         }
     } catch (error) {
         console.error('Failed to load store:', error);
+        // Show fallback message when server is down
+        const container = document.getElementById('store-items');
+        container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #aaa;">
+                <div style="font-size: 48px; margin-bottom: 15px;">🔧</div>
+                <div style="font-size: 18px; margin-bottom: 10px;">Store is temporarily unavailable</div>
+                <div style="font-size: 14px; opacity: 0.7;">The OWL store server is waking up...</div>
+                <div style="font-size: 12px; opacity: 0.5; margin-top: 15px;">Try again in a few moments!</div>
+            </div>
+        `;
     }
 }
 
