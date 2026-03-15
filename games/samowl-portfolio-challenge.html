@@ -1395,8 +1395,18 @@
             if (players.length === 0) {
                 try {
                     console.log('Fetching leaderboard.json...');
-                    const response = await fetch('../leaderboard.json?t=' + Date.now());
+                    // Determine base URL from current location
+                    const baseUrl = window.location.pathname.includes('/games/') 
+                        ? window.location.href.split('/games/')[0] 
+                        : window.location.origin;
+                    const lbUrl = baseUrl + '/leaderboard.json?t=' + Date.now();
+                    console.log('Trying URL:', lbUrl);
+                    
+                    const response = await fetch(lbUrl);
                     console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error('HTTP ' + response.status);
+                    }
                     const data = await response.json();
                     console.log('Leaderboard data:', data);
 
