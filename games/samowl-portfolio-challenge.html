@@ -47,6 +47,8 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
         }
         
         .header {
@@ -109,14 +111,24 @@
             display: flex;
             overflow-x: auto;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        
+
+        .nav::-webkit-scrollbar {
+            display: none;
+        }
+
         .nav-item {
-            padding: 15px 25px;
+            padding: 15px 20px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
             white-space: nowrap;
+            flex: 1;
+            text-align: center;
+            min-width: 80px;
         }
         
         .nav-item:hover, .nav-item.active {
@@ -128,6 +140,8 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            min-height: 0;
         }
         
         .tab-content {
@@ -509,8 +523,7 @@
             .app-container {
                 height: 100vh;
                 max-height: 100vh;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow: hidden;
             }
 
             .header {
@@ -899,16 +912,16 @@
 
             var currentTrade = { symbol: '', action: '', price: 0 };
 
-        // Stock data with simulated prices
+        // Stock data with Friday March 14, 2026 closing prices (static until market opens)
         const stocks = [
-            { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 175.50 },
-            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30 },
-            { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 380.25 },
-            { symbol: 'AMZN', name: 'Amazon.com', basePrice: 178.90 },
-            { symbol: 'TSLA', name: 'Tesla Inc.', basePrice: 205.60 },
-            { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75 },
-            { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 890.15 },
-            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40 }
+            { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 225.00 },
+            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 165.00 },
+            { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 420.00 },
+            { symbol: 'AMZN', name: 'Amazon.com', basePrice: 195.00 },
+            { symbol: 'TSLA', name: 'Tesla Inc.', basePrice: 270.00 },
+            { symbol: 'META', name: 'Meta Platforms', basePrice: 600.00 },
+            { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 140.00 },
+            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 850.00 }
         ];
 
         // Load saved game
@@ -1022,20 +1035,19 @@
                 console.log('prices.json not available');
             }
             
-            // If no prices loaded, use realistic simulated prices
+            // If no prices loaded, use static Friday close prices (no weekend changes)
             if (!pricesLoaded) {
-                console.log('Using realistic simulated prices');
-                // These are approximate real prices (will be static until we find a working API)
-                const simulatedPrices = {
-                    'AAPL': 225.50, 'MSFT': 420.00, 'GOOGL': 165.00, 'AMZN': 195.00,
+                console.log('Using static Friday close prices - no changes until market opens');
+                // Friday March 14, 2026 closing prices - static for weekend
+                const fridayClosePrices = {
+                    'AAPL': 225.00, 'MSFT': 420.00, 'GOOGL': 165.00, 'AMZN': 195.00,
                     'NVDA': 140.00, 'META': 600.00, 'NFLX': 850.00, 'TSLA': 270.00
                 };
-                
+
                 stocks.forEach(stock => {
-                    if (simulatedPrices[stock.symbol]) {
-                        // Add small random variation to make it look live
-                        const variation = (Math.random() - 0.5) * 0.02; // ±1%
-                        stock.basePrice = simulatedPrices[stock.symbol] * (1 + variation);
+                    if (fridayClosePrices[stock.symbol]) {
+                        // Keep prices static - no random variation on weekends
+                        stock.basePrice = fridayClosePrices[stock.symbol];
                     }
                 });
             }
@@ -1202,46 +1214,77 @@
         function updateHoldings() {
             const list = document.getElementById('holdingsList');
             const holdings = Object.entries(gameState.holdings);
-            
+            const isMobile = window.innerWidth <= 768;
+
             if (holdings.length === 0) {
                 list.innerHTML = '<div class="empty-state">No holdings yet. Buy some stocks!</div>';
                 return;
             }
-            
-            list.innerHTML = `
-                <table class="holdings-table">
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Shares</th>
-                            <th>Avg Price</th>
-                            <th>Current</th>
-                            <th>Value</th>
-                            <th>P&L</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${holdings.map(([symbol, h]) => {
-                            const stock = stocks.find(s => s.symbol === symbol);
-                            const currentPrice = stock ? stock.basePrice : h.avgPrice;
-                            const value = h.shares * currentPrice;
-                            const cost = h.shares * h.avgPrice;
-                            const pnl = value - cost;
-                            const pnlClass = pnl >= 0 ? 'positive' : 'negative';
-                            return `
-                                <tr>
-                                    <td><strong>${symbol}</strong></td>
-                                    <td>${h.shares}</td>
-                                    <td>$${h.avgPrice.toFixed(2)}</td>
-                                    <td>$${currentPrice.toFixed(2)}</td>
-                                    <td>$${value.toFixed(2)}</td>
-                                    <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
-                                </tr>
-                            `;
-                        }).join('')}
-                    </tbody>
-                </table>
-            `;
+
+            if (isMobile) {
+                // Mobile card layout
+                list.innerHTML = holdings.map(([symbol, h]) => {
+                    const stock = stocks.find(s => s.symbol === symbol);
+                    const currentPrice = stock ? stock.basePrice : h.avgPrice;
+                    const value = h.shares * currentPrice;
+                    const cost = h.shares * h.avgPrice;
+                    const pnl = value - cost;
+                    const pnlClass = pnl >= 0 ? 'positive' : 'negative';
+                    const pnlPct = ((pnl / cost) * 100).toFixed(1);
+
+                    return `
+                        <div class="stock-item" style="margin-bottom: 10px; flex-direction: column; align-items: flex-start; gap: 8px;">
+                            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                <div class="stock-symbol">${symbol}</div>
+                                <div class="${pnlClass}" style="font-weight: bold;">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(0)} (${pnlPct}%)</div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; width: 100%; font-size: 0.9em; opacity: 0.8;">
+                                <span>${h.shares} shares @ $${h.avgPrice.toFixed(2)}</span>
+                                <span>Now: $${currentPrice.toFixed(2)}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; width: 100%; font-size: 1.1em; font-weight: 600;">
+                                <span>Value: $${value.toFixed(0)}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                // Desktop table layout
+                list.innerHTML = `
+                    <table class="holdings-table">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Shares</th>
+                                <th>Avg Price</th>
+                                <th>Current</th>
+                                <th>Value</th>
+                                <th>P&L</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${holdings.map(([symbol, h]) => {
+                                const stock = stocks.find(s => s.symbol === symbol);
+                                const currentPrice = stock ? stock.basePrice : h.avgPrice;
+                                const value = h.shares * currentPrice;
+                                const cost = h.shares * h.avgPrice;
+                                const pnl = value - cost;
+                                const pnlClass = pnl >= 0 ? 'positive' : 'negative';
+                                return `
+                                    <tr>
+                                        <td><strong>${symbol}</strong></td>
+                                        <td>${h.shares}</td>
+                                        <td>$${h.avgPrice.toFixed(2)}</td>
+                                        <td>$${currentPrice.toFixed(2)}</td>
+                                        <td>$${value.toFixed(2)}</td>
+                                        <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
         }
 
         // Reset game function
