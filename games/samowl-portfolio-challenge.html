@@ -25,36 +25,70 @@
             --dark: #1a1a2e;
         }
         
+        html {
+            background: #1a1a2e !important;
+        }
+
         body {
             background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
             min-height: 100vh;
             color: white;
             /* Force dark mode */
             color-scheme: dark;
+            -webkit-text-fill-color: white;
         }
 
-        /* Force dark mode - ignore system preferences */
+        /* Force dark mode - ignore ALL system preferences */
         @media (prefers-color-scheme: light) {
+            html, body {
+                background: #1a1a2e !important;
+                background-color: #1a1a2e !important;
+                color: white !important;
+                -webkit-text-fill-color: white !important;
+            }
+
             body {
                 background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%) !important;
+            }
+
+            .app-container, .main-content, .tab-content {
+                background: transparent !important;
                 color: white !important;
             }
 
-            .app-container {
-                background: transparent !important;
-            }
-
-            .card, .stock-item, .stat-card {
+            .card, .stock-item, .stat-card, .header, .nav {
+                background-color: rgba(255,255,255,0.05) !important;
                 background: rgba(255,255,255,0.05) !important;
                 color: white !important;
+            }
+
+            .header {
+                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%) !important;
             }
 
             .stock-symbol {
                 color: #667eea !important;
             }
 
-            .stock-price {
+            .stock-price, .stat-card-value, .header-stat-value {
                 color: white !important;
+            }
+
+            .nav-item {
+                color: white !important;
+            }
+
+            .nav-item.active {
+                background: rgba(255,255,255,0.1) !important;
+                border-bottom-color: var(--primary) !important;
+            }
+        }
+
+        /* Extra protection for iOS Safari which has issues with color-scheme */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
+                color: white;
             }
         }
         
