@@ -5,9 +5,15 @@
       "portfolio_value": 100000,
       "cash": 100000,
       "updated": "2026-03-15T20:40:30.449795"
+    },
+    {
+      "name": "owl_gr2vmi2kt",
+      "portfolio_value": 100000,
+      "cash": 98245,
+      "updated": "2026-03-15T20:40:59.492186"
     }
   ],
-  "last_update": "2026-03-15T20:40:30.449803",
+  "last_update": "2026-03-15T20:40:59.492193",
   "users": {
     "owl_5jli2zx2z": {
       "name": "owl_5jli2zx2z",
@@ -23,6 +29,21 @@
       },
       "created": "2026-03-15T20:40:30.449781",
       "updated": "2026-03-15T20:40:30.449792"
+    },
+    "owl_gr2vmi2kt": {
+      "name": "owl_gr2vmi2kt",
+      "portfolio_value": 100000,
+      "cash": 98245,
+      "owls": 256,
+      "inventory": [],
+      "stats": {
+        "trades": 1,
+        "profit_trades": 1,
+        "streak_days": 0,
+        "last_played": null
+      },
+      "created": "2026-03-15T20:40:59.492171",
+      "updated": "2026-03-15T20:40:59.492183"
     }
   }
 }
