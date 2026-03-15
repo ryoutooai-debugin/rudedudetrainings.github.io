@@ -1,24 +1,18 @@
 {
   "entries": [
     {
-      "name": "owl_3f17iy0bh",
-      "portfolio_value": 100000,
-      "cash": 100000,
-      "updated": "2026-03-15T21:21:45.127691"
-    },
-    {
-      "name": "owl_5jli2zx2z",
-      "portfolio_value": 99966.37135715538,
-      "cash": 64716.37135715538,
-      "updated": "2026-03-15T21:21:56.390905"
+      "name": "owl_gr2vmi2kt",
+      "portfolio_value": 100495,
+      "cash": 65245,
+      "updated": "2026-03-15T21:22:44.401049"
     }
   ],
-  "last_update": "2026-03-15T21:21:56.390912",
+  "last_update": "2026-03-15T21:22:44.401059",
   "users": {
-    "owl_3f17iy0bh": {
-      "name": "owl_3f17iy0bh",
-      "portfolio_value": 100000,
-      "cash": 100000,
+    "owl_gr2vmi2kt": {
+      "name": "owl_gr2vmi2kt",
+      "portfolio_value": 100495,
+      "cash": 65245,
       "owls": 256,
       "inventory": [],
       "stats": {
@@ -27,23 +21,8 @@
         "streak_days": 0,
         "last_played": null
       },
-      "created": "2026-03-15T21:21:45.127678",
-      "updated": "2026-03-15T21:21:45.127689"
-    },
-    "owl_5jli2zx2z": {
-      "name": "owl_5jli2zx2z",
-      "portfolio_value": 99966.37135715538,
-      "cash": 64716.37135715538,
-      "owls": 106,
-      "inventory": [],
-      "stats": {
-        "trades": 1,
-        "profit_trades": 1,
-        "streak_days": 0,
-        "last_played": null
-      },
-      "created": "2026-03-15T21:21:56.390890",
-      "updated": "2026-03-15T21:21:56.390902"
+      "created": "2026-03-15T21:22:44.401027",
+      "updated": "2026-03-15T21:22:44.401046"
     }
   }
 }
