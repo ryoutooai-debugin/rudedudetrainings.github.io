@@ -517,7 +517,9 @@
             cash: 100000,
             holdings: {},
             startValue: 100000,
-            trades: []
+            trades: [],
+            level: 1,
+            startTime: Date.now()
         };
 
         let currentTrade = { symbol: '', action: '', price: 0 };
@@ -876,6 +878,22 @@
 
         // Load saved game on page load
         window.onload = function() {
+            // Check for saved game first
+            const saved = localStorage.getItem('portfolioChallenge');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.playerName && parsed.cash !== undefined) {
+                        // Show resume hint on start screen
+                        document.getElementById('resumeHint').style.display = 'block';
+                        document.getElementById('playerNameInput').value = parsed.playerName;
+                        document.getElementById('playerNameInput').placeholder = 'Welcome back, ' + parsed.playerName + '!';
+                    }
+                } catch (e) {
+                    console.log('Error checking saved game:', e);
+                }
+            }
+            
             if (loadGame()) {
                 // Auto-resume saved game
                 document.getElementById('startScreen').classList.add('hidden');
@@ -904,7 +922,9 @@
                         timeElapsed: Math.floor((Date.now() - gameState.startTime) / 1000)
                     };
                     
-                    submitScore('portfolio-challenge', portfolioValue, gameState.level, 0, extras);
+                    if (typeof submitScore === 'function') {
+                        submitScore('portfolio-challenge', portfolioValue, 1, 0, extras);
+                    }
                 }, 120000); // Every 2 minutes
             }
         };
