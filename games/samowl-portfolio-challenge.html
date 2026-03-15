@@ -1394,8 +1394,11 @@
             // If Supabase failed or returned empty, try local leaderboard.json
             if (players.length === 0) {
                 try {
+                    console.log('Fetching leaderboard.json...');
                     const response = await fetch('../leaderboard.json?t=' + Date.now());
+                    console.log('Response status:', response.status);
                     const data = await response.json();
+                    console.log('Leaderboard data:', data);
 
                     if (data.entries && data.entries.length > 0) {
                         // Convert entries format to match Supabase format
@@ -1404,7 +1407,7 @@
                             portfolio_value: entry.portfolio_value,
                             cash: entry.cash
                         }));
-                        console.log('Loaded', players.length, 'players from leaderboard.json');
+                        console.log('Loaded', players.length, 'players from leaderboard.json:', players);
                     } else if (data.users) {
                         // Alternative format from owl system
                         players = Object.values(data.users).map(user => ({
@@ -1412,9 +1415,12 @@
                             portfolio_value: user.portfolio_value,
                             cash: user.cash
                         }));
+                        console.log('Loaded', players.length, 'players from users object');
+                    } else {
+                        console.log('No entries or users found in leaderboard data');
                     }
                 } catch (e) {
-                    console.log('leaderboard.json not available:', e);
+                    console.log('leaderboard.json error:', e);
                 }
             }
 
@@ -1433,6 +1439,7 @@
 
             // Render leaderboard
             const list = document.getElementById('leaderboardList');
+            console.log('Rendering leaderboard with', players.length, 'players');
             if (players && players.length > 0) {
                 list.innerHTML = players.map((p, i) => `
                     <div class="leaderboard-item">
@@ -1441,8 +1448,10 @@
                         <div class="leaderboard-value">$${Math.round(p.portfolio_value).toLocaleString()}</div>
                     </div>
                 `).join('');
+                console.log('Leaderboard rendered successfully');
             } else {
                 list.innerHTML = '<div class="empty-state">No traders yet. Be the first!</div>';
+                console.log('No players to display');
             }
         }
 
