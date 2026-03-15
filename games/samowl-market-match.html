@@ -716,7 +716,7 @@
         <div class="chart-container">
             <div style="text-align: center; font-size: 1.2em; color: #495057; margin-bottom: 15px; font-weight: bold;">📊 What Happens Next?</div>
             <div class="candles-row" id="candlesRow"></div>
-            <div class="pattern-hint" id="patternHint">💡 Look for patterns in the candles!</div>
+            <div class="pattern-hint" id="patternHint" style="display: block !important; visibility: visible !important; opacity: 1 !important; background: #fff3cd !important; border: 2px dashed #ffc107 !important; padding: 10px !important; margin: 10px 15px !important; text-align: center !important; min-height: 40px !important; outline: 3px solid red !important;">💡 Look for patterns in the candles!</div>
         </div>
 
         <div class="question-box">
@@ -783,7 +783,15 @@
             const followPattern = Math.random() > 0.3;
             gameState.nextDirection = followPattern ? pattern.bias : (pattern.bias === 'up' ? 'down' : 'up');
             
-            document.getElementById('patternHint').textContent = `💡 ${pattern.hint}`;
+            const hintEl = document.getElementById('patternHint');
+            if (hintEl) {
+                hintEl.textContent = `💡 ${pattern.hint}`;
+                hintEl.style.display = 'block';
+                hintEl.style.visibility = 'visible';
+                console.log('Hint set:', pattern.hint);
+            } else {
+                console.error('patternHint element not found!');
+            }
             gameState.isProcessing = false;
         }
 
