@@ -31,7 +31,7 @@
             background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
             border-radius: 30px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.4);
-            overflow: hidden;
+            overflow: visible;
             position: relative;
             min-height: auto;
             max-height: 100vh;
@@ -207,10 +207,13 @@
             border-radius: 10px;
             border: 2px dashed #ffc107;
             margin: 10px 15px;
-            display: block;
-            visibility: visible;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
             min-height: 40px;
             line-height: 1.4;
+            position: relative;
+            z-index: 5;
         }
         
         .question-box {
@@ -374,9 +377,12 @@
                 margin: 8px 10px;
                 padding: 8px;
                 font-size: 0.85em;
-                display: block;
-                visibility: visible;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
                 min-height: 35px;
+                position: relative;
+                z-index: 5;
             }
             
             .question-box {
