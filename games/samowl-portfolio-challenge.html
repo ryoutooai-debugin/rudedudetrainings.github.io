@@ -493,6 +493,29 @@
         </div>
     </div>
 
+    <!-- SamOwl Message Modal -->
+    <div class="modal-overlay" id="samowlModal" style="display: none;">
+        <div class="modal" style="text-align: center; max-width: 400px;">
+            <div style="font-size: 3em; margin-bottom: 10px;">🦉</div>
+            <h3 style="margin-bottom: 15px; color: #667eea;">SamOwl Says</h3>
+            <p id="samowlMessage" style="margin: 20px 0; font-size: 1.1em; line-height: 1.5;"></p>
+            <button class="btn" onclick="closeSamOwlModal()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Got it!</button>
+        </div>
+    </div>
+
+    <!-- SamOwl Confirm Modal -->
+    <div class="modal-overlay" id="samowlConfirmModal" style="display: none;">
+        <div class="modal" style="text-align: center; max-width: 400px;">
+            <div style="font-size: 3em; margin-bottom: 10px;">🦉</div>
+            <h3 style="margin-bottom: 15px; color: #667eea;">SamOwl Asks</h3>
+            <p id="samowlConfirmMessage" style="margin: 20px 0; font-size: 1.1em; line-height: 1.5;"></p>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn" onclick="samowlConfirmYes()" style="flex: 1; padding: 15px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Yes</button>
+                <button class="btn" onclick="closeSamOwlConfirmModal()" style="flex: 1; padding: 15px; background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">No</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Supabase Setup - DISABLED for now
         // const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
@@ -604,6 +627,37 @@
             document.getElementById(tab + 'Tab').classList.add('active');
         }
 
+        // SamOwl Modal Functions
+        function showSamOwl(message) {
+            document.getElementById('samowlMessage').textContent = message;
+            document.getElementById('samowlModal').classList.add('show');
+        }
+
+        function closeSamOwlModal() {
+            document.getElementById('samowlModal').classList.remove('show');
+        }
+
+        // SamOwl Confirm Modal Functions
+        let samowlConfirmCallback = null;
+
+        function showSamOwlConfirm(message, onYes) {
+            document.getElementById('samowlConfirmMessage').textContent = message;
+            samowlConfirmCallback = onYes;
+            document.getElementById('samowlConfirmModal').classList.add('show');
+        }
+
+        function closeSamOwlConfirmModal() {
+            document.getElementById('samowlConfirmModal').classList.remove('show');
+            samowlConfirmCallback = null;
+        }
+
+        function samowlConfirmYes() {
+            if (samowlConfirmCallback) {
+                samowlConfirmCallback();
+            }
+            closeSamOwlConfirmModal();
+        }
+
         // Render market
         function renderMarket() {
             const list = document.getElementById('marketList');
@@ -654,20 +708,20 @@
         function executeTrade() {
             const shares = parseInt(document.getElementById('modalShares').value);
             if (!shares || shares <= 0) {
-                alert('Please enter a valid number of shares');
+                showSamOwl('Please enter a valid number of shares');
                 return;
             }
-            
+
             const total = shares * currentTrade.price;
-            
+
             if (currentTrade.action === 'buy') {
                 if (total > gameState.cash) {
-                    alert('Not enough cash!');
+                    showSamOwl('Not enough cash! Sell some stocks or wait for prices to drop.');
                     return;
                 }
-                
+
                 gameState.cash -= total;
-                
+
                 if (gameState.holdings[currentTrade.symbol]) {
                     const h = gameState.holdings[currentTrade.symbol];
                     const newShares = h.shares + shares;
@@ -679,7 +733,7 @@
                         avgPrice: currentTrade.price
                     };
                 }
-                
+
                 gameState.trades.push({
                     symbol: currentTrade.symbol,
                     action: 'BUY',
@@ -688,10 +742,10 @@
                     total: total,
                     time: new Date().toISOString()
                 });
-                
-                alert(`Bought ${shares} shares of ${currentTrade.symbol} for $${total.toFixed(2)}`);
+
+                showSamOwl(`Bought ${shares} shares of ${currentTrade.symbol} for $${total.toFixed(2)}`);
             }
-            
+
             saveGame();
             updateDashboard();
             updateHoldings();
@@ -773,10 +827,10 @@
 
         // Reset game function
         function resetGame() {
-            if (confirm('Start a new game? Your current progress will be saved separately.')) {
+            showSamOwlConfirm('Start a new game? Your current progress will be saved separately.', function() {
                 localStorage.removeItem('portfolioChallenge');
                 location.reload();
-            }
+            });
         }
 
         // Update leaderboard (Supabase disabled - local only)
