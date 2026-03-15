@@ -29,6 +29,16 @@
             background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
             min-height: 100vh;
             color: white;
+            /* Force dark mode */
+            color-scheme: dark;
+        }
+
+        /* Override any system light mode preferences */
+        @media (prefers-color-scheme: light) {
+            body {
+                background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
+                color: white;
+            }
         }
         
         .app-container {
