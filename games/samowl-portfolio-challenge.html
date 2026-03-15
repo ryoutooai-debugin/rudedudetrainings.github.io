@@ -926,14 +926,24 @@
 
         // Start game
         function startGame() {
+            console.log('startGame() called');
             const nameInput = document.getElementById('playerNameInput');
-            const name = nameInput.value.trim() || 'Trader';
+            const name = nameInput ? nameInput.value.trim() || 'Trader' : 'Trader';
             
+            console.log('Player name:', name);
             gameState.playerName = name;
-            document.getElementById('playerDisplay').textContent = name;
             
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('appContainer').style.display = 'flex';
+            const playerDisplay = document.getElementById('playerDisplay');
+            if (playerDisplay) playerDisplay.textContent = name;
+            
+            const startScreen = document.getElementById('startScreen');
+            const appContainer = document.getElementById('appContainer');
+            
+            console.log('startScreen:', startScreen);
+            console.log('appContainer:', appContainer);
+            
+            if (startScreen) startScreen.classList.add('hidden');
+            if (appContainer) appContainer.style.display = 'flex';
             
             saveGame();
             renderMarket();
@@ -944,6 +954,8 @@
             // Fetch real prices on start, then update every 30 seconds
             fetchRealPrices();
             setInterval(updatePrices, 30000);
+            
+            console.log('Game started successfully');
         }
 
         // Fetch real prices from Yahoo Finance
