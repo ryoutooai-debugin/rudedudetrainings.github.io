@@ -997,7 +997,7 @@
             return false;
         }
 
-        // Save game locally and to Supabase + local leaderboard
+        // Save game locally and to Supabase + localStorage leaderboard
         async function saveGame() {
             localStorage.setItem('portfolioChallenge', JSON.stringify(gameState));
 
@@ -1011,7 +1011,7 @@
             }
             const totalValue = gameState.cash + holdingsValue;
 
-            // Save to Supabase leaderboard
+            // Save to Supabase leaderboard (if available)
             try {
                 const { error } = await supabase
                     .from('portfolio_leaderboard')
@@ -1026,30 +1026,38 @@
 
                 if (error) console.log('Supabase save error:', error);
             } catch (e) {
-                console.log('Supabase unavailable, will try local server');
+                console.log('Supabase unavailable, using localStorage');
             }
 
-            // Also save to local leaderboard server (as backup)
+            // Save to localStorage leaderboard (works on GitHub Pages)
             try {
-                const response = await fetch('../submit-score', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_id: gameState.playerName,
-                        game: 'portfolio-challenge',
-                        score: totalValue,
-                        level: 1,
-                        extras: {
-                            cash: gameState.cash,
-                            holdings: gameState.holdings
-                        }
-                    })
-                });
-                if (response.ok) {
-                    console.log('Saved to local leaderboard');
+                let localLeaderboard = JSON.parse(localStorage.getItem('portfolioLeaderboard') || '{"entries":[]}');
+
+                // Find existing entry or create new
+                const existingIndex = localLeaderboard.entries.findIndex(e => e.name === gameState.playerName);
+                const entry = {
+                    name: gameState.playerName,
+                    portfolio_value: totalValue,
+                    cash: gameState.cash,
+                    updated: new Date().toISOString()
+                };
+
+                if (existingIndex >= 0) {
+                    localLeaderboard.entries[existingIndex] = entry;
+                } else {
+                    localLeaderboard.entries.push(entry);
                 }
+
+                // Sort by portfolio value descending
+                localLeaderboard.entries.sort((a, b) => b.portfolio_value - a.portfolio_value);
+
+                // Keep top 50
+                localLeaderboard.entries = localLeaderboard.entries.slice(0, 50);
+
+                localStorage.setItem('portfolioLeaderboard', JSON.stringify(localLeaderboard));
+                console.log('Saved to localStorage leaderboard:', entry);
             } catch (e) {
-                console.log('Local leaderboard server not available:', e);
+                console.log('Error saving to localStorage leaderboard:', e);
             }
         }
 
@@ -1391,17 +1399,34 @@
                 supabaseError = true;
             }
 
-            // If Supabase failed or returned empty, try local leaderboard.json
+            // If Supabase failed or returned empty, try localStorage first, then leaderboard.json
+            if (players.length === 0) {
+                // Try localStorage first (works on GitHub Pages)
+                try {
+                    const localData = JSON.parse(localStorage.getItem('portfolioLeaderboard') || '{"entries":[]}');
+                    if (localData.entries && localData.entries.length > 0) {
+                        players = localData.entries.map(entry => ({
+                            player_name: entry.name,
+                            portfolio_value: entry.portfolio_value,
+                            cash: entry.cash
+                        }));
+                        console.log('Loaded', players.length, 'players from localStorage:', players);
+                    }
+                } catch (e) {
+                    console.log('localStorage leaderboard error:', e);
+                }
+            }
+
+            // If still no players, try the JSON file (for pre-populated data)
             if (players.length === 0) {
                 try {
                     console.log('Fetching leaderboard.json...');
-                    // Determine base URL from current location
-                    const baseUrl = window.location.pathname.includes('/games/') 
-                        ? window.location.href.split('/games/')[0] 
+                    const baseUrl = window.location.pathname.includes('/games/')
+                        ? window.location.href.split('/games/')[0]
                         : window.location.origin;
                     const lbUrl = baseUrl + '/leaderboard.json?t=' + Date.now();
                     console.log('Trying URL:', lbUrl);
-                    
+
                     const response = await fetch(lbUrl);
                     console.log('Response status:', response.status);
                     if (!response.ok) {
@@ -1411,23 +1436,12 @@
                     console.log('Leaderboard data:', data);
 
                     if (data.entries && data.entries.length > 0) {
-                        // Convert entries format to match Supabase format
                         players = data.entries.map(entry => ({
                             player_name: entry.name,
                             portfolio_value: entry.portfolio_value,
                             cash: entry.cash
                         }));
                         console.log('Loaded', players.length, 'players from leaderboard.json:', players);
-                    } else if (data.users) {
-                        // Alternative format from owl system
-                        players = Object.values(data.users).map(user => ({
-                            player_name: user.name,
-                            portfolio_value: user.portfolio_value,
-                            cash: user.cash
-                        }));
-                        console.log('Loaded', players.length, 'players from users object');
-                    } else {
-                        console.log('No entries or users found in leaderboard data');
                     }
                 } catch (e) {
                     console.log('leaderboard.json error:', e);
