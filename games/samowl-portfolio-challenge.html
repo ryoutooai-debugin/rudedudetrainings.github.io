@@ -744,6 +744,31 @@
                 });
 
                 showSamOwl(`Bought ${shares} shares of ${currentTrade.symbol} for $${total.toFixed(2)}`);
+            } else if (currentTrade.action === 'sell') {
+                const holding = gameState.holdings[currentTrade.symbol];
+                if (!holding || holding.shares < shares) {
+                    showSamOwl(`You don't have enough shares to sell. You own ${holding ? holding.shares : 0} shares of ${currentTrade.symbol}.`);
+                    return;
+                }
+
+                const total = shares * currentTrade.price;
+                gameState.cash += total;
+
+                holding.shares -= shares;
+                if (holding.shares === 0) {
+                    delete gameState.holdings[currentTrade.symbol];
+                }
+
+                gameState.trades.push({
+                    symbol: currentTrade.symbol,
+                    action: 'SELL',
+                    shares: shares,
+                    price: currentTrade.price,
+                    total: total,
+                    time: new Date().toISOString()
+                });
+
+                showSamOwl(`Sold ${shares} shares of ${currentTrade.symbol} for $${total.toFixed(2)}`);
             }
 
             saveGame();
@@ -799,6 +824,7 @@
                             <th>Current</th>
                             <th>Value</th>
                             <th>P&L</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -817,6 +843,7 @@
                                     <td>$${currentPrice.toFixed(2)}</td>
                                     <td>$${value.toFixed(2)}</td>
                                     <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                                    <td><button class="btn btn-sell" onclick="openTrade('${symbol}', 'sell')">Sell</button></td>
                                 </tr>
                             `;
                         }).join('')}
