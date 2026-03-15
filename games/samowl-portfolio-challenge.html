@@ -1031,7 +1031,7 @@
             // Save to Supabase leaderboard (if available)
             try {
                 const { error } = await supabase
-                    .from('Leaderboard_cahe')
+                    .from('leaderboard_cache')
                     .upsert({
                         player_name: gameState.playerName,
                         portfolio_value: totalValue,
@@ -1437,7 +1437,7 @@
             // Try Supabase first
             try {
                 const { data: supabasePlayers, error } = await supabase
-                    .from('Leaderboard_cahe')
+                    .from('leaderboard_cache')
                     .select('*')
                     .order('portfolio_value', { ascending: false })
                     .limit(50);
