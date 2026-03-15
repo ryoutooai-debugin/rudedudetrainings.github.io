@@ -33,7 +33,16 @@
             box-shadow: 0 25px 80px rgba(0,0,0,0.4);
             overflow: hidden;
             position: relative;
-            min-height: 800px;
+            min-height: auto;
+            max-height: 100vh;
+        }
+        
+        @media (max-width: 550px) {
+            .game-container {
+                border-radius: 0;
+                max-height: 100vh;
+                overflow-y: auto;
+            }
         }
         
         .header {

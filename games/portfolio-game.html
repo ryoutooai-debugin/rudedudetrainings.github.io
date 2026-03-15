@@ -329,7 +329,8 @@
             background: rgba(255,255,255,0.1);
             color: white;
             margin-bottom: 20px;
-            width: 300px;
+            width: 90%;
+            max-width: 300px;
             text-align: center;
         }
         
@@ -625,14 +626,25 @@
 
         // Start game
         async function startGame() {
+            console.log('Starting game...');
             const nameInput = document.getElementById('playerNameInput');
             const name = nameInput.value.trim() || 'Trader';
             
+            console.log('Player name:', name);
+            
             gameState.playerName = name;
+            gameState.cash = 10000;
+            gameState.portfolioValue = 10000;
+            gameState.holdings = {};
+            gameState.transactions = [];
+            gameState.totalReturn = 0;
+            
             document.getElementById('playerDisplay').textContent = name;
             
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('appContainer').style.display = 'flex';
+            
+            console.log('Game initialized, rendering...');
             
             saveGame();
             renderMarket();
@@ -641,11 +653,23 @@
             await updateLeaderboard();
             
             // Fetch real prices on start, then update every 5 minutes
-            // Polygon free tier: 5 calls/minute = 1 call per 12 seconds
-            // 24 tickers * 12 seconds = ~4.8 minutes minimum between full refreshes
             fetchRealPrices();
             setInterval(updatePrices, 300000); // 5 minutes
+            
+            console.log('Game started successfully');
         }
+        
+        // Ensure start button works
+        document.addEventListener('DOMContentLoaded', function() {
+            const startBtn = document.querySelector('.start-btn');
+            if (startBtn) {
+                startBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    startGame();
+                });
+            }
+        });
 
         // Fetch prices from local JSON file (updated by backend server)
         // No API rate limits - backend handles Polygon calls
@@ -1098,7 +1122,11 @@
 
         // Load saved game on page load
         window.onload = async function() {
-            if (loadGame()) {
+            const hasSavedGame = loadGame();
+            const hasValidData = hasSavedGame && gameState.playerName && gameState.cash !== undefined;
+            
+            if (hasValidData) {
+                console.log('Resuming saved game for:', gameState.playerName);
                 // Auto-resume saved game
                 document.getElementById('startScreen').classList.add('hidden');
                 document.getElementById('appContainer').style.display = 'flex';
@@ -1108,8 +1136,12 @@
                 updateHoldings();
                 await updateLeaderboard();
                 fetchRealPrices();
-                // Update every 5 minutes for swing trading (was 30 seconds)
                 setInterval(updatePrices, 300000);
+            } else {
+                console.log('No valid saved game, showing start screen');
+                // Show start screen
+                document.getElementById('startScreen').classList.remove('hidden');
+                document.getElementById('appContainer').style.display = 'none';
             }
         };
     </script>
