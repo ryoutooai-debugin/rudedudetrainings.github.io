@@ -997,10 +997,10 @@
             return false;
         }
 
-        // Save game locally and to Supabase
+        // Save game locally and to Supabase + local leaderboard
         async function saveGame() {
             localStorage.setItem('portfolioChallenge', JSON.stringify(gameState));
-            
+
             // Calculate total portfolio value
             let holdingsValue = 0;
             for (const [symbol, holding] of Object.entries(gameState.holdings)) {
@@ -1010,7 +1010,7 @@
                 }
             }
             const totalValue = gameState.cash + holdingsValue;
-            
+
             // Save to Supabase leaderboard
             try {
                 const { error } = await supabase
@@ -1023,10 +1023,33 @@
                     }, {
                         onConflict: 'player_name'
                     });
-                
+
                 if (error) console.log('Supabase save error:', error);
             } catch (e) {
-                console.log('Supabase unavailable, using localStorage only');
+                console.log('Supabase unavailable, will try local server');
+            }
+
+            // Also save to local leaderboard server (as backup)
+            try {
+                const response = await fetch('/submit-score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: gameState.playerName,
+                        game: 'portfolio-challenge',
+                        score: totalValue,
+                        level: 1,
+                        extras: {
+                            cash: gameState.cash,
+                            holdings: gameState.holdings
+                        }
+                    })
+                });
+                if (response.ok) {
+                    console.log('Saved to local leaderboard');
+                }
+            } catch (e) {
+                console.log('Local leaderboard server not available:', e);
             }
         }
 
@@ -1346,49 +1369,80 @@
             }
         }
 
-        // Update leaderboard from Supabase
+        // Update leaderboard from Supabase or local JSON
         async function updateLeaderboard() {
+            let players = [];
+            let supabaseError = false;
+
+            // Try Supabase first
             try {
-                // Fetch top 50 from Supabase
-                const { data: players, error } = await supabase
+                const { data: supabasePlayers, error } = await supabase
                     .from('portfolio_leaderboard')
                     .select('*')
                     .order('portfolio_value', { ascending: false })
                     .limit(50);
-                
+
                 if (error) throw error;
-                
-                // Calculate current player's value
-                let currentValue = gameState.cash;
-                for (const [symbol, h] of Object.entries(gameState.holdings)) {
-                    const stock = stocks.find(s => s.symbol === symbol);
-                    if (stock) {
-                        currentValue += h.shares * stock.basePrice;
-                    }
-                }
-                
-                // Find player's rank
-                const rank = players.findIndex(p => p.player_name === gameState.playerName) + 1;
-                document.getElementById('dashRank').textContent = rank > 0 ? `#${rank}` : '#--';
-                
-                // Render leaderboard
-                const list = document.getElementById('leaderboardList');
-                if (players && players.length > 0) {
-                    list.innerHTML = players.map((p, i) => `
-                        <div class="leaderboard-item">
-                            <div class="leaderboard-rank">#${i + 1}</div>
-                            <div class="leaderboard-name">${p.player_name}</div>
-                            <div class="leaderboard-value">$${p.portfolio_value.toLocaleString()}</div>
-                        </div>
-                    `).join('');
-                } else {
-                    list.innerHTML = '<div class="empty-state">No traders yet. Be the first!</div>';
+                if (supabasePlayers && supabasePlayers.length > 0) {
+                    players = supabasePlayers;
                 }
             } catch (e) {
-                console.log('Supabase error, falling back to localStorage:', e);
-                // Fallback to localStorage
-                const list = document.getElementById('leaderboardList');
-                list.innerHTML = '<div class="empty-state">Leaderboard unavailable. Playing in local mode.</div>';
+                console.log('Supabase error:', e);
+                supabaseError = true;
+            }
+
+            // If Supabase failed or returned empty, try local leaderboard.json
+            if (players.length === 0) {
+                try {
+                    const response = await fetch('leaderboard.json?t=' + Date.now());
+                    const data = await response.json();
+
+                    if (data.entries && data.entries.length > 0) {
+                        // Convert entries format to match Supabase format
+                        players = data.entries.map(entry => ({
+                            player_name: entry.name,
+                            portfolio_value: entry.portfolio_value,
+                            cash: entry.cash
+                        }));
+                        console.log('Loaded', players.length, 'players from leaderboard.json');
+                    } else if (data.users) {
+                        // Alternative format from owl system
+                        players = Object.values(data.users).map(user => ({
+                            player_name: user.name,
+                            portfolio_value: user.portfolio_value,
+                            cash: user.cash
+                        }));
+                    }
+                } catch (e) {
+                    console.log('leaderboard.json not available:', e);
+                }
+            }
+
+            // Calculate current player's value
+            let currentValue = gameState.cash;
+            for (const [symbol, h] of Object.entries(gameState.holdings)) {
+                const stock = stocks.find(s => s.symbol === symbol);
+                if (stock) {
+                    currentValue += h.shares * stock.basePrice;
+                }
+            }
+
+            // Find player's rank
+            const rank = players.findIndex(p => p.player_name === gameState.playerName) + 1;
+            document.getElementById('dashRank').textContent = rank > 0 ? `#${rank}` : '#--';
+
+            // Render leaderboard
+            const list = document.getElementById('leaderboardList');
+            if (players && players.length > 0) {
+                list.innerHTML = players.map((p, i) => `
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank">#${i + 1}</div>
+                        <div class="leaderboard-name">${p.player_name}</div>
+                        <div class="leaderboard-value">$${Math.round(p.portfolio_value).toLocaleString()}</div>
+                    </div>
+                `).join('');
+            } else {
+                list.innerHTML = '<div class="empty-state">No traders yet. Be the first!</div>';
             }
         }
 
