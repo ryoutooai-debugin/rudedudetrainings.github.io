@@ -1232,9 +1232,9 @@
                     alert('Not enough cash!');
                     return;
                 }
-                
+
                 gameState.cash -= total;
-                
+
                 if (gameState.holdings[currentTrade.symbol]) {
                     const h = gameState.holdings[currentTrade.symbol];
                     const newShares = h.shares + shares;
@@ -1246,7 +1246,7 @@
                         avgPrice: currentTrade.price
                     };
                 }
-                
+
                 gameState.trades.push({
                     symbol: currentTrade.symbol,
                     action: 'BUY',
@@ -1255,8 +1255,40 @@
                     total: total,
                     time: new Date().toISOString()
                 });
-                
+
                 alert(`Bought ${shares} shares of ${currentTrade.symbol} for $${total.toFixed(2)}`);
+            } else if (currentTrade.action === 'sell') {
+                // Check if user has enough shares to sell
+                if (!gameState.holdings[currentTrade.symbol] || gameState.holdings[currentTrade.symbol].shares < shares) {
+                    alert(`You don't have enough shares! You own ${gameState.holdings[currentTrade.symbol]?.shares || 0} shares.`);
+                    return;
+                }
+
+                const h = gameState.holdings[currentTrade.symbol];
+                const saleProceeds = shares * currentTrade.price;
+                const costBasis = shares * h.avgPrice;
+                const profit = saleProceeds - costBasis;
+
+                gameState.cash += saleProceeds;
+                h.shares -= shares;
+
+                // Remove holding if all shares sold
+                if (h.shares === 0) {
+                    delete gameState.holdings[currentTrade.symbol];
+                }
+
+                gameState.trades.push({
+                    symbol: currentTrade.symbol,
+                    action: 'SELL',
+                    shares: shares,
+                    price: currentTrade.price,
+                    total: saleProceeds,
+                    profit: profit,
+                    time: new Date().toISOString()
+                });
+
+                const profitText = profit >= 0 ? `Profit: +$${profit.toFixed(2)}` : `Loss: -$${Math.abs(profit).toFixed(2)}`;
+                alert(`Sold ${shares} shares of ${currentTrade.symbol} for $${saleProceeds.toFixed(2)}\n${profitText}`);
             }
             
             saveGame();
@@ -1324,8 +1356,9 @@
                                 <span>${h.shares} shares @ $${h.avgPrice.toFixed(2)}</span>
                                 <span>Now: $${currentPrice.toFixed(2)}</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; width: 100%; font-size: 1.1em; font-weight: 600;">
-                                <span>Value: $${value.toFixed(0)}</span>
+                            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                <span style="font-size: 1.1em; font-weight: 600;">Value: $${value.toFixed(0)}</span>
+                                <button class="btn btn-sell" onclick="openTrade('${symbol}', 'sell')">Sell</button>
                             </div>
                         </div>
                     `;
@@ -1342,6 +1375,7 @@
                                 <th>Current</th>
                                 <th>Value</th>
                                 <th>P&L</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1360,6 +1394,7 @@
                                         <td>$${currentPrice.toFixed(2)}</td>
                                         <td>$${value.toFixed(2)}</td>
                                         <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                                        <td><button class="btn btn-sell" onclick="openTrade('${symbol}', 'sell')">Sell</button></td>
                                     </tr>
                                 `;
                             }).join('')}
