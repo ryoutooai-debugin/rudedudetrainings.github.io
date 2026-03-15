@@ -962,22 +962,25 @@
             console.log('Game started successfully');
         }
 
-        // Fetch real prices from local prices.json (updated by game_server.py)
+        // Fetch real prices from Yahoo Finance (batch call)
         async function fetchRealPrices() {
             try {
-                const response = await fetch('prices.json');
+                // Yahoo Finance batch quote endpoint
+                const symbols = stocks.map(s => s.symbol).join(',');
+                const response = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`);
                 const data = await response.json();
                 
-                if (data.stocks) {
-                    stocks.forEach(stock => {
-                        if (data.stocks[stock.symbol]) {
-                            stock.basePrice = data.stocks[stock.symbol].price;
+                if (data.quoteResponse && data.quoteResponse.result) {
+                    data.quoteResponse.result.forEach(quote => {
+                        const stock = stocks.find(s => s.symbol === quote.symbol);
+                        if (stock && quote.regularMarketPrice) {
+                            stock.basePrice = quote.regularMarketPrice;
+                            console.log(`Updated ${stock.symbol}: $${stock.basePrice}`);
                         }
                     });
-                    console.log('Loaded real prices from prices.json');
                 }
             } catch (e) {
-                console.log('Using simulated prices (prices.json unavailable):', e);
+                console.log('Using simulated prices (Yahoo Finance unavailable):', e);
             }
             renderMarket();
             updateDashboard();
