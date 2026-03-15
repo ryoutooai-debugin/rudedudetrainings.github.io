@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 SamOwl Game Server
-Handles both price fetching and leaderboard
-Runs continuously
+Fetches stock prices every 5 minutes and saves to prices.json
+Serves leaderboard API
 """
 
 import json
@@ -14,7 +14,6 @@ from pathlib import Path
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 # Configuration
-API_KEY = 'hZajhu43KW9bwuLMdpbtBww7KqeU1bad'
 STOCKS = [
     'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'NFLX', 'TSLA',
     'BRK-B', 'JPM', 'V', 'MA', 'LLY', 'JNJ', 'UNH', 'PFE',
@@ -75,41 +74,42 @@ def add_score(name, portfolio_value, cash):
     save_leaderboard(leaderboard)
     return leaderboard
 
-def fetch_prices():
-    """Fetch prices for all stocks from Polygon"""
+def fetch_yahoo_prices():
+    """Fetch prices from Yahoo Finance (5-min delayed, free)"""
     prices = {}
     
-    print(f"[{datetime.now()}] Fetching prices from Polygon.io...")
+    print(f"[{datetime.now()}] Fetching prices from Yahoo Finance...")
     
-    for symbol in STOCKS:
-        try:
-            url = f'https://api.polygon.io/v2/aggs/ticker/{symbol}/prev?apiKey={API_KEY}'
-            response = requests.get(url, timeout=10)
-            
-            if response.status_code == 429:
-                print(f"  Rate limited on {symbol}, waiting...")
-                time.sleep(12)
-                response = requests.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
-                if data.get('results') and len(data['results']) > 0:
-                    result = data['results'][0]
-                    prices[symbol] = {
-                        'price': result['c'],
-                        'open': result['o'],
-                        'high': result['h'],
-                        'low': result['l'],
-                        'volume': result['v'],
-                        'updated': datetime.now().isoformat()
-                    }
-                    print(f"  {symbol}: ${result['c']:.2f}")
-            else:
-                print(f"  {symbol}: HTTP {response.status_code}")
-        except Exception as e:
-            print(f"  {symbol}: Error - {e}")
-        
-        time.sleep(0.3)
+    # Yahoo Finance allows batch requests
+    symbols = ','.join(STOCKS)
+    url = f'https://query1.finance.yahoo.com/v7/finance/quote?symbols={symbols}'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    }
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=30)
+        if response.status_code == 200:
+            data = response.json()
+            if data.get('quoteResponse') and data['quoteResponse'].get('result'):
+                for quote in data['quoteResponse']['result']:
+                    symbol = quote.get('symbol')
+                    price = quote.get('regularMarketPrice')
+                    if symbol and price:
+                        prices[symbol] = {
+                            'price': price,
+                            'open': quote.get('regularMarketOpen', price),
+                            'high': quote.get('regularMarketDayHigh', price),
+                            'low': quote.get('regularMarketDayLow', price),
+                            'volume': quote.get('regularMarketVolume', 0),
+                            'updated': datetime.now().isoformat()
+                        }
+                        print(f"  {symbol}: ${price:.2f}")
+            print(f"[{datetime.now()}] Fetched {len(prices)} prices")
+        else:
+            print(f"[{datetime.now()}] Yahoo Finance returned status {response.status_code}")
+    except Exception as e:
+        print(f"[{datetime.now()}] Error fetching prices: {e}")
     
     return prices
 
@@ -121,18 +121,21 @@ def save_prices(prices):
     }
     with open(PRICES_FILE, 'w') as f:
         json.dump(data, f, indent=2)
-    print(f"[{datetime.now()}] Saved {len(prices)} prices")
+    print(f"[{datetime.now()}] Saved {len(prices)} prices to prices.json")
 
 def price_updater():
     """Background thread - fetch prices every 5 minutes"""
+    # Fetch immediately on startup
+    prices = fetch_yahoo_prices()
+    save_prices(prices)
+    
     while True:
+        time.sleep(PRICE_UPDATE_INTERVAL)
         try:
-            prices = fetch_prices()
+            prices = fetch_yahoo_prices()
             save_prices(prices)
         except Exception as e:
             print(f"[{datetime.now()}] Price update error: {e}")
-        
-        time.sleep(PRICE_UPDATE_INTERVAL)
 
 class RequestHandler(BaseHTTPRequestHandler):
     """HTTP request handler for leaderboard API"""

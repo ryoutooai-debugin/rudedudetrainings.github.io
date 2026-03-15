@@ -962,27 +962,46 @@
             console.log('Game started successfully');
         }
 
-        // Fetch real prices from Yahoo Finance via CORS proxy
+        // Fetch prices - tries multiple sources
         async function fetchRealPrices() {
+            let pricesLoaded = false;
+            
+            // Try local prices.json first
             try {
-                const symbols = stocks.map(s => s.symbol).join(',');
-                // Use allorigins CORS proxy
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}`)}`;
-                const response = await fetch(proxyUrl);
+                const response = await fetch('prices.json?t=' + Date.now());
                 const data = await response.json();
                 
-                if (data.quoteResponse && data.quoteResponse.result) {
-                    data.quoteResponse.result.forEach(quote => {
-                        const stock = stocks.find(s => s.symbol === quote.symbol);
-                        if (stock && quote.regularMarketPrice) {
-                            stock.basePrice = quote.regularMarketPrice;
-                            console.log(`Updated ${stock.symbol}: $${stock.basePrice}`);
+                if (data.stocks && Object.keys(data.stocks).length > 0) {
+                    stocks.forEach(stock => {
+                        if (data.stocks[stock.symbol]) {
+                            stock.basePrice = data.stocks[stock.symbol].price;
                         }
                     });
+                    console.log('Loaded prices from prices.json');
+                    pricesLoaded = true;
                 }
             } catch (e) {
-                console.log('Using simulated prices (Yahoo Finance unavailable):', e);
+                console.log('prices.json not available');
             }
+            
+            // If no prices loaded, use realistic simulated prices
+            if (!pricesLoaded) {
+                console.log('Using realistic simulated prices');
+                // These are approximate real prices (will be static until we find a working API)
+                const simulatedPrices = {
+                    'AAPL': 225.50, 'MSFT': 420.00, 'GOOGL': 165.00, 'AMZN': 195.00,
+                    'NVDA': 140.00, 'META': 600.00, 'NFLX': 850.00, 'TSLA': 270.00
+                };
+                
+                stocks.forEach(stock => {
+                    if (simulatedPrices[stock.symbol]) {
+                        // Add small random variation to make it look live
+                        const variation = (Math.random() - 0.5) * 0.02; // ±1%
+                        stock.basePrice = simulatedPrices[stock.symbol] * (1 + variation);
+                    }
+                });
+            }
+            
             renderMarket();
             updateDashboard();
         }
