@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🦉 SamOwl's Portfolio Challenge - Master the Markets</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <!-- Supabase disabled for now -->
     <style>
         * {
             margin: 0;
@@ -494,22 +494,10 @@
     </div>
 
     <script>
-        // Supabase Setup
-        const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
-        let supabase = null;
-        
-        // Initialize Supabase when library is loaded
-        function initSupabase() {
-            if (window.supabase) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-                console.log('Supabase initialized');
-            } else {
-                console.log('Supabase library not loaded yet, will retry...');
-                setTimeout(initSupabase, 100);
-            }
-        }
-        initSupabase();
+        // Supabase Setup - DISABLED for now
+        // const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
+        // const SUPABASE_KEY = '...';
+        // let supabaseClient = null;
 
         // Game State
         let gameState = {
@@ -554,43 +542,10 @@
             return false;
         }
 
-        // Save game locally and to Supabase
+        // Save game locally (Supabase disabled)
         async function saveGame() {
             localStorage.setItem('portfolioChallenge', JSON.stringify(gameState));
-            
-            // Skip if supabase not initialized
-            if (!supabase) {
-                console.log('Supabase not initialized, saving to localStorage only');
-                return;
-            }
-            
-            // Calculate total portfolio value
-            let holdingsValue = 0;
-            for (const [symbol, holding] of Object.entries(gameState.holdings)) {
-                const stock = stocks.find(s => s.symbol === symbol);
-                if (stock) {
-                    holdingsValue += holding.shares * stock.basePrice;
-                }
-            }
-            const totalValue = gameState.cash + holdingsValue;
-            
-            // Save to Supabase leaderboard
-            try {
-                const { error } = await supabase
-                    .from('portfolio_leaderboard')
-                    .upsert({
-                        player_name: gameState.playerName,
-                        portfolio_value: totalValue,
-                        cash: gameState.cash,
-                        updated_at: new Date().toISOString()
-                    }, {
-                        onConflict: 'player_name'
-                    });
-                
-                if (error) console.log('Supabase save error:', error);
-            } catch (e) {
-                console.log('Supabase unavailable, using localStorage only');
-            }
+            // Supabase integration disabled for now
         }
 
         // Start game
@@ -824,56 +779,14 @@
             }
         }
 
-        // Update leaderboard from Supabase
+        // Update leaderboard (Supabase disabled - local only)
         async function updateLeaderboard() {
-            // Check if supabase is initialized
-            if (!supabase) {
-                console.log('Supabase not initialized yet, skipping leaderboard update');
-                return;
+            // Supabase leaderboard disabled - show local mode message
+            const list = document.getElementById('leaderboardList');
+            if (list) {
+                list.innerHTML = '<div class="empty-state">Leaderboard coming soon! Play locally for now.</div>';
             }
-            
-            try {
-                // Fetch top 50 from Supabase
-                const { data: players, error } = await supabase
-                    .from('portfolio_leaderboard')
-                    .select('*')
-                    .order('portfolio_value', { ascending: false })
-                    .limit(50);
-                
-                if (error) throw error;
-                
-                // Calculate current player's value
-                let currentValue = gameState.cash;
-                for (const [symbol, h] of Object.entries(gameState.holdings)) {
-                    const stock = stocks.find(s => s.symbol === symbol);
-                    if (stock) {
-                        currentValue += h.shares * stock.basePrice;
-                    }
-                }
-                
-                // Find player's rank
-                const rank = players.findIndex(p => p.player_name === gameState.playerName) + 1;
-                document.getElementById('dashRank').textContent = rank > 0 ? `#${rank}` : '#--';
-                
-                // Render leaderboard
-                const list = document.getElementById('leaderboardList');
-                if (players && players.length > 0) {
-                    list.innerHTML = players.map((p, i) => `
-                        <div class="leaderboard-item">
-                            <div class="leaderboard-rank">#${i + 1}</div>
-                            <div class="leaderboard-name">${p.player_name}</div>
-                            <div class="leaderboard-value">$${p.portfolio_value.toLocaleString()}</div>
-                        </div>
-                    `).join('');
-                } else {
-                    list.innerHTML = '<div class="empty-state">No traders yet. Be the first!</div>';
-                }
-            } catch (e) {
-                console.log('Supabase error, falling back to localStorage:', e);
-                // Fallback to localStorage
-                const list = document.getElementById('leaderboardList');
-                list.innerHTML = '<div class="empty-state">Leaderboard unavailable. Playing in local mode.</div>';
-            }
+            document.getElementById('dashRank').textContent = '#--';
         }
 
         // Load saved game on page load
