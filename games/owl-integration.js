@@ -709,8 +709,9 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createOwlButton);
-} else {
-    createOwlButton();
-}
+// OWL Store disabled for now
+// if (document.readyState === 'loading') {
+//     document.addEventListener('DOMContentLoaded', createOwlButton);
+// } else {
+//     createOwlButton();
+// }
