@@ -1031,7 +1031,7 @@
 
             // Also save to local leaderboard server (as backup)
             try {
-                const response = await fetch('/submit-score', {
+                const response = await fetch('../submit-score', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -1394,7 +1394,7 @@
             // If Supabase failed or returned empty, try local leaderboard.json
             if (players.length === 0) {
                 try {
-                    const response = await fetch('leaderboard.json?t=' + Date.now());
+                    const response = await fetch('../leaderboard.json?t=' + Date.now());
                     const data = await response.json();
 
                     if (data.entries && data.entries.length > 0) {
