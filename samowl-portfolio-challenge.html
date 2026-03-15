@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🦉 SamOwl's Portfolio Challenge - Master the Markets</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+        
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #1a1a2e;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            font-size: 3em;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .brand-text h1 {
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        
+        .brand-text p {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header-stat {
+            text-align: right;
+        }
+        
+        .header-stat-label {
+            font-size: 0.75em;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+        
+        .header-stat-value {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        
+        .nav {
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .nav-item {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.1);
+            border-bottom-color: var(--primary);
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat-card-label {
+            font-size: 0.85em;
+            opacity: 0.7;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card-value {
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        
+        .stock-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .stock-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px 100px;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .stock-item:hover {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .stock-symbol {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--primary);
+        }
+        
+        .stock-price {
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .stock-change {
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        .positive { color: var(--success); }
+        .negative { color: var(--danger); }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-buy {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-sell {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .holdings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .holdings-table th,
+        .holdings-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .holdings-table th {
+            opacity: 0.7;
+            font-weight: 600;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .leaderboard-rank {
+            font-size: 1.5em;
+            font-weight: 700;
+            width: 50px;
+        }
+        
+        .leaderboard-name {
+            flex: 1;
+            font-weight: 600;
+        }
+        
+        .leaderboard-value {
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+        
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .start-logo {
+            font-size: 8em;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .start-btn {
+            padding: 20px 60px;
+            font-size: 1.3em;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+        
+        .name-input {
+            padding: 15px 25px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-bottom: 20px;
+            width: 300px;
+            text-align: center;
+        }
+        
+        .name-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .hidden { display: none !important; }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button (on start screen) -->
+    <div style="position: absolute; top: 15px; left: 15px; z-index: 101;">
+        <a href="index.html" style="color: #333; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; gap: 5px; padding: 8px 15px; background: rgba(255,255,255,0.9); border-radius: 20px; transition: all 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <span>←</span> Back to Games
+        </a>
+    </div>
+
+    <div class="start-screen" id="startScreen">
+        <div class="start-logo">🦉</div>
+        <h1 style="font-size: 2.5em; font-weight: 700; margin-bottom: 10px;">Portfolio Challenge</h1>
+        <p style="font-size: 1.2em; opacity: 0.8; margin-bottom: 20px;">Master the markets. Build your empire.</p>
+        <div style="background: #ffd700; color: #333; padding: 8px 20px; border-radius: 20px; font-weight: bold; margin-bottom: 30px;">Ages 13+</div>
+        <input type="text" id="playerNameInput" class="name-input" placeholder="Enter your name" maxlength="20">
+        <button class="start-btn" onclick="startGame()">🚀 Start Trading</button>
+        <p id="resumeHint" style="margin-top: 20px; font-size: 0.9em; color: #667eea; display: none;">💡 Your previous game will be restored automatically</p>
+    </div>
+
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- Back Button -->
+        <div style="padding: 10px 20px; background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center;">
+            <a href="index.html" style="color: white; text-decoration: none; font-size: 0.9em; display: flex; align-items: center; gap: 5px; padding: 8px 15px; background: rgba(255,255,255,0.1); border-radius: 20px; transition: all 0.3s ease;">
+                <span>←</span> Back to Games
+            </a>
+            <button onclick="resetGame()" style="background: rgba(255,255,255,0.1); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.85em;">🔄 New Game</button>
+        </div>
+
+        <div class="header">
+            <div class="brand">
+                <div class="logo">🦉</div>
+                <div class="brand-text">
+                    <h1 id="playerDisplay">SamOwl</h1>
+                    <p>Portfolio Challenge</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <div class="header-stat-label">Portfolio Value</div>
+                    <div class="header-stat-value" id="headerPortfolio">$100,000</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-label">Day Change</div>
+                    <div class="header-stat-value positive" id="headerChange">+$0.00</div>
+                </div>
+                <div class="header-stat">
+                    <div class="header-stat-label">Cash</div>
+                    <div class="header-stat-value" id="headerCash">$100,000</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav">
+            <div class="nav-item active" onclick="switchTab('dashboard')">📊 Dashboard</div>
+            <div class="nav-item" onclick="switchTab('market')">🌎 Market</div>
+            <div class="nav-item" onclick="switchTab('portfolio')">💼 Portfolio</div>
+            <div class="nav-item" onclick="switchTab('leaderboard')">🏆 Rankings</div>
+        </div>
+
+        <div class="main-content">
+            <div class="tab-content active" id="dashboardTab">
+                <div class="portfolio-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-label">Total Portfolio Value</div>
+                        <div class="stat-card-value" id="dashPortfolio">$100,000.00</div>
+                        <div class="positive" id="dashChange">+0.00% today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label">Available Cash</div>
+                        <div class="stat-card-value" id="dashCash">$100,000.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label">Total Return</div>
+                        <div class="stat-card-value" id="dashReturn">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label">Rank</div>
+                        <div class="stat-card-value" id="dashRank">#--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="marketTab">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🌎 Market</div>
+                    </div>
+                    <div class="stock-list" id="marketList"></div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="portfolioTab">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">💼 Your Holdings</div>
+                    </div>
+                    <div id="holdingsList">
+                        <div class="empty-state">No holdings yet. Buy some stocks!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="leaderboardTab">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">🏆 Top Traders</div>
+                    </div>
+                    <div id="leaderboardList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="tradeModal">
+        <div class="modal">
+            <h2 id="modalTitle">Buy AAPL</h2>
+            <p style="margin: 15px 0; opacity: 0.8;">Price: <span id="modalPrice">$175.50</span></p>
+            <p style="margin: 15px 0; opacity: 0.8;">Cash Available: <span id="modalCash">$100,000</span></p>
+            <input type="number" id="modalShares" placeholder="Number of shares" min="1" style="padding: 12px; width: 100%; margin: 15px 0; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+            <p style="margin: 15px 0;">Total: <span id="modalTotal">$0.00</span></p>
+            <button class="btn btn-buy" onclick="executeTrade()" style="width: 100%; padding: 15px;">Confirm</button>
+            <button class="btn" onclick="closeModal()" style="width: 100%; padding: 15px; margin-top: 10px; background: rgba(255,255,255,0.1);">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Setup
+        const SUPABASE_URL = 'https://rtbqaqkobwwjnbzwvjab.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ0YnFhcWtvYnd3am5iend2amFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDE2ODAsImV4cCI6MjA4ODgxNzY4MH0.EUnSeOMf3U6Uentgo1gcq-PfTgTI35SN92Vr9mdNO0Y';
+        let supabase = null;
+        
+        // Initialize Supabase when library is loaded
+        function initSupabase() {
+            if (window.supabase) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('Supabase initialized');
+            } else {
+                console.log('Supabase library not loaded yet, will retry...');
+                setTimeout(initSupabase, 100);
+            }
+        }
+        initSupabase();
+
+        // Game State
+        let gameState = {
+            playerName: '',
+            cash: 100000,
+            holdings: {},
+            startValue: 100000,
+            trades: []
+        };
+
+        let currentTrade = { symbol: '', action: '', price: 0 };
+
+        // Stock data with simulated prices
+        const stocks = [
+            { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 175.50 },
+            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30 },
+            { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 380.25 },
+            { symbol: 'AMZN', name: 'Amazon.com', basePrice: 178.90 },
+            { symbol: 'TSLA', name: 'Tesla Inc.', basePrice: 205.60 },
+            { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75 },
+            { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 890.15 },
+            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40 }
+        ];
+
+        // Load saved game
+        function loadGame() {
+            const saved = localStorage.getItem('portfolioChallenge');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // Validate the saved data has required fields
+                    if (parsed.playerName && parsed.cash !== undefined) {
+                        gameState = parsed;
+                        return true;
+                    }
+                } catch (e) {
+                    console.log('Error loading saved game:', e);
+                }
+            }
+            return false;
+        }
+
+        // Save game locally and to Supabase
+        async function saveGame() {
+            localStorage.setItem('portfolioChallenge', JSON.stringify(gameState));
+            
+            // Skip if supabase not initialized
+            if (!supabase) {
+                console.log('Supabase not initialized, saving to localStorage only');
+                return;
+            }
+            
+            // Calculate total portfolio value
+            let holdingsValue = 0;
+            for (const [symbol, holding] of Object.entries(gameState.holdings)) {
+                const stock = stocks.find(s => s.symbol === symbol);
+                if (stock) {
+                    holdingsValue += holding.shares * stock.basePrice;
+                }
+            }
+            const totalValue = gameState.cash + holdingsValue;
+            
+            // Save to Supabase leaderboard
+            try {
+                const { error } = await supabase
+                    .from('portfolio_leaderboard')
+                    .upsert({
+                        player_name: gameState.playerName,
+                        portfolio_value: totalValue,
+                        cash: gameState.cash,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'player_name'
+                    });
+                
+                if (error) console.log('Supabase save error:', error);
+            } catch (e) {
+                console.log('Supabase unavailable, using localStorage only');
+            }
+        }
+
+        // Start game
+        function startGame() {
+            const nameInput = document.getElementById('playerNameInput');
+            const name = nameInput.value.trim() || 'Trader';
+            
+            gameState.playerName = name;
+            document.getElementById('playerDisplay').textContent = name;
+            
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('appContainer').style.display = 'flex';
+            
+            saveGame();
+            renderMarket();
+            updateDashboard();
+            updateHoldings();
+            updateLeaderboard();
+            
+            // Fetch real prices on start, then update every 30 seconds
+            fetchRealPrices();
+            setInterval(updatePrices, 30000);
+        }
+
+        // Fetch real prices from Yahoo Finance
+        async function fetchRealPrices() {
+            try {
+                const symbols = stocks.map(s => s.symbol).join(',');
+                const response = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
+                const data = await response.json();
+                
+                if (data.chart && data.chart.result) {
+                    data.chart.result.forEach((result, index) => {
+                        if (result.meta && result.meta.regularMarketPrice) {
+                            stocks[index].basePrice = result.meta.regularMarketPrice;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.log('Using simulated prices (Yahoo Finance unavailable)');
+            }
+            renderMarket();
+            updateDashboard();
+        }
+
+        // Update stock prices (fallback to simulation if API fails)
+        function updatePrices() {
+            fetchRealPrices();
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            event.target.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+        }
+
+        // Render market
+        function renderMarket() {
+            const list = document.getElementById('marketList');
+            list.innerHTML = stocks.map(s => {
+                const change = (Math.random() - 0.5) * 2;
+                const changeClass = change >= 0 ? 'positive' : 'negative';
+                const changeSymbol = change >= 0 ? '+' : '';
+                return `
+                    <div class="stock-item">
+                        <div class="stock-symbol">${s.symbol}</div>
+                        <div>${s.name}</div>
+                        <div class="stock-price">$${s.basePrice.toFixed(2)}</div>
+                        <div>
+                            <button class="btn btn-buy" onclick="openTrade('${s.symbol}', 'buy')">Buy</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Open trade modal
+        function openTrade(symbol, action) {
+            const stock = stocks.find(s => s.symbol === symbol);
+            currentTrade = { symbol, action, price: stock.basePrice };
+            
+            document.getElementById('modalTitle').textContent = `${action === 'buy' ? 'Buy' : 'Sell'} ${symbol}`;
+            document.getElementById('modalPrice').textContent = `$${stock.basePrice.toFixed(2)}`;
+            document.getElementById('modalCash').textContent = `$${gameState.cash.toLocaleString()}`;
+            document.getElementById('modalShares').value = '';
+            document.getElementById('modalTotal').textContent = '$0.00';
+            
+            document.getElementById('tradeModal').classList.add('show');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('tradeModal').classList.remove('show');
+        }
+
+        // Update modal total
+        document.getElementById('modalShares').addEventListener('input', function() {
+            const shares = parseInt(this.value) || 0;
+            const total = shares * currentTrade.price;
+            document.getElementById('modalTotal').textContent = `$${total.toLocaleString()}`;
+        });
+
+        // Execute trade
+        function executeTrade() {
+            const shares = parseInt(document.getElementById('modalShares').value);
+            if (!shares || shares <= 0) {
+                alert('Please enter a valid number of shares');
+                return;
+            }
+            
+            const total = shares * currentTrade.price;
+            
+            if (currentTrade.action === 'buy') {
+                if (total > gameState.cash) {
+                    alert('Not enough cash!');
+                    return;
+                }
+                
+                gameState.cash -= total;
+                
+                if (gameState.holdings[currentTrade.symbol]) {
+                    const h = gameState.holdings[currentTrade.symbol];
+                    const newShares = h.shares + shares;
+                    h.avgPrice = ((h.shares * h.avgPrice) + total) / newShares;
+                    h.shares = newShares;
+                } else {
+                    gameState.holdings[currentTrade.symbol] = {
+                        shares: shares,
+                        avgPrice: currentTrade.price
+                    };
+                }
+                
+                gameState.trades.push({
+                    symbol: currentTrade.symbol,
+                    action: 'BUY',
+                    shares: shares,
+                    price: currentTrade.price,
+                    total: total,
+                    time: new Date().toISOString()
+                });
+                
+                alert(`Bought ${shares} shares of ${currentTrade.symbol} for $${total.toFixed(2)}`);
+            }
+            
+            saveGame();
+            updateDashboard();
+            updateHoldings();
+            updateLeaderboard();
+            closeModal();
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            let holdingsValue = 0;
+            for (const [symbol, holding] of Object.entries(gameState.holdings)) {
+                const stock = stocks.find(s => s.symbol === symbol);
+                if (stock) {
+                    holdingsValue += holding.shares * stock.basePrice;
+                }
+            }
+            
+            const totalValue = gameState.cash + holdingsValue;
+            const totalReturn = totalValue - gameState.startValue;
+            const returnPct = (totalReturn / gameState.startValue) * 100;
+            
+            document.getElementById('headerPortfolio').textContent = `$${totalValue.toLocaleString()}`;
+            document.getElementById('headerCash').textContent = `$${gameState.cash.toLocaleString()}`;
+            document.getElementById('headerChange').textContent = `${totalReturn >= 0 ? '+' : ''}$${totalReturn.toFixed(2)}`;
+            document.getElementById('headerChange').className = `header-stat-value ${totalReturn >= 0 ? 'positive' : 'negative'}`;
+            
+            document.getElementById('dashPortfolio').textContent = `$${totalValue.toLocaleString()}`;
+            document.getElementById('dashCash').textContent = `$${gameState.cash.toLocaleString()}`;
+            document.getElementById('dashReturn').textContent = `${totalReturn >= 0 ? '+' : ''}$${totalReturn.toFixed(2)}`;
+            document.getElementById('dashChange').textContent = `${returnPct >= 0 ? '+' : ''}${returnPct.toFixed(2)}% today`;
+            document.getElementById('dashChange').className = returnPct >= 0 ? 'positive' : 'negative';
+        }
+
+        // Update holdings display
+        function updateHoldings() {
+            const list = document.getElementById('holdingsList');
+            const holdings = Object.entries(gameState.holdings);
+            
+            if (holdings.length === 0) {
+                list.innerHTML = '<div class="empty-state">No holdings yet. Buy some stocks!</div>';
+                return;
+            }
+            
+            list.innerHTML = `
+                <table class="holdings-table">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Shares</th>
+                            <th>Avg Price</th>
+                            <th>Current</th>
+                            <th>Value</th>
+                            <th>P&L</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${holdings.map(([symbol, h]) => {
+                            const stock = stocks.find(s => s.symbol === symbol);
+                            const currentPrice = stock ? stock.basePrice : h.avgPrice;
+                            const value = h.shares * currentPrice;
+                            const cost = h.shares * h.avgPrice;
+                            const pnl = value - cost;
+                            const pnlClass = pnl >= 0 ? 'positive' : 'negative';
+                            return `
+                                <tr>
+                                    <td><strong>${symbol}</strong></td>
+                                    <td>${h.shares}</td>
+                                    <td>$${h.avgPrice.toFixed(2)}</td>
+                                    <td>$${currentPrice.toFixed(2)}</td>
+                                    <td>$${value.toFixed(2)}</td>
+                                    <td class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toFixed(2)}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Reset game function
+        function resetGame() {
+            if (confirm('Start a new game? Your current progress will be saved separately.')) {
+                localStorage.removeItem('portfolioChallenge');
+                location.reload();
+            }
+        }
+
+        // Update leaderboard from Supabase
+        async function updateLeaderboard() {
+            // Check if supabase is initialized
+            if (!supabase) {
+                console.log('Supabase not initialized yet, skipping leaderboard update');
+                return;
+            }
+            
+            try {
+                // Fetch top 50 from Supabase
+                const { data: players, error } = await supabase
+                    .from('portfolio_leaderboard')
+                    .select('*')
+                    .order('portfolio_value', { ascending: false })
+                    .limit(50);
+                
+                if (error) throw error;
+                
+                // Calculate current player's value
+                let currentValue = gameState.cash;
+                for (const [symbol, h] of Object.entries(gameState.holdings)) {
+                    const stock = stocks.find(s => s.symbol === symbol);
+                    if (stock) {
+                        currentValue += h.shares * stock.basePrice;
+                    }
+                }
+                
+                // Find player's rank
+                const rank = players.findIndex(p => p.player_name === gameState.playerName) + 1;
+                document.getElementById('dashRank').textContent = rank > 0 ? `#${rank}` : '#--';
+                
+                // Render leaderboard
+                const list = document.getElementById('leaderboardList');
+                if (players && players.length > 0) {
+                    list.innerHTML = players.map((p, i) => `
+                        <div class="leaderboard-item">
+                            <div class="leaderboard-rank">#${i + 1}</div>
+                            <div class="leaderboard-name">${p.player_name}</div>
+                            <div class="leaderboard-value">$${p.portfolio_value.toLocaleString()}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    list.innerHTML = '<div class="empty-state">No traders yet. Be the first!</div>';
+                }
+            } catch (e) {
+                console.log('Supabase error, falling back to localStorage:', e);
+                // Fallback to localStorage
+                const list = document.getElementById('leaderboardList');
+                list.innerHTML = '<div class="empty-state">Leaderboard unavailable. Playing in local mode.</div>';
+            }
+        }
+
+        // Load saved game on page load
+        window.onload = function() {
+            if (loadGame()) {
+                // Auto-resume saved game
+                document.getElementById('startScreen').classList.add('hidden');
+                document.getElementById('appContainer').style.display = 'flex';
+                document.getElementById('playerDisplay').textContent = gameState.playerName;
+                renderMarket();
+                updateDashboard();
+                updateHoldings();
+                updateLeaderboard();
+                fetchRealPrices();
+                setInterval(updatePrices, 30000);
+                
+                // Submit score for OWLs periodically
+                setInterval(() => {
+                    let portfolioValue = gameState.cash;
+                    for (const [symbol, h] of Object.entries(gameState.holdings)) {
+                        const stock = stocks.find(s => s.symbol === symbol);
+                        if (stock) {
+                            portfolioValue += h.shares * stock.basePrice;
+                        }
+                    }
+                    
+                    const extras = {
+                        portfolio: portfolioValue,
+                        cash: gameState.cash,
+                        timeElapsed: Math.floor((Date.now() - gameState.startTime) / 1000)
+                    };
+                    
+                    submitScore('portfolio-challenge', portfolioValue, gameState.level, 0, extras);
+                }, 120000); // Every 2 minutes
+            }
+        };
+    </script>
+    <script src="owl-integration.js"></script>
+</body>
+</html>
