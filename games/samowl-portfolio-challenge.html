@@ -33,11 +33,28 @@
             color-scheme: dark;
         }
 
-        /* Override any system light mode preferences */
+        /* Force dark mode - ignore system preferences */
         @media (prefers-color-scheme: light) {
             body {
-                background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%);
-                color: white;
+                background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%) !important;
+                color: white !important;
+            }
+
+            .app-container {
+                background: transparent !important;
+            }
+
+            .card, .stock-item, .stat-card {
+                background: rgba(255,255,255,0.05) !important;
+                color: white !important;
+            }
+
+            .stock-symbol {
+                color: #667eea !important;
+            }
+
+            .stock-price {
+                color: white !important;
             }
         }
         
