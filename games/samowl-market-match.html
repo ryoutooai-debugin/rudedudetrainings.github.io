@@ -149,6 +149,7 @@
         .chart-container {
             padding: 20px;
             background: white;
+            overflow: visible;
         }
         
         .candles-row {
@@ -204,9 +205,11 @@
             background: #fff3cd;
             border-radius: 10px;
             border: 2px dashed #ffc107;
-            margin: 10px 15px;
+            margin: 15px 0 0 0;
             display: block;
             visibility: visible;
+            min-height: 40px;
+            line-height: 1.4;
         }
         
         .question-box {
@@ -362,11 +365,12 @@
             }
             
             .pattern-hint {
-                margin: 8px 10px;
+                margin: 10px 0 0 0;
                 padding: 8px;
                 font-size: 0.85em;
                 display: block;
                 visibility: visible;
+                min-height: 35px;
             }
             
             .question-box {
