@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Litecanvas Trading Demo - Rudedude Trainings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-shadow: 0 0 10px rgba(0,255,0,0.3);
+        }
+        .subtitle {
+            color: #888;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        canvas {
+            border: 2px solid #4a4a6a;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0,255,0,0.15);
+            max-width: 100%;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #2d2d44 0%, #3d3d5c 100%);
+            color: #fff;
+            border: 1px solid #4a4a6a;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #3d3d5c 0%, #4d4d6c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .info {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+            text-align: center;
+        }
+        .stats {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+        .stat {
+            background: rgba(255,255,255,0.05);
+            padding: 8px 16px;
+            border-radius: 4px;
+        }
+        .back-link {
+            margin-top: 30px;
+            color: #4a9eff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>🕯️ Litecanvas Trading Demo</h1>
+    <div class="subtitle">Animated candlestick charts with particle effects</div>
+    <canvas id="game"></canvas>
+    <div class="controls">
+        <button onclick="addGreenCandle()">🟢 Green Candle</button>
+        <button onclick="addRedCandle()">🔴 Red Candle</button>
+        <button onclick="toggleParticles()">✨ Toggle Particles</button>
+        <button onclick="toggleAuto()">▶️ Auto Mode</button>
+        <button onclick="resetChart()">🔄 Reset</button>
+    </div>
+    <div class="stats">
+        <div class="stat">Candles: <span id="candleCount">0</span></div>
+        <div class="stat">Particles: <span id="particleCount">0</span></div>
+        <div class="stat">FPS: <span id="fps">60</span></div>
+    </div>
+    <div class="info">Click buttons to add candles • Watch the EWO line animate • Particles on new candles</div>
+    <a href="index.html" class="back-link">← Back to Games</a>
+
+    <script src="https://unpkg.com/litecanvas"></script>
+    <script>
+        // Candle data
+        let candles = [];
+        let particles = [];
+        let ewoValues = [];
+        let showParticles = true;
+        let autoMode = false;
+        let time = 0;
+        let lastTime = 0;
+        let frameCount = 0;
+        let fpsTime = 0;
+        
+        // Colors (litecanvas palette indices)
+        const GREEN = 2;
+        const RED = 4;
+        const WHITE = 3;
+        const DARK = 0;
+        const GRAY = 1;
+        
+        // Initialize litecanvas
+        litecanvas({
+            width: 800,
+            height: 400,
+            loop: { init, update, draw }
+        });
+
+        function init() {
+            // Add some initial candles
+            for (let i = 0; i < 10; i++) {
+                addRandomCandle();
+            }
+        }
+
+        function update(dt) {
+            time += dt;
+            
+            // Calculate FPS
+            frameCount++;
+            fpsTime += dt;
+            if (fpsTime >= 1) {
+                document.getElementById('fps').textContent = frameCount;
+                frameCount = 0;
+                fpsTime = 0;
+            }
+            
+            // Auto mode - add candle every 0.5 seconds
+            if (autoMode && time - lastTime > 0.5) {
+                addRandomCandle();
+                lastTime = time;
+            }
+            
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= dt * 1.5;
+                p.vy += 0.15; // gravity
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            // Auto-scroll candles if too many
+            if (candles.length > 20) {
+                candles.shift();
+                ewoValues.shift();
+            }
+            
+            // Update stats
+            document.getElementById('candleCount').textContent = candles.length;
+            document.getElementById('particleCount').textContent = particles.length;
+        }
+
+        function draw() {
+            // Clear background
+            cls(DARK);
+            
+            // Draw grid
+            drawGrid();
+            
+            // Draw candles
+            drawCandles();
+            
+            // Draw EWO line
+            drawEWOLine();
+            
+            // Draw particles
+            drawParticles();
+            
+            // Draw title and info
+            text(10, 10, "EWO 2-Minute Strategy Demo", 3);
+            
+            // Draw EWO zero line
+            line(50, 200, 750, 200, GRAY);
+            text(755, 195, "0", GRAY);
+            
+            // Draw legend
+            text(10, 380, "Green EWO = CALL Signal  |  Red EWO = PUT Signal", GRAY);
+        }
+
+        function drawGrid() {
+            // Horizontal grid lines
+            for (let y = 50; y < 350; y += 50) {
+                line(50, y, 750, y, GRAY);
+            }
+            // Vertical grid lines
+            for (let x = 50; x < 750; x += 70) {
+                line(x, 50, x, 350, GRAY);
+            }
+        }
+
+        function drawCandles() {
+            const candleWidth = 30;
+            const spacing = 35;
+            const startX = 80;
+            
+            candles.forEach((candle, i) => {
+                const x = startX + (i * spacing);
+                const centerX = x + candleWidth / 2;
+                
+                // Wick
+                line(centerX, candle.lowY, centerX, candle.highY, WHITE);
+                
+                // Body
+                const bodyTop = Math.min(candle.openY, candle.closeY);
+                const bodyHeight = Math.abs(candle.closeY - candle.openY);
+                const color = candle.isGreen ? GREEN : RED;
+                
+                rectfill(x, bodyTop, candleWidth, Math.max(bodyHeight, 2), color);
+                rect(x, bodyTop, candleWidth, Math.max(bodyHeight, 2), WHITE);
+            });
+        }
+
+        function drawEWOLine() {
+            if (ewoValues.length < 2) return;
+            
+            const spacing = 35;
+            const startX = 80 + 15;
+            
+            for (let i = 0; i < ewoValues.length - 1; i++) {
+                const x1 = startX + (i * spacing);
+                const x2 = startX + ((i + 1) * spacing);
+                const y1 = 200 - (ewoValues[i] * 30);
+                const y2 = 200 - (ewoValues[i + 1] * 30);
+                
+                const color = ewoValues[i + 1] > 0 ? GREEN : RED;
+                line(x1, y1, x2, y2, color);
+            }
+        }
+
+        function drawParticles() {
+            particles.forEach(p => {
+                const alpha = p.life / p.maxLife;
+                const size = p.size * alpha;
+                circfill(p.x, p.y, size, p.color);
+            });
+        }
+
+        function addRandomCandle() {
+            const isGreen = Math.random() > 0.5;
+            const basePrice = 200;
+            const volatility = 30;
+            
+            const open = basePrice + (Math.random() - 0.5) * volatility;
+            const close = open + (isGreen ? 1 : -1) * (Math.random() * 20 + 5);
+            const high = Math.max(open, close) + Math.random() * 10;
+            const low = Math.min(open, close) - Math.random() * 10;
+            
+            candles.push({
+                openY: open,
+                closeY: close,
+                highY: high,
+                lowY: low,
+                isGreen: isGreen
+            });
+            
+            // Generate EWO value (-2 to +2)
+            const ewo = (Math.random() - 0.5) * 4;
+            ewoValues.push(ewo);
+            
+            // Add particles
+            if (showParticles) {
+                spawnParticles(80 + (candles.length - 1) * 35 + 15, close, isGreen ? GREEN : RED);
+            }
+        }
+
+        function spawnParticles(x, y, color) {
+            for (let i = 0; i < 12; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 5,
+                    vy: (Math.random() - 0.5) * 5 - 3,
+                    life: 1.0,
+                    maxLife: 1.0,
+                    size: Math.random() * 5 + 2,
+                    color: color
+                });
+            }
+        }
+
+        // Button handlers
+        function addGreenCandle() {
+            const basePrice = 200;
+            const open = basePrice + (Math.random() - 0.5) * 30;
+            const close = open + (Math.random() * 20 + 10);
+            const high = close + Math.random() * 10;
+            const low = open - Math.random() * 5;
+            
+            candles.push({
+                openY: open,
+                closeY: close,
+                highY: high,
+                lowY: low,
+                isGreen: true
+            });
+            
+            ewoValues.push(Math.random() * 2 + 0.5);
+            
+            if (showParticles) {
+                spawnParticles(80 + (candles.length - 1) * 35 + 15, close, GREEN);
+            }
+        }
+
+        function addRedCandle() {
+            const basePrice = 200;
+            const open = basePrice + (Math.random() - 0.5) * 30;
+            const close = open - (Math.random() * 20 + 10);
+            const high = open + Math.random() * 10;
+            const low = close - Math.random() * 5;
+            
+            candles.push({
+                openY: open,
+                closeY: close,
+                highY: high,
+                lowY: low,
+                isGreen: false
+            });
+            
+            ewoValues.push(-(Math.random() * 2 + 0.5));
+            
+            if (showParticles) {
+                spawnParticles(80 + (candles.length - 1) * 35 + 15, close, RED);
+            }
+        }
+
+        function toggleParticles() {
+            showParticles = !showParticles;
+        }
+
+        function toggleAuto() {
+            autoMode = !autoMode;
+            lastTime = time;
+        }
+
+        function resetChart() {
+            candles = [];
+            particles = [];
+            ewoValues = [];
+            autoMode = false;
+            for (let i = 0; i < 10; i++) {
+                addRandomCandle();
+            }
+        }
+    </script>
+</body>
+</html>
