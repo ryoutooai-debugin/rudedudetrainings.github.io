@@ -206,8 +206,26 @@ class OptionsScalper:
         return round(pnl, 2)
     
     def fetch_price_data(self) -> dict:
-        """Fetch price data from Yahoo Finance"""
+        """Fetch price data from prices.json (updated by price_server.py)"""
         try:
+            # Read from prices.json instead of hitting Yahoo Finance directly
+            prices_file = Path("/root/rudedudetrainings.github.io/prices.json")
+            if prices_file.exists():
+                with open(prices_file, 'r') as f:
+                    data = json.load(f)
+                
+                if data.get('stocks') and self.symbol in data['stocks']:
+                    stock_data = data['stocks'][self.symbol]
+                    current_price = stock_data['price']
+                    
+                    return {
+                        "price": current_price,
+                        "high": [stock_data.get('high', current_price)],
+                        "low": [stock_data.get('low', current_price)],
+                        "close": [current_price]
+                    }
+            
+            # Fallback to Yahoo Finance if prices.json not available
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{self.symbol}"
             params = {"interval": "1m", "range": "1d"}
             
@@ -216,7 +234,6 @@ class OptionsScalper:
             
             result = data["chart"]["result"][0]
             meta = result["meta"]
-            timestamps = result["timestamp"]
             ohlcv = result["indicators"]["quote"][0]
             
             current_price = meta.get("regularMarketPrice", ohlcv["close"][-1])

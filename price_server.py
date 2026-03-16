@@ -14,12 +14,12 @@ from pathlib import Path
 # Configuration
 API_KEY = 'hZajhu43KW9bwuLMdpbtBww7KqeU1bad'
 STOCKS = [
-    'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'NFLX', 'TSLA',
+    'SPY', 'QQQ', 'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'META', 'NFLX', 'TSLA',
     'BRK-B', 'JPM', 'V', 'MA', 'LLY', 'JNJ', 'UNH', 'PFE',
     'WMT', 'COST', 'HD', 'PG', 'KO', 'PEP', 'XOM', 'CAT', 'BA'
 ]
 PRICES_FILE = Path('/root/rudedudetrainings.github.io/prices.json')
-UPDATE_INTERVAL = 300  # 5 minutes
+UPDATE_INTERVAL = 60  # 1 minute
 
 def fetch_prices():
     """Fetch prices for all stocks from Polygon"""
