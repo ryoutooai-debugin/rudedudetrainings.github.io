@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idle Trading Firm - Samuel & White Wolf</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 2px solid #e94560;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        }
+        .header p {
+            color: #888;
+            font-size: 1.1em;
+        }
+        .characters {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 20px 0;
+        }
+        .character {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .character:hover {
+            border-color: #e94560;
+            transform: translateY(-5px);
+        }
+        .character-icon {
+            font-size: 4em;
+            margin-bottom: 10px;
+        }
+        .character-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #e94560;
+        }
+        .character-role {
+            font-size: 0.9em;
+            color: #888;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e94560;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 5px;
+        }
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+        .trading-floor {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        .trading-floor h2 {
+            margin-bottom: 20px;
+            color: #e94560;
+        }
+        .trade-log {
+            height: 300px;
+            overflow-y: auto;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        .trade-entry {
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .trade-profit {
+            background: rgba(0, 255, 0, 0.1);
+            border-left: 3px solid #00ff00;
+        }
+        .trade-loss {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff0000;
+        }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .upgrade-panel {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        .upgrade-panel h3 {
+            margin-bottom: 15px;
+            color: #e94560;
+        }
+        .upgrade-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        .upgrade-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #e94560;
+        }
+        .upgrade-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .upgrade-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .upgrade-desc {
+            font-size: 0.85em;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .upgrade-cost {
+            font-size: 0.9em;
+            color: #ffd700;
+        }
+        .strategies-panel {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+        .strategies-panel h3 {
+            margin-bottom: 15px;
+            color: #e94560;
+        }
+        .strategy-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .strategy-name {
+            font-weight: bold;
+        }
+        .strategy-status {
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        .status-active {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+        .status-locked {
+            background: rgba(128, 128, 128, 0.2);
+            color: #888;
+        }
+        .click-area {
+            text-align: center;
+            padding: 30px;
+            background: rgba(233, 69, 96, 0.1);
+            border-radius: 15px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid rgba(233, 69, 96, 0.5);
+        }
+        .click-area:hover {
+            background: rgba(233, 69, 96, 0.2);
+            transform: scale(1.02);
+        }
+        .click-area h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .click-area p {
+            color: #888;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            transition: width 0.3s;
+        }
+        @media (max-width: 900px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            .characters {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🦉🐺 Idle Trading Firm</h1>
+        <p>Build your trading empire with Samuel the Owl and White Wolf</p>
+        
+        <div class="characters">
+            <div class="character">
+                <div class="character-icon">🦉</div>
+                <div class="character-name">Samuel</div>
+                <div class="character-role">The Night Analyst</div>
+            </div>
+            <div class="character">
+                <div class="character-icon">🐺</div>
+                <div class="character-name">White Wolf</div>
+                <div class="character-role">The Aggressive Trader</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="totalCash">$1,000</div>
+                <div class="stat-label">Total Cash</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalProfit">$0</div>
+                <div class="stat-label">Total Profit</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="winRate">0%</div>
+                <div class="stat-label">Win Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="tradesMade">0</div>
+                <div class="stat-label">Trades Made</div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="trading-floor">
+                <h2>📊 Live Trading Floor</h2>
+                <div class="trade-log" id="tradeLog">
+                    <div class="trade-entry" style="color: #888;">
+                        <span>Welcome to your trading firm! Start trading to see activity...</span>
+                    </div>
+                </div>
+                
+                <div class="click-area" id="manualTrade">
+                    <h3>🎯 Execute Manual Trade</h3>
+                    <p>Click to make a trade manually (+$10-$50)</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="clickProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="upgrade-panel">
+                    <h3>⬆️ Upgrades</h3>
+                    <div class="upgrade-item" id="upgradeSpeed" onclick="upgrade('speed')">
+                        <div class="upgrade-name">⚡ Trading Speed</div>
+                        <div class="upgrade-desc">Trades happen faster</div>
+                        <div class="upgrade-cost">Cost: $500</div>
+                    </div>
+                    <div class="upgrade-item" id="upgradeAccuracy" onclick="upgrade('accuracy')">
+                        <div class="upgrade-name">🎯 Accuracy</div>
+                        <div class="upgrade-desc">Better win rate on trades</div>
+                        <div class="upgrade-cost">Cost: $1,000</div>
+                    </div>
+                    <div class="upgrade-item" id="upgradeSize" onclick="upgrade('size')">
+                        <div class="upgrade-name">💰 Position Size</div>
+                        <div class="upgrade-desc">Bigger trades, bigger profits</div>
+                        <div class="upgrade-cost">Cost: $2,000</div>
+                    </div>
+                </div>
+
+                <div class="strategies-panel">
+                    <h3>📈 Strategies</h3>
+                    <div class="strategy-item">
+                        <span class="strategy-name">Basic Trading</span>
+                        <span class="strategy-status status-active">Active</span>
+                    </div>
+                    <div class="strategy-item">
+                        <span class="strategy-name">EWO Strategy</span>
+                        <span class="strategy-status status-locked">Locked</span>
+                    </div>
+                    <div class="strategy-item">
+                        <span class="strategy-name">Scalper</span>
+                        <span class="strategy-status status-locked">Locked</span>
+                    </div>
+                    <div class="strategy-item">
+                        <span class="strategy-name">Covered Calls</span>
+                        <span class="strategy-status status-locked">Locked</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            cash: 1000,
+            totalProfit: 0,
+            tradesMade: 0,
+            wins: 0,
+            losses: 0,
+            autoTradeInterval: 5000, // ms between auto trades
+            winRateBonus: 0,
+            positionSize: 1,
+            lastTradeTime: 0
+        };
+
+        // Upgrade costs and levels
+        const upgrades = {
+            speed: { level: 1, baseCost: 500, costMultiplier: 2 },
+            accuracy: { level: 1, baseCost: 1000, costMultiplier: 2.5 },
+            size: { level: 1, baseCost: 2000, costMultiplier: 3 }
+        };
+
+        // Auto trading loop
+        setInterval(() => {
+            if (gameState.cash >= 100) {
+                makeTrade('auto');
+            }
+        }, gameState.autoTradeInterval);
+
+        // Manual trading
+        document.getElementById('manualTrade').addEventListener('click', () => {
+            makeTrade('manual');
+            
+            // Visual feedback
+            const progress = document.getElementById('clickProgress');
+            progress.style.width = '100%';
+            setTimeout(() => {
+                progress.style.width = '0%';
+            }, 300);
+        });
+
+        function makeTrade(type) {
+            const baseAmount = type === 'manual' ? 30 : 20;
+            const variance = Math.random() * 40 - 10; // -10 to +30
+            const winRate = 0.5 + (gameState.winRateBonus * 0.05);
+            const isWin = Math.random() < winRate;
+            
+            let profit = (baseAmount + variance) * gameState.positionSize;
+            if (!isWin) profit = -profit * 0.5; // Losses are smaller
+            
+            profit = Math.floor(profit);
+            
+            gameState.cash += profit;
+            gameState.totalProfit += profit;
+            gameState.tradesMade++;
+            
+            if (isWin) {
+                gameState.wins++;
+            } else {
+                gameState.losses++;
+            }
+            
+            addTradeLog(type, profit, isWin);
+            updateStats();
+        }
+
+        function addTradeLog(type, profit, isWin) {
+            const log = document.getElementById('tradeLog');
+            const entry = document.createElement('div');
+            entry.className = `trade-entry ${isWin ? 'trade-profit' : 'trade-loss'}`;
+            
+            const time = new Date().toLocaleTimeString();
+            const trader = Math.random() > 0.5 ? '🦉 Samuel' : '🐺 White Wolf';
+            const symbol = ['SPY', 'QQQ', 'AAPL', 'TSLA'][Math.floor(Math.random() * 4)];
+            
+            entry.innerHTML = `
+                <span>${time} | ${trader} | ${symbol} ${type === 'manual' ? '(Manual)' : '(Auto)'}</span>
+                <span style="color: ${isWin ? '#00ff00' : '#ff0000'}; font-weight: bold;">
+                    ${isWin ? '+' : ''}$${profit}
+                </span>
+            `;
+            
+            log.insertBefore(entry, log.firstChild);
+            
+            // Keep only last 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.lastChild);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalCash').textContent = `$${gameState.cash.toLocaleString()}`;
+            document.getElementById('totalProfit').textContent = `$${gameState.totalProfit.toLocaleString()}`;
+            document.getElementById('tradesMade').textContent = gameState.tradesMade;
+            
+            const winRate = gameState.tradesMade > 0 
+                ? ((gameState.wins / gameState.tradesMade) * 100).toFixed(1) 
+                : 0;
+            document.getElementById('winRate').textContent = `${winRate}%`;
+            
+            // Update upgrade buttons
+            updateUpgradeButtons();
+        }
+
+        function updateUpgradeButtons() {
+            Object.keys(upgrades).forEach(key => {
+                const upgrade = upgrades[key];
+                const cost = Math.floor(upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.level - 1));
+                const btn = document.getElementById(`upgrade${key.charAt(0).toUpperCase() + key.slice(1)}`);
+                
+                if (gameState.cash < cost) {
+                    btn.classList.add('disabled');
+                } else {
+                    btn.classList.remove('disabled');
+                }
+                
+                btn.querySelector('.upgrade-cost').textContent = `Cost: $${cost.toLocaleString()} (Lvl ${upgrade.level})`;
+            });
+        }
+
+        function upgrade(type) {
+            const upgrade = upgrades[type];
+            const cost = Math.floor(upgrade.baseCost * Math.pow(upgrade.costMultiplier, upgrade.level - 1));
+            
+            if (gameState.cash < cost) return;
+            
+            gameState.cash -= cost;
+            upgrade.level++;
+            
+            // Apply upgrade effects
+            switch(type) {
+                case 'speed':
+                    gameState.autoTradeInterval = Math.max(1000, gameState.autoTradeInterval * 0.8);
+                    break;
+                case 'accuracy':
+                    gameState.winRateBonus++;
+                    break;
+                case 'size':
+                    gameState.positionSize *= 1.5;
+                    break;
+            }
+            
+            updateStats();
+            addTradeLog('system', 0, true);
+            const log = document.getElementById('tradeLog');
+            const entry = document.createElement('div');
+            entry.className = 'trade-entry';
+            entry.style.color = '#ffd700';
+            entry.innerHTML = `<span>⭐ UPGRADED: ${type.toUpperCase()} to Level ${upgrade.level}!</span>`;
+            log.insertBefore(entry, log.firstChild);
+        }
+
+        // Initialize
+        updateStats();
+        
+        // Welcome message
+        setTimeout(() => {
+            addTradeLog('system', 0, true);
+            const log = document.getElementById('tradeLog');
+            const entry = document.createElement('div');
+            entry.className = 'trade-entry';
+            entry.style.color = '#e94560';
+            entry.innerHTML = `<span>🎮 Samuel and White Wolf are ready to trade!</span>`;
+            log.insertBefore(entry, log.firstChild);
+        }, 500);
+    </script>
+</body>
+</html>
