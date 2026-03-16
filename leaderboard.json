@@ -7,22 +7,22 @@
       "updated": "2026-03-16T17:28:17.111330"
     }
   ],
-  "last_update": "2026-03-16T17:28:17.111340",
+  "last_update": "2026-03-16T17:30:16.915559",
   "users": {
     "owl_5jli2zx2z": {
       "name": "owl_5jli2zx2z",
       "portfolio_value": 100000,
       "cash": 74988,
-      "owls": 256,
+      "owls": 257,
       "inventory": [],
       "stats": {
-        "trades": 1,
+        "trades": 2,
         "profit_trades": 1,
         "streak_days": 0,
         "last_played": null
       },
       "created": "2026-03-16T17:28:17.111310",
-      "updated": "2026-03-16T17:28:17.111326"
+      "updated": "2026-03-16T17:30:16.915547"
     }
   }
 }
