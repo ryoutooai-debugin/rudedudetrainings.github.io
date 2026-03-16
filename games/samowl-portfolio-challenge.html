@@ -589,9 +589,9 @@
             updateHoldings();
             updateLeaderboard();
             
-            // Fetch real prices on start, then update every 30 seconds
+            // Fetch real prices on start, then update every 15 minutes (900000 ms)
             fetchRealPrices();
-            setInterval(updatePrices, 30000);
+            setInterval(updatePrices, 900000);
         }
 
         // Fetch real prices from Yahoo Finance via CORS proxy
@@ -964,7 +964,8 @@
                 updateHoldings();
                 updateLeaderboard();
                 fetchRealPrices();
-                setInterval(updatePrices, 30000);
+                // Update prices every 15 minutes (900000 ms) to match GitHub push interval
+                setInterval(updatePrices, 900000);
                 
                 // Submit score for OWLs periodically
                 setInterval(() => {

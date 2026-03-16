@@ -1,0 +1,64 @@
+Starting Price Server...
+Stocks: SPY, QQQ, AAPL, MSFT, GOOGL, AMZN, NVDA, META, NFLX, TSLA
+Update interval: 60 seconds
+--------------------------------------------------
+[2026-03-16 18:19:43.941682] Fetching live prices from Yahoo Finance...
+  SPY: $669.91
+  QQQ: $601.49
+  AAPL: $252.30
+  MSFT: $399.36
+  GOOGL: $305.43
+  AMZN: $210.61
+  NVDA: $185.42
+  META: $624.62
+  NFLX: $95.03
+  TSLA: $398.01
+[2026-03-16 18:19:50.186661] Saved 10 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-16 18:20:50.186767] Fetching live prices from Yahoo Finance...
+  SPY: $669.88
+  QQQ: $601.47
+  AAPL: $252.29
+  MSFT: $399.12
+  GOOGL: $305.18
+  AMZN: $210.68
+  NVDA: $185.27
+  META: $624.39
+  NFLX: $95.11
+  TSLA: $398.09
+[2026-03-16 18:20:56.635597] Saved 10 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-16 18:21:56.635694] Fetching live prices from Yahoo Finance...
+  SPY: $669.64
+  QQQ: $601.28
+  AAPL: $252.21
+  MSFT: $398.97
+  GOOGL: $305.00
+  AMZN: $210.79
+  NVDA: $185.19
+  META: $624.70
+  NFLX: $95.06
+  TSLA: $397.94
+[2026-03-16 18:22:03.026744] Saved 10 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-16 18:23:03.026844] Fetching live prices from Yahoo Finance...
+  SPY: $669.79
+  QQQ: $601.36
+  AAPL: $252.17
+  MSFT: $399.12
+  GOOGL: $305.01
+  AMZN: $210.85
+  NVDA: $185.25
+  META: $624.86
+  NFLX: $95.06
+  TSLA: $398.05
+[2026-03-16 18:23:09.110939] Saved 10 prices to /root/rudedudetrainings.github.io/prices.json
+[2026-03-16 18:24:09.111042] Fetching live prices from Yahoo Finance...
+  SPY: $670.01
+  QQQ: $601.55
+  AAPL: $252.22
+  MSFT: $399.15
+  GOOGL: $305.22
+  AMZN: $210.97
+  NVDA: $185.29
+  META: $625.95
+  NFLX: $95.08
+  TSLA: $398.23
+[2026-03-16 18:24:15.139504] Saved 10 prices to /root/rudedudetrainings.github.io/prices.json
