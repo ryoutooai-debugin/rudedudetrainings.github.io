@@ -598,7 +598,12 @@
         async function fetchRealPrices() {
             try {
                 // Try to fetch from local prices.json (updated by price_server.py)
-                const response = await fetch('../prices.json?t=' + Date.now());
+                // Use cache-busting to prevent browser/GitHub Pages caching
+                const cacheBuster = Date.now() + Math.random();
+                const response = await fetch('../prices.json?_=' + cacheBuster, {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
                 if (response.ok) {
                     const data = await response.json();
                     

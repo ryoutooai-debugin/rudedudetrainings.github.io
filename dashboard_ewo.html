@@ -428,7 +428,12 @@
         // Fetch data from JSON file
         async function fetchEWOData() {
             try {
-                const response = await fetch(DATA_URL + '?t=' + Date.now());
+                // Use cache-busting to prevent browser/GitHub Pages caching
+                const cacheBuster = Date.now() + Math.random();
+                const response = await fetch(DATA_URL + '?_=' + cacheBuster, {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache' }
+                });
                 if (!response.ok) throw new Error('Data not available');
                 const data = await response.json();
                 return data;
