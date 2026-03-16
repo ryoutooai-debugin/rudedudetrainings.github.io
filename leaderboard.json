@@ -2,16 +2,16 @@
   "entries": [
     {
       "name": "owl_5jli2zx2z",
-      "portfolio_value": 100310.95999999999,
+      "portfolio_value": 100281.53,
       "cash": 67958.51,
-      "updated": "2026-03-16T19:01:14.920163"
+      "updated": "2026-03-16T19:17:05.987475"
     }
   ],
-  "last_update": "2026-03-16T19:01:14.920170",
+  "last_update": "2026-03-16T19:17:05.987481",
   "users": {
     "owl_5jli2zx2z": {
       "name": "owl_5jli2zx2z",
-      "portfolio_value": 100310.95999999999,
+      "portfolio_value": 100281.53,
       "cash": 67958.51,
       "owls": 256,
       "inventory": [],
@@ -21,8 +21,8 @@
         "streak_days": 0,
         "last_played": null
       },
-      "created": "2026-03-16T19:01:14.920149",
-      "updated": "2026-03-16T19:01:14.920161"
+      "created": "2026-03-16T19:17:05.987462",
+      "updated": "2026-03-16T19:17:05.987473"
     }
   }
 }
