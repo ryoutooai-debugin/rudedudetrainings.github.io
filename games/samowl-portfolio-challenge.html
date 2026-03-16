@@ -535,16 +535,16 @@
 
         let currentTrade = { symbol: '', action: '', price: 0 };
 
-        // Stock data with simulated prices
+        // Stock data - prices updated from prices.json
         const stocks = [
-            { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 175.50 },
-            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 142.30 },
-            { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 380.25 },
-            { symbol: 'AMZN', name: 'Amazon.com', basePrice: 178.90 },
-            { symbol: 'TSLA', name: 'Tesla Inc.', basePrice: 205.60 },
-            { symbol: 'META', name: 'Meta Platforms', basePrice: 505.75 },
-            { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 890.15 },
-            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 625.40 }
+            { symbol: 'AAPL', name: 'Apple Inc.', basePrice: 250.12, openPrice: 255.48 },
+            { symbol: 'GOOGL', name: 'Alphabet Inc.', basePrice: 165.00, openPrice: 168.50 },
+            { symbol: 'MSFT', name: 'Microsoft Corp.', basePrice: 395.55, openPrice: 401.00 },
+            { symbol: 'AMZN', name: 'Amazon.com', basePrice: 195.00, openPrice: 198.00 },
+            { symbol: 'TSLA', name: 'Tesla Inc.', basePrice: 270.00, openPrice: 275.00 },
+            { symbol: 'META', name: 'Meta Platforms', basePrice: 600.00, openPrice: 610.00 },
+            { symbol: 'NVDA', name: 'NVIDIA Corp.', basePrice: 140.00, openPrice: 142.00 },
+            { symbol: 'NFLX', name: 'Netflix Inc.', basePrice: 850.00, openPrice: 860.00 }
         ];
 
         // Load saved game
@@ -594,30 +594,29 @@
             setInterval(updatePrices, 30000);
         }
 
-        // Fetch real prices from Yahoo Finance via CORS proxy
+        // Fetch real prices from local prices.json file
         async function fetchRealPrices() {
             try {
-                // Use CORS proxy to bypass browser restrictions
-                const proxyUrl = 'https://api.allorigins.win/get?url=';
-                const symbols = stocks.map(s => s.symbol).join(',');
-                const yahooUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
-                
-                const response = await fetch(proxyUrl + yahooUrl);
-                const proxyData = await response.json();
-                
-                // allorigins wraps the response in a 'contents' string
-                const data = JSON.parse(proxyData.contents);
-                
-                if (data.chart && data.chart.result) {
-                    data.chart.result.forEach((result, index) => {
-                        if (result.meta && result.meta.regularMarketPrice) {
-                            stocks[index].basePrice = result.meta.regularMarketPrice;
-                        }
-                    });
-                    console.log('Updated real-time prices');
+                // Try to fetch from local prices.json (updated by price_server.py)
+                const response = await fetch('../prices.json?t=' + Date.now());
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.stocks) {
+                        stocks.forEach(stock => {
+                            const symbol = stock.symbol;
+                            if (data.stocks[symbol] && data.stocks[symbol].price) {
+                                stock.basePrice = data.stocks[symbol].price;
+                                stock.openPrice = data.stocks[symbol].open || stock.basePrice;
+                            }
+                        });
+                        console.log('Updated prices from prices.json:', data.last_update);
+                    }
+                } else {
+                    throw new Error('prices.json not available');
                 }
             } catch (e) {
-                console.log('Using simulated prices (Yahoo Finance unavailable)');
+                console.log('Using base prices (prices.json unavailable):', e.message);
             }
             renderMarket();
             updateDashboard();
@@ -671,7 +670,8 @@
         function renderMarket() {
             const list = document.getElementById('marketList');
             list.innerHTML = stocks.map(s => {
-                const change = (Math.random() - 0.5) * 2;
+                const openPrice = s.openPrice || s.basePrice;
+                const change = ((s.basePrice - openPrice) / openPrice) * 100;
                 const changeClass = change >= 0 ? 'positive' : 'negative';
                 const changeSymbol = change >= 0 ? '+' : '';
                 return `
@@ -679,6 +679,7 @@
                         <div class="stock-symbol">${s.symbol}</div>
                         <div>${s.name}</div>
                         <div class="stock-price">$${s.basePrice.toFixed(2)}</div>
+                        <div class="stock-change ${changeClass}">${changeSymbol}${change.toFixed(2)}%</div>
                         <div>
                             <button class="btn btn-buy" onclick="openTrade('${s.symbol}', 'buy')">Buy</button>
                         </div>
