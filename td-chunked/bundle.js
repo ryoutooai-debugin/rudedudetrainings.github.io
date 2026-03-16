@@ -128,12 +128,12 @@ class PathSystem {
     render(ctx) {
         ctx.save();
         ctx.shadowColor = 'rgba(233,69,96,0.3)'; ctx.shadowBlur = 20;
-        ctx.strokeStyle = 'rgba(233,69,96,0.2)'; ctx.lineWidth = 40;
+        ctx.strokeStyle = 'rgba(233,69,96,0.08)'; ctx.lineWidth = 40;
         ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         this.drawPath(ctx);
-        ctx.shadowBlur = 10; ctx.strokeStyle = 'rgba(233,69,96,0.4)'; ctx.lineWidth = 20;
+        ctx.shadowBlur = 10; ctx.strokeStyle = 'rgba(233,69,96,0.15)'; ctx.lineWidth = 20;
         this.drawPath(ctx);
-        ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(233,69,96,0.8)'; ctx.lineWidth = 4;
+        ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(233,69,96,0.4)'; ctx.lineWidth = 4;
         ctx.setLineDash([10,10]); this.drawPath(ctx); ctx.setLineDash([]);
         for (let i=0; i<this.currentPath.length; i++) {
             const p=this.currentPath[i];
@@ -342,7 +342,7 @@ class Tower extends Entity {
     }
     render(ctx) {
         // Range
-        ctx.beginPath(); ctx.arc(this.x,this.y,this.stats.range,0,Math.PI*2); ctx.fillStyle=this.stats.color+'10'; ctx.fill(); ctx.strokeStyle=this.stats.color+'30'; ctx.stroke();
+        ctx.beginPath(); ctx.arc(this.x,this.y,this.stats.range,0,Math.PI*2); ctx.fillStyle=this.stats.color+'05'; ctx.fill(); ctx.strokeStyle=this.stats.color+'15'; ctx.stroke();
         // Base
         ctx.fillStyle='#333'; ctx.fillRect(this.x-16,this.y-16,32,32);
         // Body
