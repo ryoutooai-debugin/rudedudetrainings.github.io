@@ -141,3 +141,146 @@ Error fetching data: Expecting value: line 1 column 1 (char 0)
 ✅ Updated - Price: $669.61 | RSI: 53.3 | Signal: HOLDING PUT
 ✅ Updated - Price: $669.85 | RSI: 79.5 | Signal: HOLDING PUT
 ✅ Updated - Price: $669.85 | RSI: 79.5 | Signal: HOLDING PUT
+✅ Updated - Price: $669.95 | RSI: 94.7 | Signal: HOLDING PUT
+✅ Updated - Price: $669.91 | RSI: 89.3 | Signal: HOLDING PUT
+✅ Updated - Price: $669.84 | RSI: 80.9 | Signal: HOLDING PUT
+✅ Updated - Price: $669.88 | RSI: 81.9 | Signal: HOLDING PUT
+✅ Updated - Price: $669.80 | RSI: 74.4 | Signal: HOLDING PUT
+✅ Updated - Price: $669.64 | RSI: 59.9 | Signal: HOLDING PUT
+✅ Updated - Price: $669.79 | RSI: 57.9 | Signal: HOLDING PUT
+✅ Updated - Price: $669.79 | RSI: 60.2 | Signal: HOLDING PUT
+✅ Updated - Price: $669.79 | RSI: 60.2 | Signal: HOLDING PUT
+🔔 EXIT: PUT @ $670.01 | STOP_LOSS | P&L: $-55.00
+Error in cycle: cannot access local variable 'signal' where it is not associated with a value
+✅ Updated - Price: $669.99 | RSI: 67.0 | Signal: None
+✅ Updated - Price: $669.91 | RSI: 62.5 | Signal: None
+✅ Updated - Price: $669.91 | RSI: 53.1 | Signal: None
+✅ Updated - Price: $669.88 | RSI: 51.5 | Signal: None
+✅ Updated - Price: $669.88 | RSI: 46.1 | Signal: None
+✅ Updated - Price: $669.92 | RSI: 50.8 | Signal: None
+✅ Updated - Price: $669.92 | RSI: 55.2 | Signal: None
+✅ Updated - Price: $669.82 | RSI: 46.6 | Signal: None
+✅ Updated - Price: $669.82 | RSI: 51.2 | Signal: None
+✅ Updated - Price: $669.82 | RSI: 63.8 | Signal: None
+✅ Updated - Price: $669.73 | RSI: 44.5 | Signal: None
+✅ Updated - Price: $669.73 | RSI: 44.5 | Signal: None
+✅ Updated - Price: $669.81 | RSI: 51.5 | Signal: None
+✅ Updated - Price: $669.81 | RSI: 28.3 | Signal: None
+✅ Updated - Price: $669.78 | RSI: 27.9 | Signal: None
+✅ Updated - Price: $669.78 | RSI: 33.7 | Signal: None
+✅ Updated - Price: $669.73 | RSI: 29.2 | Signal: None
+✅ Updated - Price: $669.73 | RSI: 31.3 | Signal: None
+✅ Updated - Price: $669.87 | RSI: 49.1 | Signal: None
+✅ Updated - Price: $669.87 | RSI: 44.7 | Signal: None
+✅ Updated - Price: $669.87 | RSI: 44.7 | Signal: None
+✅ Updated - Price: $669.95 | RSI: 63.3 | Signal: None
+✅ Updated - Price: $669.95 | RSI: 63.3 | Signal: None
+✅ Updated - Price: $669.90 | RSI: 57.8 | Signal: None
+✅ Updated - Price: $669.90 | RSI: 70.3 | Signal: None
+✅ Updated - Price: $669.84 | RSI: 60.8 | Signal: None
+✅ Updated - Price: $669.84 | RSI: 52.9 | Signal: None
+✅ Updated - Price: $669.85 | RSI: 54.5 | Signal: None
+✅ Updated - Price: $669.85 | RSI: 58.0 | Signal: None
+✅ Updated - Price: $669.85 | RSI: 58.0 | Signal: None
+✅ Updated - Price: $670.02 | RSI: 78.1 | Signal: None
+✅ Updated - Price: $670.02 | RSI: 78.1 | Signal: None
+✅ Updated - Price: $670.06 | RSI: 72.6 | Signal: None
+✅ Updated - Price: $670.06 | RSI: 72.6 | Signal: None
+✅ Updated - Price: $669.99 | RSI: 61.6 | Signal: None
+✅ Updated - Price: $669.99 | RSI: 54.2 | Signal: None
+✅ Updated - Price: $670.15 | RSI: 67.2 | Signal: None
+✅ Updated - Price: $670.15 | RSI: 73.0 | Signal: None
+✅ Updated - Price: $670.00 | RSI: 57.0 | Signal: None
+✅ Updated - Price: $670.00 | RSI: 63.4 | Signal: None
+✅ Updated - Price: $670.00 | RSI: 63.4 | Signal: None
+✅ Updated - Price: $670.10 | RSI: 67.9 | Signal: None
+✅ Updated - Price: $670.10 | RSI: 67.9 | Signal: None
+✅ Updated - Price: $670.26 | RSI: 73.8 | Signal: None
+✅ Updated - Price: $670.26 | RSI: 67.4 | Signal: None
+✅ Updated - Price: $670.11 | RSI: 55.4 | Signal: None
+✅ Updated - Price: $670.11 | RSI: 53.1 | Signal: None
+✅ Updated - Price: $670.16 | RSI: 55.9 | Signal: None
+✅ Updated - Price: $670.16 | RSI: 61.3 | Signal: None
+✅ Updated - Price: $670.14 | RSI: 59.7 | Signal: None
+✅ Updated - Price: $670.14 | RSI: 49.2 | Signal: None
+✅ Updated - Price: $670.14 | RSI: 49.2 | Signal: None
+✅ Updated - Price: $670.03 | RSI: 53.0 | Signal: None
+✅ Updated - Price: $670.03 | RSI: 53.0 | Signal: None
+✅ Updated - Price: $670.06 | RSI: 54.9 | Signal: None
+✅ Updated - Price: $670.06 | RSI: 46.1 | Signal: None
+✅ Updated - Price: $670.02 | RSI: 42.7 | Signal: None
+✅ Updated - Price: $670.02 | RSI: 19.2 | Signal: None
+✅ Updated - Price: $669.84 | RSI: 13.2 | Signal: None
+✅ Updated - Price: $669.84 | RSI: 17.9 | Signal: None
+✅ Updated - Price: $669.88 | RSI: 25.0 | Signal: None
+✅ Updated - Price: $669.88 | RSI: 15.9 | Signal: None
+✅ Updated - Price: $669.88 | RSI: 15.9 | Signal: None
+Error fetching data: Expecting value: line 1 column 1 (char 0)
+✅ Updated - Price: $669.88 | RSI: 16.7 | Signal: None
+Error fetching data: Expecting value: line 1 column 1 (char 0)
+✅ Updated - Price: $669.88 | RSI: 16.7 | Signal: None
+✅ Updated - Price: $669.63 | RSI: 10.2 | Signal: None
+✅ Updated - Price: $669.63 | RSI: 12.1 | Signal: None
+✅ Updated - Price: $669.59 | RSI: 11.3 | Signal: None
+✅ Updated - Price: $669.59 | RSI: 7.3 | Signal: None
+✅ Updated - Price: $669.59 | RSI: 7.3 | Signal: None
+✅ Updated - Price: $669.62 | RSI: 13.8 | Signal: None
+✅ Updated - Price: $669.62 | RSI: 13.8 | Signal: None
+✅ Updated - Price: $669.77 | RSI: 43.7 | Signal: None
+✅ Updated - Price: $669.77 | RSI: 43.7 | Signal: None
+✅ Updated - Price: $669.86 | RSI: 48.2 | Signal: None
+✅ Updated - Price: $669.86 | RSI: 48.2 | Signal: None
+✅ Updated - Price: $669.75 | RSI: 40.3 | Signal: None
+✅ Updated - Price: $669.75 | RSI: 40.3 | Signal: None
+✅ Updated - Price: $669.51 | RSI: 29.7 | Signal: None
+✅ Updated - Price: $669.51 | RSI: 40.9 | Signal: None
+✅ Updated - Price: $669.51 | RSI: 40.9 | Signal: None
+✅ Updated - Price: $669.47 | RSI: 40.9 | Signal: None
+✅ Updated - Price: $669.47 | RSI: 40.9 | Signal: None
+✅ Updated - Price: $669.34 | RSI: 34.2 | Signal: None
+✅ Updated - Price: $669.34 | RSI: 31.1 | Signal: None
+✅ Updated - Price: $669.35 | RSI: 32.0 | Signal: None
+✅ Updated - Price: $669.35 | RSI: 15.4 | Signal: None
+✅ Updated - Price: $669.33 | RSI: 15.0 | Signal: None
+✅ Updated - Price: $669.33 | RSI: 1.8 | Signal: None
+✅ Updated - Price: $669.69 | RSI: 40.7 | Signal: None
+✅ Updated - Price: $669.69 | RSI: 46.3 | Signal: None
+✅ Updated - Price: $669.69 | RSI: 46.3 | Signal: None
+✅ Updated - Price: $671.65 | RSI: 92.5 | Signal: None
+✅ Updated - Price: $671.65 | RSI: 92.5 | Signal: None
+✅ Updated - Price: $670.47 | RSI: 63.0 | Signal: None
+✅ Updated - Price: $670.47 | RSI: 63.7 | Signal: None
+✅ Updated - Price: $670.40 | RSI: 62.6 | Signal: None
+✅ Updated - Price: $670.40 | RSI: 64.8 | Signal: None
+✅ Updated - Price: $669.93 | RSI: 57.2 | Signal: None
+✅ Updated - Price: $669.93 | RSI: 57.1 | Signal: None
+✅ Updated - Price: $670.02 | RSI: 58.1 | Signal: None
+✅ Updated - Price: $670.02 | RSI: 58.4 | Signal: None
+✅ Updated - Price: $670.02 | RSI: 58.4 | Signal: None
+✅ Updated - Price: $669.90 | RSI: 52.7 | Signal: None
+✅ Updated - Price: $669.90 | RSI: 52.7 | Signal: None
+✅ Updated - Price: $670.07 | RSI: 54.7 | Signal: None
+✅ Updated - Price: $670.07 | RSI: 12.5 | Signal: None
+🚀 ENTRY: CALL $671 2026-03-20 @ $670.21 | Contracts: 1
+✅ Updated - Price: $670.21 | RSI: 17.9 | Signal: HOLDING CALL
+✅ Updated - Price: $670.21 | RSI: 37.8 | Signal: HOLDING CALL
+✅ Updated - Price: $669.77 | RSI: 26.7 | Signal: HOLDING CALL
+✅ Updated - Price: $669.77 | RSI: 27.9 | Signal: HOLDING CALL
+✅ Updated - Price: $669.77 | RSI: 27.9 | Signal: HOLDING CALL
+🔔 EXIT: CALL @ $669.27 | STOP_LOSS | P&L: $-93.90
+Error in cycle: cannot access local variable 'signal' where it is not associated with a value
+✅ Updated - Price: $669.27 | RSI: 27.5 | Signal: None
+✅ Updated - Price: $669.45 | RSI: 31.6 | Signal: None
+✅ Updated - Price: $669.45 | RSI: 31.6 | Signal: None
+✅ Updated - Price: $669.48 | RSI: 32.9 | Signal: None
+✅ Updated - Price: $669.48 | RSI: 35.7 | Signal: None
+✅ Updated - Price: $669.35 | RSI: 32.8 | Signal: None
+✅ Updated - Price: $669.35 | RSI: 24.6 | Signal: None
+✅ Updated - Price: $669.25 | RSI: 23.1 | Signal: None
+✅ Updated - Price: $669.25 | RSI: 15.2 | Signal: None
+✅ Updated - Price: $669.25 | RSI: 15.2 | Signal: None
+✅ Updated - Price: $668.95 | RSI: 16.9 | Signal: None
+✅ Updated - Price: $668.95 | RSI: 16.9 | Signal: None
+✅ Updated - Price: $668.77 | RSI: 14.7 | Signal: None
+✅ Updated - Price: $668.77 | RSI: 22.7 | Signal: None
+✅ Updated - Price: $668.84 | RSI: 27.8 | Signal: None
