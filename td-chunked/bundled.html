@@ -113,6 +113,40 @@
         .game-over h2 { font-family: 'Orbitron', sans-serif; font-size: 2.5em; color: #e94560; margin-bottom: 20px; text-shadow: 0 0 20px rgba(233, 69, 96, 0.5); }
         .game-over p { font-size: 1.2em; margin-bottom: 15px; color: #ccc; }
         .game-over .stat { color: #e94560; font-weight: bold; font-size: 1.5em; }
+        .help-panel {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 500; display: flex;
+            justify-content: center; align-items: center; backdrop-filter: blur(5px);
+        }
+        .help-content {
+            background: linear-gradient(135deg, #1a1a3e 0%, #16213e 100%);
+            padding: 30px; border-radius: 20px; border: 2px solid #e94560;
+            max-width: 450px; max-height: 80vh; overflow-y: auto;
+            box-shadow: 0 0 50px rgba(233, 69, 96, 0.3);
+        }
+        .help-content h3 {
+            font-family: 'Orbitron', sans-serif; color: #e94560;
+            text-align: center; margin-bottom: 20px; font-size: 1.4em;
+        }
+        .help-section { margin-bottom: 18px; }
+        .help-section h4 {
+            color: #ffd700; font-size: 1em; margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255,215,0,0.3); padding-bottom: 5px;
+        }
+        .help-section ul {
+            list-style: none; padding: 0; margin: 0;
+        }
+        .help-section li {
+            padding: 4px 0; font-size: 0.9em; color: #ccc;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .help-section li:last-child { border-bottom: none; }
+        .help-section strong { color: #fff; }
+        .help-tip {
+            background: rgba(0,255,0,0.1); border: 1px solid rgba(0,255,0,0.3);
+            padding: 12px; border-radius: 8px; font-size: 0.9em; color: #0f0;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -130,7 +164,45 @@
     
     <div class="header-controls" id="headerControls" style="display: none;">
         <button class="control-btn" onclick="togglePause()" id="pauseBtn">⏸️</button>
-        <button class="control-btn" onclick="showHelp()">❓</button>
+        <button class="control-btn" onclick="toggleHelp()" id="helpBtn">❓</button>
+    </div>
+    
+    <!-- Help Panel -->
+    <div class="help-panel" id="helpPanel" style="display: none;">
+        <div class="help-content">
+            <h3>📖 Trading Desk Manual</h3>
+            <div class="help-section">
+                <h4>🎮 Controls</h4>
+                <ul>
+                    <li><strong>Left Click:</strong> Build tower</li>
+                    <li><strong>Right Click:</strong> Sell tower (50% refund)</li>
+                    <li><strong>Start Wave:</strong> Begin next wave</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h4>🏗️ Towers</h4>
+                <ul>
+                    <li><strong>📊 EWO:</strong> Splash damage</li>
+                    <li><strong>⚡ Scalper:</strong> Rapid fire</li>
+                    <li><strong>💵 CC:</strong> Generates cash</li>
+                    <li><strong>🎯 VWAP:</strong> Slows enemies</li>
+                    <li><strong>🛑 Stop Loss:</strong> Executes high-HP enemies</li>
+                </ul>
+            </div>
+            <div class="help-section">
+                <h4>🔄 Market Routes</h4>
+                <ul>
+                    <li><strong>Waves 1-8:</strong> Standard S-curve</li>
+                    <li><strong>Waves 9-16:</strong> Figure-8 loop</li>
+                    <li><strong>Waves 17-24:</strong> Dual lane</li>
+                    <li><strong>Waves 25+:</strong> Spiral of doom</li>
+                </ul>
+            </div>
+            <div class="help-tip">
+                💡 <strong>Pro Tip:</strong> Place towers near corners for maximum coverage!
+            </div>
+            <button class="btn" onclick="toggleHelp()" style="margin-top: 15px;">Close</button>
+        </div>
     </div>
     
     <div class="game-container" id="gameContainer">
@@ -203,8 +275,10 @@
             document.getElementById('gameOver').style.display = 'none';
         }
         function togglePause() { if (game) game.pause(); }
-        function showHelp() {
-            alert('🎮 HOW TO PLAY:\n\n🏗️ Click a tower, then click map to build.\n\n🎯 Stop enemies from reaching the end!\n\n💰 Earn cash from kills.\n\n🌊 Survive as many waves as possible!\n\n🔄 PATH CHANGES:\n• Waves 1-8: Standard path\n• Waves 9-16: Figure-8 loop\n• Waves 17-24: Dual lane\n• Waves 25+: Spiral of doom');
+        function toggleHelp() {
+            const panel = document.getElementById('helpPanel');
+            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+            if (game && panel.style.display === 'flex') game.pause();
         }
     </script>
 </body>
