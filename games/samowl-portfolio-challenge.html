@@ -594,35 +594,73 @@
             setInterval(updatePrices, 30000);
         }
 
-        // Fetch real prices from local prices.json file
+        // Fetch real prices from Yahoo Finance via CORS proxy
         async function fetchRealPrices() {
+            let pricesUpdated = false;
+            
+            // Try 1: Yahoo Finance via CORS proxy (live prices)
             try {
-                // Try to fetch from local prices.json (updated by price_server.py)
-                // Use cache-busting to prevent browser/GitHub Pages caching
-                const cacheBuster = Date.now() + Math.random();
-                const response = await fetch('../prices.json?_=' + cacheBuster, {
-                    cache: 'no-store',
-                    headers: { 'Cache-Control': 'no-cache' }
-                });
+                const symbols = stocks.map(s => s.symbol).join(',');
+                const corsProxy = 'https://api.allorigins.win/raw?url=';
+                const yahooUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
+                
+                const response = await fetch(corsProxy + yahooUrl, { cache: 'no-store' });
+                
                 if (response.ok) {
                     const data = await response.json();
                     
-                    if (data.stocks) {
-                        stocks.forEach(stock => {
-                            const symbol = stock.symbol;
-                            if (data.stocks[symbol] && data.stocks[symbol].price) {
-                                stock.basePrice = data.stocks[symbol].price;
-                                stock.openPrice = data.stocks[symbol].open || stock.basePrice;
+                    if (data.chart && data.chart.result) {
+                        data.chart.result.forEach((result, index) => {
+                            if (result.meta && result.meta.regularMarketPrice) {
+                                const symbol = result.meta.symbol || stocks[index].symbol;
+                                const stock = stocks.find(s => s.symbol === symbol);
+                                if (stock) {
+                                    stock.basePrice = result.meta.regularMarketPrice;
+                                    stock.openPrice = result.meta.regularMarketOpen || stock.basePrice;
+                                }
                             }
                         });
-                        console.log('Updated prices from prices.json:', data.last_update);
+                        console.log('Updated prices from Yahoo Finance:', new Date().toISOString());
+                        pricesUpdated = true;
                     }
-                } else {
-                    throw new Error('prices.json not available');
                 }
             } catch (e) {
-                console.log('Using base prices (prices.json unavailable):', e.message);
+                console.log('Yahoo Finance via proxy failed:', e.message);
             }
+            
+            // Try 2: Local prices.json (fallback)
+            if (!pricesUpdated) {
+                try {
+                    const cacheBuster = Date.now() + Math.random();
+                    const response = await fetch('../prices.json?_=' + cacheBuster, {
+                        cache: 'no-store',
+                        headers: { 'Cache-Control': 'no-cache' }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        if (data.stocks) {
+                            stocks.forEach(stock => {
+                                const symbol = stock.symbol;
+                                if (data.stocks[symbol] && data.stocks[symbol].price) {
+                                    stock.basePrice = data.stocks[symbol].price;
+                                    stock.openPrice = data.stocks[symbol].open || stock.basePrice;
+                                }
+                            });
+                            console.log('Updated prices from prices.json:', data.last_update);
+                            pricesUpdated = true;
+                        }
+                    }
+                } catch (e) {
+                    console.log('prices.json unavailable:', e.message);
+                }
+            }
+            
+            // Try 3: Use base prices (already set in stocks array)
+            if (!pricesUpdated) {
+                console.log('Using base prices (no live data available)');
+            }
+            
             renderMarket();
             updateDashboard();
         }
