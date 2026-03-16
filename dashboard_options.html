@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Options Scalper Live Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .header p {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .status-live {
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-paused {
+            background: #f59e0b;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .card h2 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            color: #fbbf24;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.8em;
+            color: #a0a0a0;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        .positive { color: #4ade80; }
+        .negative { color: #f87171; }
+        .neutral { color: #fbbf24; }
+        .call { color: #22c55e; }
+        .put { color: #ef4444; }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+        
+        .trades-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .trade-item {
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+        
+        .trade-call { border-left-color: #22c55e; }
+        .trade-put { border-left-color: #ef4444; }
+        
+        .trade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .trade-symbol {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .trade-pnl {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .trade-details {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .metric-box {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .metric-name {
+            font-size: 0.75em;
+            color: #a0a0a0;
+        }
+        
+        .metric-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .refresh-info {
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+        
+        .current-position {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .position-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .position-title {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .position-status {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        
+        .position-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .position-stat {
+            text-align: center;
+        }
+        
+        .position-label {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+        
+        .position-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+        
+        .strategy-info {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .strategy-info h3 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+        
+        .strategy-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .strategy-row:last-child {
+            border-bottom: none;
+        }
+        
+        .signal-call { color: #22c55e; font-weight: bold; }
+        .signal-put { color: #ef4444; font-weight: bold; }
+        .signal-wait { color: #fbbf24; font-weight: bold; }
+        .signal-setup-call { color: #4ade80; }
+        .signal-setup-put { color: #f87171; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎯 Options Scalper Live Dashboard</h1>
+        <p>RSI Mean Reversion Strategy - CALLs on Oversold, PUTs on Overbought</p>
+        <span class="status-badge status-live" id="statusBadge">● LIVE</span>
+    </div>
+    
+    <div class="grid">
+        <!-- Stats Overview -->
+        <div class="card full-width">
+            <h2>📊 Session Performance</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Total Trades</div>
+                    <div class="stat-value neutral" id="totalTrades">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value neutral" id="winRate">0%</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Total P&L</div>
+                    <div class="stat-value neutral" id="totalPnL">$0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Avg Trade</div>
+                    <div class="stat-value neutral" id="avgTrade">$0</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Current Position -->
+        <div class="card full-width" id="positionCard" style="display: none;">
+            <div class="current-position">
+                <div class="position-header">
+                    <span class="position-title">🎯 Active Position</span>
+                    <span class="position-status">IN TRADE</span>
+                </div>
+                <div class="position-details">
+                    <div class="position-stat">
+                        <div class="position-label">Contract</div>
+                        <div class="position-value" id="posContract">-</div>
+                    </div>
+                    <div class="position-stat">
+                        <div class="position-label">Direction</div>
+                        <div class="position-value" id="posDirection">-</div>
+                    </div>
+                    <div class="position-stat">
+                        <div class="position-label">Entry Price</div>
+                        <div class="position-value" id="posEntry">-</div>
+                    </div>
+                    <div class="position-stat">
+                        <div class="position-label">Contracts</div>
+                        <div class="position-value" id="posContracts">-</div>
+                    </div>
+                    <div class="position-stat">
+                        <div class="position-label">Stop Loss</div>
+                        <div class="position-value" id="posStop">-</div>
+                    </div>
+                    <div class="position-stat">
+                        <div class="position-label">Take Profit</div>
+                        <div class="position-value" id="posTarget">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Price Chart with Trades -->
+        <div class="card">
+            <h2>📈 Price Chart with Signals</h2>
+            <div class="chart-container">
+                <canvas id="priceChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Recent Trades -->
+        <div class="card">
+            <h2>📋 Recent Options Trades</h2>
+            <div class="trades-list" id="tradesList">
+                <p style="text-align: center; color: #a0a0a0; padding: 40px;">No trades yet today...</p>
+            </div>
+        </div>
+        
+        <!-- Live Metrics -->
+        <div class="card">
+            <h2>📊 Live Market Metrics</h2>
+            <div class="metrics-grid" id="metricsGrid">
+                <div class="metric-box">
+                    <div class="metric-name">SPY Price</div>
+                    <div class="metric-value" id="spyPrice">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">RSI (14)</div>
+                    <div class="metric-value" id="rsiValue">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">ATR</div>
+                    <div class="metric-value" id="atrValue">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">EMA9</div>
+                    <div class="metric-value" id="ema9Value">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">EMA21</div>
+                    <div class="metric-value" id="ema21Value">-</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-name">Signal</div>
+                    <div class="metric-value" id="signalValue">-</div>
+                </div>
+            </div>
+            
+            <div class="strategy-info">
+                <h3>📖 Strategy Rules</h3>
+                <div class="strategy-row">
+                    <span>🟢 CALL Entry:</span>
+                    <span class="signal-call">RSI &lt; 30 + Price &gt; EMA9</span>
+                </div>
+                <div class="strategy-row">
+                    <span>🔴 PUT Entry:</span>
+                    <span class="signal-put">RSI &gt; 70 + Price &lt; EMA9</span>
+                </div>
+                <div class="strategy-row">
+                    <span>💰 Position Size:</span>
+                    <span>$500 per trade</span>
+                </div>
+                <div class="strategy-row">
+                    <span>🎯 Target/Stop:</span>
+                    <span>2x ATR / 1x ATR</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trade Distribution -->
+        <div class="card">
+            <h2>🎯 Trade Distribution</h2>
+            <div class="chart-container">
+                <canvas id="distributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="refresh-info">
+        Auto-refresh every 5 seconds | Last update: <span id="lastUpdate">-</span>
+    </div>
+
+    <script>
+        // Chart instances
+        let priceChart = null;
+        let distributionChart = null;
+        
+        // Data storage
+        let trades = [];
+        let currentPosition = null;
+        let priceHistory = [];
+        
+        // Data source - change this to your data endpoint
+        const DATA_URL = './scalper_options_data.json';
+        
+        // Initialize charts
+        function initCharts() {
+            // Price chart
+            const priceCtx = document.getElementById('priceChart').getContext('2d');
+            priceChart = new Chart(priceCtx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'SPY Price',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'EMA9',
+                        data: [],
+                        borderColor: '#fbbf24',
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }, {
+                        label: 'EMA21',
+                        data: [],
+                        borderColor: '#f472b6',
+                        borderWidth: 1,
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'time',
+                            time: {
+                                unit: 'minute',
+                                displayFormats: {
+                                    minute: 'HH:mm'
+                                }
+                            },
+                            ticks: { color: '#a0a0a0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#a0a0a0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+            
+            // Distribution chart
+            const distCtx = document.getElementById('distributionChart').getContext('2d');
+            distributionChart = new Chart(distCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Wins', 'Losses'],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#22c55e', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: 'white' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Fetch data from JSON file
+        async function fetchScalperData() {
+            try {
+                const response = await fetch(DATA_URL + '?t=' + Date.now()); // Cache buster
+                if (!response.ok) throw new Error('Data not available');
+                const data = await response.json();
+                return data;
+            } catch (e) {
+                console.log('Using demo data:', e);
+                // Return demo data if file not available
+                return {
+                    status: 'idle',
+                    total_trades: 0,
+                    wins: 0,
+                    losses: 0,
+                    total_pnl: 0,
+                    trades: [],
+                    current_position: null,
+                    metrics: {
+                        spy_price: 0,
+                        rsi: 0,
+                        atr: 0,
+                        ema9: 0,
+                        ema21: 0,
+                        signal: 'WAIT',
+                        option_type: null,
+                        strike: null,
+                        expiration: null
+                    },
+                    price_history: [],
+                    last_update: new Date().toISOString()
+                };
+            }
+        }
+        
+        // Update dashboard
+        async function updateDashboard() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+            
+            const data = await fetchScalperData();
+            
+            updateStats(data);
+            updateCharts(data);
+            updateTrades(data.trades || []);
+            updateMetrics(data.metrics || {});
+            updatePosition(data.current_position);
+            updateStatus(data.status);
+        }
+        
+        function updateStatus(status) {
+            const badge = document.getElementById('statusBadge');
+            if (status === 'active') {
+                badge.textContent = '● IN TRADE';
+                badge.className = 'status-badge status-live';
+            } else if (status === 'scanning') {
+                badge.textContent = '● SCANNING';
+                badge.className = 'status-badge status-live';
+            } else {
+                badge.textContent = '○ IDLE';
+                badge.className = 'status-badge status-paused';
+            }
+        }
+        
+        function updateStats(data) {
+            const totalTrades = data.total_trades || 0;
+            const wins = data.wins || 0;
+            const losses = data.losses || 0;
+            const totalPnL = data.total_pnl || 0;
+            
+            document.getElementById('totalTrades').textContent = totalTrades;
+            
+            const winRate = totalTrades > 0 ? (wins / totalTrades * 100).toFixed(1) : 0;
+            document.getElementById('winRate').textContent = winRate + '%';
+            
+            const pnlEl = document.getElementById('totalPnL');
+            pnlEl.textContent = (totalPnL >= 0 ? '+' : '') + '$' + totalPnL.toFixed(2);
+            pnlEl.className = 'stat-value ' + (totalPnL >= 0 ? 'positive' : 'negative');
+            
+            const avgTrade = totalTrades > 0 ? totalPnL / totalTrades : 0;
+            const avgEl = document.getElementById('avgTrade');
+            avgEl.textContent = (avgTrade >= 0 ? '+' : '') + '$' + avgTrade.toFixed(2);
+            avgEl.className = 'stat-value ' + (avgTrade >= 0 ? 'positive' : 'negative');
+        }
+        
+        function updateCharts(data) {
+            const history = data.price_history || [];
+            
+            // Update price chart
+            priceChart.data.datasets[0].data = history.map(h => ({ 
+                x: new Date(h.time), 
+                y: h.price 
+            }));
+            priceChart.data.datasets[1].data = history.map(h => ({ 
+                x: new Date(h.time), 
+                y: h.ema9 
+            }));
+            priceChart.data.datasets[2].data = history.map(h => ({ 
+                x: new Date(h.time), 
+                y: h.ema21 
+            }));
+            priceChart.update('none');
+            
+            // Update distribution chart
+            const wins = data.wins || 0;
+            const losses = data.losses || 0;
+            distributionChart.data.datasets[0].data = [wins, losses];
+            distributionChart.update('none');
+        }
+        
+        function updateTrades(trades) {
+            const container = document.getElementById('tradesList');
+            
+            if (!trades || trades.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #a0a0a0; padding: 40px;">No trades yet today...</p>';
+                return;
+            }
+            
+            container.innerHTML = trades.slice().reverse().map(trade => `
+                <div class="trade-item trade-${trade.direction.toLowerCase()}">
+                    <div class="trade-header">
+                        <span class="trade-symbol">${trade.symbol} ${trade.direction} $${trade.strike} ${trade.direction === 'CALL' ? '📈' : '📉'}</span>
+                        <span class="trade-pnl ${trade.pnl >= 0 ? 'positive' : 'negative'}">${trade.pnl >= 0 ? '+' : ''}$${trade.pnl.toFixed(2)}</span>
+                    </div>
+                    <div class="trade-details">
+                        ${trade.contracts} contract${trade.contracts > 1 ? 's' : ''} | Entry: $${trade.entry.toFixed(2)} | ${trade.time} | ${trade.exitReason}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateMetrics(metrics) {
+            document.getElementById('spyPrice').textContent = metrics.spy_price ? '$' + metrics.spy_price.toFixed(2) : '-';
+            document.getElementById('rsiValue').textContent = metrics.rsi ? metrics.rsi.toFixed(1) : '-';
+            document.getElementById('atrValue').textContent = metrics.atr ? metrics.atr.toFixed(2) : '-';
+            document.getElementById('ema9Value').textContent = metrics.ema9 ? metrics.ema9.toFixed(2) : '-';
+            document.getElementById('ema21Value').textContent = metrics.ema21 ? metrics.ema21.toFixed(2) : '-';
+            
+            const signalEl = document.getElementById('signalValue');
+            const signal = metrics.signal || 'WAIT';
+            signalEl.textContent = signal;
+            
+            // Color code signals
+            if (signal.includes('CALL')) {
+                signalEl.className = 'metric-value signal-call';
+            } else if (signal.includes('PUT')) {
+                signalEl.className = 'metric-value signal-put';
+            } else if (signal.includes('HOLDING')) {
+                signalEl.className = 'metric-value signal-wait';
+            } else {
+                signalEl.className = 'metric-value signal-wait';
+            }
+        }
+        
+        function updatePosition(position) {
+            const card = document.getElementById('positionCard');
+            
+            if (!position) {
+                card.style.display = 'none';
+                return;
+            }
+            
+            card.style.display = 'block';
+            
+            const directionClass = position.direction === 'CALL' ? 'call' : 'put';
+            const directionEmoji = position.direction === 'CALL' ? '📈' : '📉';
+            
+            document.getElementById('posContract').textContent = `${position.symbol} $${position.strike}`;
+            document.getElementById('posDirection').innerHTML = `<span class="${directionClass}">${directionEmoji} ${position.direction}</span>`;
+            document.getElementById('posEntry').textContent = '$' + position.entry_price.toFixed(2);
+            document.getElementById('posContracts').textContent = position.contracts;
+            document.getElementById('posStop').textContent = '$' + position.stop_loss.toFixed(2);
+            document.getElementById('posTarget').textContent = '$' + position.take_profit.toFixed(2);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateDashboard();
+            
+            // Auto-refresh every 5 seconds
+            setInterval(updateDashboard, 5000);
+        });
+    </script>
+</body>
+</html>

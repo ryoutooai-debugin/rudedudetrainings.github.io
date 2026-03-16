@@ -1,0 +1,49 @@
+{
+  "status": "scanning",
+  "total_trades": 1,
+  "wins": 1,
+  "losses": 0,
+  "total_pnl": 11.97,
+  "trades": [
+    {
+      "symbol": "SPY",
+      "direction": "CALL",
+      "entry": 668.57,
+      "exit": 669.77,
+      "pnl": 11.97,
+      "time": "15:00",
+      "exitReason": "TAKE_PROFIT"
+    }
+  ],
+  "current_position": null,
+  "metrics": {
+    "spy_price": 668.48,
+    "rsi": 22.99,
+    "atr": 0.37,
+    "ema9": 669.05,
+    "ema21": 669.44,
+    "signal": "WAIT",
+    "option_type": null,
+    "strike": null,
+    "expiration": null
+  },
+  "strategy": {
+    "name": "RSI Mean Reversion Options Scalper",
+    "description": "Trades CALLs on oversold bounces, PUTs on overbought drops",
+    "call_entry": {
+      "condition": "RSI < 30 (oversold) + price crosses above EMA9",
+      "option": "ATM or slightly OTM CALL",
+      "target": "2x ATR move up",
+      "stop": "1x ATR move down"
+    },
+    "put_entry": {
+      "condition": "RSI > 70 (overbought) + price crosses below EMA9",
+      "option": "ATM or slightly OTM PUT",
+      "target": "2x ATR move down",
+      "stop": "1x ATR move up"
+    },
+    "position_size": "$500 per trade (1-2 contracts)",
+    "max_hold_time": "30 minutes"
+  },
+  "price_history": []
+}
