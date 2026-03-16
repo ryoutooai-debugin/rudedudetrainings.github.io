@@ -599,33 +599,45 @@
             let pricesUpdated = false;
             
             // Try 1: Yahoo Finance via CORS proxy (live prices)
-            try {
-                const symbols = stocks.map(s => s.symbol).join(',');
-                const corsProxy = 'https://api.allorigins.win/raw?url=';
-                const yahooUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
-                
-                const response = await fetch(corsProxy + yahooUrl, { cache: 'no-store' });
-                
-                if (response.ok) {
-                    const data = await response.json();
+            // Try multiple CORS proxies in case one fails
+            const corsProxies = [
+                'https://corsproxy.io/?',
+                'https://api.allorigins.win/raw?url=',
+                'https://api.codetabs.com/v1/proxy?quest='
+            ];
+            
+            for (const corsProxy of corsProxies) {
+                try {
+                    const symbols = stocks.map(s => s.symbol).join(',');
+                    const yahooUrl = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${symbols}?interval=1d&range=1d`);
                     
-                    if (data.chart && data.chart.result) {
-                        data.chart.result.forEach((result, index) => {
-                            if (result.meta && result.meta.regularMarketPrice) {
-                                const symbol = result.meta.symbol || stocks[index].symbol;
-                                const stock = stocks.find(s => s.symbol === symbol);
-                                if (stock) {
-                                    stock.basePrice = result.meta.regularMarketPrice;
-                                    stock.openPrice = result.meta.regularMarketOpen || stock.basePrice;
+                    const response = await fetch(corsProxy + yahooUrl, { 
+                        cache: 'no-store',
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        if (data.chart && data.chart.result) {
+                            data.chart.result.forEach((result, index) => {
+                                if (result.meta && result.meta.regularMarketPrice) {
+                                    const symbol = result.meta.symbol || stocks[index].symbol;
+                                    const stock = stocks.find(s => s.symbol === symbol);
+                                    if (stock) {
+                                        stock.basePrice = result.meta.regularMarketPrice;
+                                        stock.openPrice = result.meta.regularMarketOpen || stock.basePrice;
+                                    }
                                 }
-                            }
-                        });
-                        console.log('Updated prices from Yahoo Finance:', new Date().toISOString());
-                        pricesUpdated = true;
+                            });
+                            console.log('Updated prices from Yahoo Finance via', corsProxy.split('/')[2], ':', new Date().toISOString());
+                            pricesUpdated = true;
+                            break; // Success, stop trying other proxies
+                        }
                     }
+                } catch (e) {
+                    console.log('CORS proxy failed:', corsProxy.split('/')[2], '-', e.message);
                 }
-            } catch (e) {
-                console.log('Yahoo Finance via proxy failed:', e.message);
             }
             
             // Try 2: Local prices.json (fallback)
