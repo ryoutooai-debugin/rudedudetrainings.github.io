@@ -1,0 +1,70 @@
+{
+  "status": "scanning",
+  "total_signals": 4,
+  "wins": 0,
+  "losses": 2,
+  "open_trades": 2,
+  "avg_pnl": -0.10921055822950745,
+  "total_pnl": -0.2184211164590149,
+  "symbols": {
+    "SPY": {
+      "price": 0,
+      "signal": "WAIT"
+    },
+    "QQQ": {
+      "price": 0,
+      "signal": "WAIT"
+    }
+  },
+  "trades": [
+    {
+      "symbol": "QQQ",
+      "direction": "CALL",
+      "entry_price": 601.2650146484375,
+      "exit_price": 600.5798950195312,
+      "entry_time": "2026-03-16T15:18:55.269686",
+      "exit_time": "2026-03-16T15:59:10.979506",
+      "pnl_pct": -0.11394636511602835,
+      "exit_reason": "EWO REVERSAL: PUT signal",
+      "status": "CLOSED"
+    },
+    {
+      "symbol": "SPY",
+      "direction": "CALL",
+      "entry_price": 670.030029296875,
+      "exit_price": 669.3300170898438,
+      "entry_time": "2026-03-16T15:23:00.322774",
+      "exit_time": "2026-03-16T15:55:06.012899",
+      "pnl_pct": -0.10447475134298655,
+      "exit_reason": "EWO REVERSAL: PUT signal",
+      "status": "CLOSED"
+    },
+    {
+      "symbol": "SPY",
+      "direction": "PUT",
+      "entry_price": 669.3300170898438,
+      "exit_price": null,
+      "entry_time": "2026-03-16T15:55:08.376287",
+      "exit_time": null,
+      "pnl_pct": null,
+      "exit_reason": null,
+      "status": "OPEN"
+    },
+    {
+      "symbol": "QQQ",
+      "direction": "PUT",
+      "entry_price": 600.5798950195312,
+      "exit_price": null,
+      "entry_time": "2026-03-16T15:59:13.357074",
+      "exit_time": null,
+      "pnl_pct": null,
+      "exit_reason": null,
+      "status": "OPEN"
+    }
+  ],
+  "cumulative_pnl": [
+    -0.11394636511602835,
+    -0.2184211164590149
+  ],
+  "last_update": "2026-03-16T16:26:03.462183"
+}

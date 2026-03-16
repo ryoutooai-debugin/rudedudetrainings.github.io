@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 EWO Scanner Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .header p {
+            color: #a0a0a0;
+            font-size: 1em;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+        
+        .status-live {
+            background: #22c55e;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-paused {
+            background: #f59e0b;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .card h2 {
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            color: #fbbf24;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-box {
+            background: rgba(0,0,0,0.3);
+            padding: 12px 8px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.7em;
+            color: #a0a0a0;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+        
+        .positive { color: #4ade80; }
+        .negative { color: #f87171; }
+        .neutral { color: #fbbf24; }
+        .call { color: #22c55e; }
+        .put { color: #ef4444; }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 10px;
+        }
+        
+        .trades-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .trade-item {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid;
+            font-size: 0.9em;
+        }
+        
+        .trade-call { border-left-color: #22c55e; }
+        .trade-put { border-left-color: #ef4444; }
+        
+        .trade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+        
+        .trade-symbol {
+            font-weight: bold;
+        }
+        
+        .trade-pnl {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .trade-details {
+            font-size: 0.8em;
+            color: #a0a0a0;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        
+        .metric-box {
+            background: rgba(0,0,0,0.2);
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .metric-name {
+            font-size: 0.7em;
+            color: #a0a0a0;
+        }
+        
+        .metric-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .refresh-info {
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 0.8em;
+            margin-top: 15px;
+        }
+        
+        .ewo-info {
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        
+        .ewo-info h3 {
+            color: #fbbf24;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        
+        .ewo-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .ewo-row:last-child {
+            border-bottom: none;
+        }
+        
+        .signal-box {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .signal-call-box { background: rgba(34, 197, 94, 0.3); color: #4ade80; }
+        .signal-put-box { background: rgba(239, 68, 68, 0.3); color: #f87171; }
+        .signal-wait-box { background: rgba(251, 191, 36, 0.3); color: #fbbf24; }
+        
+        .symbol-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+        
+        .symbol-name {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .symbol-price {
+            font-size: 1em;
+        }
+        
+        .symbol-signal {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 EWO Scanner Dashboard</h1>
+        <p>Elliott Wave Oscillator - 2-Minute Strategy</p>
+        <span class="status-badge status-live" id="statusBadge">● SCANNING</span>
+    </div>
+    
+    <div class="grid">
+        <!-- Stats Overview -->
+        <div class="card full-width">
+            <h2>📈 Today's Performance</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Total Signals</div>
+                    <div class="stat-value neutral" id="totalSignals">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value neutral" id="winRate">0%</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Open Trades</div>
+                    <div class="stat-value neutral" id="openTrades">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Avg P&L</div>
+                    <div class="stat-value neutral" id="avgPnL">0%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live Signals -->
+        <div class="card">
+            <h2>🎯 Live Signals</h2>
+            <div id="signalsList">
+                <div class="symbol-row">
+                    <span class="symbol-name">SPY</span>
+                    <span class="symbol-price" id="spyPrice">-</span>
+                    <span class="symbol-signal" id="spySignal">-</span>
+                </div>
+                <div class="symbol-row">
+                    <span class="symbol-name">QQQ</span>
+                    <span class="symbol-price" id="qqqPrice">-</span>
+                    <span class="symbol-signal" id="qqqSignal">-</span>
+                </div>
+            </div>
+            
+            <div class="ewo-info">
+                <h3>📖 EWO Rules</h3>
+                <div class="ewo-row">
+                    <span>Entry:</span>
+                    <span class="signal-call">2nd candle same color</span>
+                </div>
+                <div class="ewo-row">
+                    <span>Green EWO:</span>
+                    <span class="signal-call">CALL signal</span>
+                </div>
+                <div class="ewo-row">
+                    <span>Red EWO:</span>
+                    <span class="signal-put">PUT signal</span>
+                </div>
+                <div class="ewo-row">
+                    <span>Stop Loss:</span>
+                    <span>30%</span>
+                </div>
+                <div class="ewo-row">
+                    <span>Take Profit:</span>
+                    <span>50%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Trades -->
+        <div class="card">
+            <h2>📋 Recent Trades</h2>
+            <div class="trades-list" id="tradesList">
+                <p style="text-align: center; color: #a0a0a0; padding: 30px;">No trades yet today...</p>
+            </div>
+        </div>
+        
+        <!-- Trade Performance Chart -->
+        <div class="card">
+            <h2>📊 Trade Performance</h2>
+            <div class="chart-container">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Win/Loss Distribution -->
+        <div class="card">
+            <h2>🎯 Win/Loss Distribution</h2>
+            <div class="chart-container">
+                <canvas id="distributionChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="refresh-info">
+        Auto-refresh every 10 seconds | Last update: <span id="lastUpdate">-</span>
+    </div>
+
+    <script>
+        // Chart instances
+        let performanceChart = null;
+        let distributionChart = null;
+        
+        // Data source - EWO tracker data
+        const DATA_URL = './ewo_dashboard_data.json';
+        
+        // Initialize charts
+        function initCharts() {
+            // Performance chart (cumulative P&L)
+            const perfCtx = document.getElementById('performanceChart').getContext('2d');
+            performanceChart = new Chart(perfCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Cumulative P&L %',
+                        data: [],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#a0a0a0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#a0a0a0' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+            
+            // Distribution chart
+            const distCtx = document.getElementById('distributionChart').getContext('2d');
+            distributionChart = new Chart(distCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Wins', 'Losses'],
+                    datasets: [{
+                        data: [0, 0],
+                        backgroundColor: ['#22c55e', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: 'white' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Fetch data from JSON file
+        async function fetchEWOData() {
+            try {
+                const response = await fetch(DATA_URL + '?t=' + Date.now());
+                if (!response.ok) throw new Error('Data not available');
+                const data = await response.json();
+                return data;
+            } catch (e) {
+                console.log('Using demo data:', e);
+                return {
+                    status: 'scanning',
+                    total_signals: 0,
+                    wins: 0,
+                    losses: 0,
+                    open_trades: 0,
+                    avg_pnl: 0,
+                    symbols: {
+                        SPY: { price: 0, signal: 'WAIT' },
+                        QQQ: { price: 0, signal: 'WAIT' }
+                    },
+                    trades: [],
+                    cumulative_pnl: [],
+                    last_update: new Date().toISOString()
+                };
+            }
+        }
+        
+        // Update dashboard
+        async function updateDashboard() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+            
+            const data = await fetchEWOData();
+            
+            updateStats(data);
+            updateCharts(data);
+            updateTrades(data.trades || []);
+            updateSignals(data.symbols || {});
+            updateStatus(data.status);
+        }
+        
+        function updateStatus(status) {
+            const badge = document.getElementById('statusBadge');
+            if (status === 'active') {
+                badge.textContent = '● ACTIVE';
+                badge.className = 'status-badge status-live';
+            } else if (status === 'scanning') {
+                badge.textContent = '● SCANNING';
+                badge.className = 'status-badge status-live';
+            } else {
+                badge.textContent = '○ IDLE';
+                badge.className = 'status-badge status-paused';
+            }
+        }
+        
+        function updateStats(data) {
+            document.getElementById('totalSignals').textContent = data.total_signals || 0;
+            
+            const totalTrades = (data.wins || 0) + (data.losses || 0);
+            const winRate = totalTrades > 0 ? ((data.wins || 0) / totalTrades * 100).toFixed(1) : 0;
+            document.getElementById('winRate').textContent = winRate + '%';
+            
+            document.getElementById('openTrades').textContent = data.open_trades || 0;
+            
+            const avgPnL = data.avg_pnl || 0;
+            const avgEl = document.getElementById('avgPnL');
+            avgEl.textContent = (avgPnL >= 0 ? '+' : '') + avgPnL.toFixed(2) + '%';
+            avgEl.className = 'stat-value ' + (avgPnL >= 0 ? 'positive' : 'negative');
+        }
+        
+        function updateCharts(data) {
+            // Update performance chart
+            const cumulativePnl = data.cumulative_pnl || [];
+            performanceChart.data.labels = cumulativePnl.map((_, i) => `Trade ${i + 1}`);
+            performanceChart.data.datasets[0].data = cumulativePnl;
+            performanceChart.update('none');
+            
+            // Update distribution chart
+            const wins = data.wins || 0;
+            const losses = data.losses || 0;
+            distributionChart.data.datasets[0].data = [wins, losses];
+            distributionChart.update('none');
+        }
+        
+        function updateTrades(trades) {
+            const container = document.getElementById('tradesList');
+            
+            if (!trades || trades.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #a0a0a0; padding: 30px;">No trades yet today...</p>';
+                return;
+            }
+            
+            container.innerHTML = trades.slice().reverse().map(trade => {
+                const pnl = trade.pnl_pct || 0;
+                const pnlClass = pnl >= 0 ? 'positive' : 'negative';
+                const directionClass = trade.direction === 'CALL' ? 'call' : 'put';
+                const emoji = trade.direction === 'CALL' ? '📈' : '📉';
+                
+                return `
+                <div class="trade-item trade-${trade.direction.toLowerCase()}">
+                    <div class="trade-header">
+                        <span class="trade-symbol">${trade.symbol} ${emoji} <span class="${directionClass}">${trade.direction}</span></span>
+                        <span class="trade-pnl ${pnlClass}">${pnl >= 0 ? '+' : ''}${(pnl * 100).toFixed(1)}%</span>
+                    </div>
+                    <div class="trade-details">
+                        $${trade.entry_price.toFixed(2)} → $${trade.exit_price ? trade.exit_price.toFixed(2) : 'OPEN'} | ${trade.exit_reason || 'OPEN'}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+        
+        function updateSignals(symbols) {
+            // Update SPY
+            const spy = symbols.SPY || {};
+            document.getElementById('spyPrice').textContent = spy.price ? '$' + spy.price.toFixed(2) : '-';
+            document.getElementById('spySignal').innerHTML = formatSignal(spy.signal || 'WAIT');
+            
+            // Update QQQ
+            const qqq = symbols.QQQ || {};
+            document.getElementById('qqqPrice').textContent = qqq.price ? '$' + qqq.price.toFixed(2) : '-';
+            document.getElementById('qqqSignal').innerHTML = formatSignal(qqq.signal || 'WAIT');
+        }
+        
+        function formatSignal(signal) {
+            if (signal === 'CALL') {
+                return '<span class="signal-box signal-call-box">📈 CALL</span>';
+            } else if (signal === 'PUT') {
+                return '<span class="signal-box signal-put-box">📉 PUT</span>';
+            } else {
+                return '<span class="signal-box signal-wait-box">⏳ WAIT</span>';
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateDashboard();
+            
+            // Auto-refresh every 10 seconds
+            setInterval(updateDashboard, 10000);
+        });
+    </script>
+</body>
+</html>
