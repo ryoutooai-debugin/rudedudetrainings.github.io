@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """
-RSI Mean Reversion Options Scalper
+RSI Mean Reversion Options Scalper - Simplified Version
 Trades both CALLs (oversold bounces) and PUTs (overbought drops)
 """
 
 import json
 import time
-import asyncio
-import aiohttp
+import requests
 import numpy as np
 from datetime import datetime, timedelta
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from typing import Optional, Literal
 from pathlib import Path
 
@@ -49,18 +48,55 @@ class OptionsScalper:
         self.price_history: list[dict] = []
         self.max_history = 100
         
-        # Strategy parameters
+        # EWO parameters
+        self.fast_period = 5
+        self.slow_period = 35
+        
+        # Exit rules
+        self.stop_loss_pct = 30.0
+        self.take_profit_pct = 50.0
+        
+        # RSI parameters
         self.rsi_period = 14
         self.ema_fast = 9
         self.ema_slow = 21
         self.oversold = 30
         self.overbought = 70
-        self.sl_mult = 1.0  # 1x ATR for stop
-        self.tp_mult = 2.0  # 2x ATR for target
+        self.sl_mult = 1.0
+        self.tp_mult = 2.0
         
         # Data file
         self.data_file = Path("/root/rudedudetrainings.github.io/scalper_options_data.json")
         
+        # Load existing data
+        self.load_data()
+    
+    def load_data(self):
+        """Load existing data from file"""
+        if self.data_file.exists():
+            try:
+                with open(self.data_file, 'r') as f:
+                    data = json.load(f)
+                    self.trades = [
+                        Trade(
+                            symbol=t['symbol'],
+                            direction=t['direction'],
+                            entry=t['entry'],
+                            exit=t.get('exit'),
+                            entry_time=t['time'],
+                            exit_time=None,
+                            pnl=t.get('pnl'),
+                            exit_reason=t.get('exitReason'),
+                            strike=t.get('strike', 0),
+                            expiration=t.get('expiration', ''),
+                            contracts=t.get('contracts', 1)
+                        )
+                        for t in data.get('trades', [])
+                    ]
+                    self.price_history = data.get('price_history', [])
+            except Exception as e:
+                print(f"Error loading data: {e}")
+    
     def calculate_rsi(self, prices: list[float]) -> float:
         """Calculate RSI from price history"""
         if len(prices) < self.rsi_period + 1:
@@ -96,12 +132,12 @@ class OptionsScalper:
     def calculate_atr(self, highs: list[float], lows: list[float], closes: list[float]) -> float:
         """Calculate Average True Range"""
         if len(closes) < 2:
-            return 0.5  # Default ATR
+            return 0.5
         
         tr_list = []
         for i in range(1, len(closes)):
-            high = highs[i]
-            low = lows[i]
+            high = highs[i] if i < len(highs) else closes[i]
+            low = lows[i] if i < len(lows) else closes[i]
             prev_close = closes[i-1]
             
             tr1 = high - low
@@ -114,14 +150,10 @@ class OptionsScalper:
     
     def get_option_strike(self, price: float, direction: Literal["CALL", "PUT"]) -> float:
         """Get ATM or slightly OTM strike price"""
-        # Round to nearest $1 for SPY
         atm = round(price)
-        
         if direction == "CALL":
-            # Slightly OTM call (higher strike)
             return atm + 1
         else:
-            # Slightly OTM put (lower strike)
             return atm - 1
     
     def get_friday_expiration(self) -> str:
@@ -129,7 +161,7 @@ class OptionsScalper:
         today = datetime.now()
         days_until_friday = (4 - today.weekday()) % 7
         if days_until_friday == 0:
-            days_until_friday = 7  # If today is Friday, get next Friday
+            days_until_friday = 7
         friday = today + timedelta(days=days_until_friday)
         return friday.strftime("%Y-%m-%d")
     
@@ -139,11 +171,9 @@ class OptionsScalper:
         if self.position:
             return None
         
-        # CALL signal: Oversold bounce
         if rsi < self.oversold and price > ema9 and prev_price <= ema9:
             return "CALL"
         
-        # PUT signal: Overbought drop
         if rsi > self.overbought and price < ema9 and prev_price >= ema9:
             return "PUT"
         
@@ -152,84 +182,77 @@ class OptionsScalper:
     def check_exit_signal(self, price: float, position: Position, atr: float) -> Optional[str]:
         """Check for exit signals"""
         if position.direction == "CALL":
-            # Stop loss: Price dropped below entry - 1x ATR
             if price <= position.stop_loss:
                 return "STOP_LOSS"
-            # Take profit: Price rose above entry + 2x ATR
             if price >= position.take_profit:
                 return "TAKE_PROFIT"
-        
         elif position.direction == "PUT":
-            # Stop loss: Price rose above entry + 1x ATR
             if price >= position.stop_loss:
                 return "STOP_LOSS"
-            # Take profit: Price dropped below entry - 2x ATR
             if price <= position.take_profit:
                 return "TAKE_PROFIT"
-        
         return None
     
     def calculate_option_pnl(self, entry_price: float, exit_price: float, 
                             direction: Literal["CALL", "PUT"], 
                             contracts: int) -> float:
-        """Calculate P&L for options trade (simplified)"""
-        # Simplified: $1 move in SPY ≈ $1 move in ATM option (delta ~1.0 for short term)
-        # In reality, this would use actual option pricing with delta/gamma/theta
-        
+        """Calculate P&L for options trade"""
         if direction == "CALL":
             price_diff = exit_price - entry_price
         else:
             price_diff = entry_price - exit_price
         
-        # Each contract = 100 shares
         pnl = price_diff * 100 * contracts
         return round(pnl, 2)
     
-    async def fetch_price_data(self) -> dict:
+    def fetch_price_data(self) -> dict:
         """Fetch price data from Yahoo Finance"""
-        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{self.symbol}"
-        params = {
-            "interval": "1m",
-            "range": "1d"
-        }
-        
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, params=params) as resp:
-                data = await resp.json()
-                
-                result = data["chart"]["result"][0]
-                meta = result["meta"]
-                timestamps = result["timestamp"]
-                ohlcv = result["indicators"]["quote"][0]
-                
-                current_price = meta.get("regularMarketPrice", ohlcv["close"][-1])
-                
-                return {
-                    "price": current_price,
-                    "high": ohlcv["high"],
-                    "low": ohlcv["low"],
-                    "close": ohlcv["close"]
-                }
+        try:
+            url = f"https://query1.finance.yahoo.com/v8/finance/chart/{self.symbol}"
+            params = {"interval": "1m", "range": "1d"}
+            
+            response = requests.get(url, params=params, timeout=10)
+            data = response.json()
+            
+            result = data["chart"]["result"][0]
+            meta = result["meta"]
+            timestamps = result["timestamp"]
+            ohlcv = result["indicators"]["quote"][0]
+            
+            current_price = meta.get("regularMarketPrice", ohlcv["close"][-1])
+            
+            return {
+                "price": current_price,
+                "high": [h for h in ohlcv["high"] if h is not None],
+                "low": [l for l in ohlcv["low"] if l is not None],
+                "close": [c for c in ohlcv["close"] if c is not None]
+            }
+        except Exception as e:
+            print(f"Error fetching data: {e}")
+            # Fallback to last known price or default
+            if self.price_history:
+                last_price = self.price_history[-1]["price"]
+                return {"price": last_price, "high": [last_price], "low": [last_price], "close": [last_price]}
+            return {"price": 668.0, "high": [668.0], "low": [668.0], "close": [668.0]}
     
     def update_data_file(self):
         """Update the JSON data file for the dashboard"""
-        # Calculate metrics
         prices = [p["price"] for p in self.price_history]
-        highs = self.price_history[-1].get("highs", []) if self.price_history else []
-        lows = self.price_history[-1].get("lows", []) if self.price_history else []
         
         if len(prices) >= 2:
             rsi = self.calculate_rsi(prices)
             ema9 = self.calculate_ema(prices, self.ema_fast)
             ema21 = self.calculate_ema(prices, self.ema_slow)
+            
+            highs = self.price_history[-1].get("highs", [])
+            lows = self.price_history[-1].get("lows", [])
             atr = self.calculate_atr(highs, lows, prices) if highs and lows else 0.5
         else:
             rsi = 50.0
-            ema9 = prices[-1] if prices else 0
-            ema21 = prices[-1] if prices else 0
+            ema9 = prices[-1] if prices else 668.0
+            ema21 = prices[-1] if prices else 668.0
             atr = 0.5
         
-        # Determine signal
         if self.position:
             signal = f"HOLDING {self.position.direction}"
         elif rsi < self.oversold:
@@ -239,7 +262,6 @@ class OptionsScalper:
         else:
             signal = "WAIT"
         
-        # Build data structure
         data = {
             "status": "active" if self.position else "scanning",
             "total_trades": len(self.trades),
@@ -259,7 +281,7 @@ class OptionsScalper:
                     "expiration": t.expiration,
                     "contracts": t.contracts
                 }
-                for t in self.trades[-10:]  # Last 10 trades
+                for t in self.trades[-10:]
             ],
             "current_position": {
                 "symbol": self.position.symbol,
@@ -273,7 +295,7 @@ class OptionsScalper:
                 "entry_time": self.position.entry_time
             } if self.position else None,
             "metrics": {
-                "spy_price": round(prices[-1], 2) if prices else 0,
+                "spy_price": round(prices[-1], 2) if prices else 668.0,
                 "rsi": round(rsi, 2),
                 "atr": round(atr, 2),
                 "ema9": round(ema9, 2),
@@ -308,25 +330,22 @@ class OptionsScalper:
                     "ema9": p.get("ema9"),
                     "ema21": p.get("ema21")
                 }
-                for p in self.price_history[-50:]  # Last 50 data points
+                for p in self.price_history[-50:]
             ]
         }
         
-        # Write to file
         with open(self.data_file, 'w') as f:
             json.dump(data, f, indent=2)
     
-    async def run_cycle(self):
+    def run_cycle(self):
         """Run one trading cycle"""
         try:
-            # Fetch price data
-            data = await self.fetch_price_data()
+            data = self.fetch_price_data()
             current_price = data["price"]
             highs = data["high"]
             lows = data["low"]
             closes = data["close"]
             
-            # Update price history
             self.price_history.append({
                 "time": datetime.now().isoformat(),
                 "price": current_price,
@@ -337,24 +356,20 @@ class OptionsScalper:
             if len(self.price_history) > self.max_history:
                 self.price_history = self.price_history[-self.max_history:]
             
-            # Calculate indicators
             prices = [p["price"] for p in self.price_history]
             rsi = self.calculate_rsi(prices)
             ema9 = self.calculate_ema(prices, self.ema_fast)
             ema21 = self.calculate_ema(prices, self.ema_slow)
             atr = self.calculate_atr(highs, lows, closes)
             
-            # Update history with indicators
             self.price_history[-1]["ema9"] = ema9
             self.price_history[-1]["ema21"] = ema21
             
             prev_price = prices[-2] if len(prices) >= 2 else current_price
             
-            # Check for exit if in position
             if self.position:
                 exit_reason = self.check_exit_signal(current_price, self.position, atr)
                 if exit_reason:
-                    # Close position
                     pnl = self.calculate_option_pnl(
                         self.position.entry_price,
                         current_price,
@@ -379,20 +394,17 @@ class OptionsScalper:
                     
                     print(f"🔔 EXIT: {self.position.direction} @ ${current_price:.2f} | {exit_reason} | P&L: ${pnl:.2f}")
                     self.position = None
-            
-            # Check for entry if not in position
             else:
                 signal = self.check_entry_signal(current_price, rsi, ema9, ema21, prev_price)
                 if signal:
-                    # Calculate position parameters
                     strike = self.get_option_strike(current_price, signal)
                     expiration = self.get_friday_expiration()
-                    contracts = max(1, int(self.capital_per_trade / 500))  # ~$500 per contract
+                    contracts = max(1, int(self.capital_per_trade / 500))
                     
                     if signal == "CALL":
                         stop = current_price - (atr * self.sl_mult)
                         target = current_price + (atr * self.tp_mult)
-                    else:  # PUT
+                    else:
                         stop = current_price + (atr * self.sl_mult)
                         target = current_price - (atr * self.tp_mult)
                     
@@ -410,13 +422,13 @@ class OptionsScalper:
                     
                     print(f"🚀 ENTRY: {signal} ${strike} {expiration} @ ${current_price:.2f} | Contracts: {contracts}")
             
-            # Update data file
             self.update_data_file()
+            print(f"✅ Updated - Price: ${current_price:.2f} | RSI: {rsi:.1f} | Signal: {signal if not self.position else 'HOLDING ' + self.position.direction}")
             
         except Exception as e:
             print(f"Error in cycle: {e}")
     
-    async def run(self):
+    def run(self):
         """Main loop"""
         print(f"🦉 Options Scalper Started - Trading {self.symbol}")
         print(f"Strategy: RSI Mean Reversion (CALLs on oversold, PUTs on overbought)")
@@ -424,10 +436,10 @@ class OptionsScalper:
         print("-" * 50)
         
         while True:
-            await self.run_cycle()
-            await asyncio.sleep(30)  # 30-second intervals
+            self.run_cycle()
+            time.sleep(30)
 
 
 if __name__ == "__main__":
     scalper = OptionsScalper(symbol="SPY", capital_per_trade=500)
-    asyncio.run(scalper.run())
+    scalper.run()
