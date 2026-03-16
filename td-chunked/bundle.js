@@ -340,9 +340,15 @@ class Tower extends Entity {
         this.engine.events.emit('spawnProjectile',{x:this.x,y:this.y,target:this.target,towerType:this.towerType,stats:this.stats});
         if (this.stats.income) this.engine.events.emit('cashEarned',{amount:this.stats.income,x:this.x,y:this.y-30});
     }
+    hexToRgba(hex,alpha) {
+        let r,g,b;
+        if (hex.length===4) { r=parseInt(hex[1]+hex[1],16); g=parseInt(hex[2]+hex[2],16); b=parseInt(hex[3]+hex[3],16); }
+        else { r=parseInt(hex.slice(1,3),16); g=parseInt(hex.slice(3,5),16); b=parseInt(hex.slice(5,7),16); }
+        return `rgba(${r},${g},${b},${alpha})`;
+    }
     render(ctx) {
         // Range
-        ctx.beginPath(); ctx.arc(this.x,this.y,this.stats.range,0,Math.PI*2); ctx.fillStyle=this.stats.color+'05'; ctx.fill(); ctx.strokeStyle=this.stats.color+'15'; ctx.stroke();
+        ctx.beginPath(); ctx.arc(this.x,this.y,this.stats.range,0,Math.PI*2); ctx.fillStyle=this.hexToRgba(this.stats.color,0.02); ctx.fill(); ctx.strokeStyle=this.hexToRgba(this.stats.color,0.08); ctx.lineWidth=1; ctx.stroke();
         // Base
         ctx.fillStyle='#333'; ctx.fillRect(this.x-16,this.y-16,32,32);
         // Body
