@@ -420,6 +420,7 @@ class GameManager {
         this.engine.events.on('waveComplete',({wave,bonus})=>{this.gameState.cash+=bonus; this.gameState.wave=wave+1; this.updateUI(); document.getElementById('startWaveBtn').disabled=false;});
         this.engine.events.on('pathChanged',({pathName})=>{console.log('Path changed to:',pathName);});
         this.engine.canvas.addEventListener('click',(e)=>this.handleClick(e));
+        this.engine.canvas.addEventListener('contextmenu',(e)=>{e.preventDefault(); this.handleRightClick(e);});
     }
     handleClick(e) {
         if (!this.gameState.selectedTower) return;
@@ -450,8 +451,40 @@ class GameManager {
             this.updateUI();
         }
     }
+    handleRightClick(e) {
+        const rect=this.engine.canvas.getBoundingClientRect();
+        const x=e.clientX-rect.left, y=e.clientY-rect.top;
+        for (let i=this.engine.entities.length-1; i>=0; i--) {
+            const entity=this.engine.entities[i];
+            if (entity.type==='tower'&&Math.hypot(entity.x-x,entity.y-y)<25) {
+                const sellPrice=Math.floor(TowerTypes[entity.towerType].cost*0.5);
+                this.gameState.cash+=sellPrice;
+                this.engine.getSystem('particles').spawn('cash',entity.x,entity.y);
+                entity.destroy();
+                this.updateUI();
+                return;
+            }
+        }
+    }
     selectTower(type) { this.gameState.selectedTower=this.gameState.selectedTower===type?null:type; this.updateUI(); }
-    startWave() { this.engine.getSystem('waves').startWave(); document.getElementById('startWaveBtn').disabled=true; }
+    startWave() {
+        const wave=this.gameState.wave;
+        const wavesystem=this.engine.getSystem('waves');
+        if ([6,7,14,15,22,23].includes(wave)) {
+            const warnings={6:'💰 MARKET SHIFT INCOMING - Spend Wisely!',7:'🚨 NEW ROUTE NEXT WAVE!',14:'💰 DIVERSIFY YOUR DEFENSES!',15:'🚨 PATH CHANGE IMMINENT!',22:'💰 PORTFOLIO REBALANCE TIME!',23:'🚨 THE MARKET IS EVOLVING!'};
+            const msg=warnings[wave]||'💰 Position for the next market shift!';
+            this.showWarning(msg);
+        }
+        wavesystem.startWave();
+        document.getElementById('startWaveBtn').disabled=true;
+    }
+    showWarning(msg) {
+        const warning=document.createElement('div');
+        warning.textContent=msg;
+        warning.style.cssText='position:fixed;top:100px;left:50%;transform:translateX(-50%);background:rgba(233,69,96,0.95);color:#fff;padding:15px 30px;border-radius:10px;font-weight:bold;z-index:1000;animation:slideDown 0.5s ease;';
+        document.body.appendChild(warning);
+        setTimeout(()=>{warning.style.animation='fadeOut 0.5s ease'; setTimeout(()=>warning.remove(),500);},3000);
+    }
     shakeScreen() {
         const c=this.engine.canvas; c.style.transform='translate(5px,5px)';
         setTimeout(()=>{c.style.transform='translate(-5px,-5px)'; setTimeout(()=>c.style.transform='translate(0,0)',50);},50);

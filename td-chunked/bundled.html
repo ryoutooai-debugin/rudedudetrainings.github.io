@@ -26,6 +26,8 @@
             text-shadow: 0 0 30px rgba(233, 69, 96, 0.5); animation: titlePulse 2s infinite;
         }
         @keyframes titlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes slideDown { from { transform: translateX(-50%) translateY(-100%); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
         .game-subtitle { font-size: 1.3em; color: #888; margin-bottom: 40px; letter-spacing: 3px; }
         .difficulty-select { display: flex; gap: 20px; margin-bottom: 30px; }
         .difficulty-btn {
@@ -195,7 +197,11 @@
         }
         function selectTower(type) { if (game) game.selectTower(type); }
         function startWave() { if (game) game.startWave(); }
-        function resetGame() { if (game) game.reset(); document.getElementById('gameOver').style.display = 'none'; }
+        function resetGame() {
+            if (!confirm('💸 Liquidate all positions? This will clear your entire portfolio!')) return;
+            if (game) game.reset();
+            document.getElementById('gameOver').style.display = 'none';
+        }
         function togglePause() { if (game) game.pause(); }
         function showHelp() {
             alert('🎮 HOW TO PLAY:\n\n🏗️ Click a tower, then click map to build.\n\n🎯 Stop enemies from reaching the end!\n\n💰 Earn cash from kills.\n\n🌊 Survive as many waves as possible!\n\n🔄 PATH CHANGES:\n• Waves 1-8: Standard path\n• Waves 9-16: Figure-8 loop\n• Waves 17-24: Dual lane\n• Waves 25+: Spiral of doom');
