@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🐂 Bulls vs Bears TD 🐻</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -17,6 +17,109 @@
             min-height: 100vh;
             color: #fff;
             overflow: hidden;
+        }
+        
+        /* Start Screen */
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 10px;
+            color: #e94560;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .game-subtitle {
+            font-size: 1.2em;
+            color: #888;
+            margin-bottom: 40px;
+        }
+        .difficulty-select {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .difficulty-btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: 2px solid #e94560;
+            background: rgba(233, 69, 96, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .difficulty-btn:hover, .difficulty-btn.selected {
+            background: #e94560;
+            transform: translateY(-2px);
+        }
+        .start-btn {
+            padding: 15px 50px;
+            font-size: 1.3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .start-btn:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+        .start-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+        }
+        .difficulty-desc {
+            text-align: center;
+            color: #888;
+            margin: 20px 0;
+            max-width: 400px;
+        }
+        
+        /* Header Controls */
+        .header-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #e94560;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            font-size: 1.3em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .control-btn:hover {
+            background: rgba(233, 69, 96, 0.3);
+            transform: scale(1.1);
         }
         .game-container {
             display: flex;
@@ -43,6 +146,15 @@
         .logo p {
             font-size: 0.8em;
             color: #888;
+        }
+        .difficulty-badge {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 12px;
+            background: rgba(233, 69, 96, 0.2);
+            border-radius: 12px;
+            font-size: 0.75em;
+            color: #e94560;
         }
         .stats {
             background: rgba(255,255,255,0.05);
@@ -196,11 +308,35 @@
     </style>
 </head>
 <body>
-    <div class="game-container">
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+        <h1 class="game-title">🐂 Bulls vs Bears 🐻</h1>
+        <p class="game-subtitle">Tower Defense - Market Edition</p>
+        
+        <div class="difficulty-select">
+            <button class="difficulty-btn" data-diff="easy" onclick="selectDifficulty('easy')">🟢 Easy</button>
+            <button class="difficulty-btn" data-diff="medium" onclick="selectDifficulty('medium')">🟡 Medium</button>
+            <button class="difficulty-btn" data-diff="hard" onclick="selectDifficulty('hard')">🔴 Hard</button>
+        </div>
+        
+        <p class="difficulty-desc" id="difficultyDesc">Select difficulty to start</p>
+        
+        <button class="start-btn" id="startBtn" onclick="startGame()" disabled>Start Game</button>
+    </div>
+    
+    <!-- Header Controls -->
+    <div class="header-controls" id="headerControls" style="display: none;">
+        <button class="control-btn" onclick="toggleSound()" id="soundBtn">🔊</button>
+        <button class="control-btn" onclick="togglePause()" id="pauseBtn">⏸️</button>
+        <button class="control-btn" onclick="showHelp()">❓</button>
+    </div>
+    
+    <div class="game-container" id="gameContainer" style="display: none;">
         <div class="sidebar">
             <div class="logo">
                 <h1>🐂 vs 🐻</h1>
                 <p>Bulls vs Bears TD</p>
+                <div class="difficulty-badge" id="difficultyBadge">Medium</div>
             </div>
             
             <div class="stats">
@@ -282,6 +418,13 @@
     </div>
 
     <script>
+        // Difficulty Configuration
+        const DIFFICULTY = {
+            easy: { name: 'Easy', healthMult: 0.7, speedMult: 0.8, rewardMult: 1.3, startCash: 600, startHealth: 25 },
+            medium: { name: 'Medium', healthMult: 1.0, speedMult: 1.0, rewardMult: 1.0, startCash: 500, startHealth: 20 },
+            hard: { name: 'Hard', healthMult: 1.4, speedMult: 1.2, rewardMult: 0.8, startCash: 400, startHealth: 15 }
+        };
+        
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         
@@ -294,8 +437,59 @@
             kills: 0,
             selectedTower: null,
             waveActive: false,
-            gameOver: false
+            gameOver: false,
+            paused: false,
+            difficulty: 'medium',
+            soundEnabled: true
         };
+        
+        // Difficulty Selection
+        function selectDifficulty(diff) {
+            gameState.difficulty = diff;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('selected'));
+            document.querySelector(`[data-diff="${diff}"]`).classList.add('selected');
+            
+            const desc = {
+                easy: 'More starting cash, weaker enemies, slower pace',
+                medium: 'Balanced gameplay - the standard experience',
+                hard: 'Less cash, stronger enemies, faster pace'
+            };
+            document.getElementById('difficultyDesc').textContent = desc[diff];
+            document.getElementById('startBtn').disabled = false;
+        }
+        
+        // Start Game
+        function startGame() {
+            const diff = DIFFICULTY[gameState.difficulty];
+            gameState.cash = diff.startCash;
+            gameState.health = diff.startHealth;
+            gameState.maxHealth = diff.startHealth;
+            
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'flex';
+            document.getElementById('headerControls').style.display = 'flex';
+            document.getElementById('difficultyBadge').textContent = diff.name;
+            
+            resize();
+            updateUI();
+        }
+        
+        // Toggle Sound
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            document.getElementById('soundBtn').textContent = gameState.soundEnabled ? '🔊' : '🔇';
+        }
+        
+        // Toggle Pause
+        function togglePause() {
+            gameState.paused = !gameState.paused;
+            document.getElementById('pauseBtn').textContent = gameState.paused ? '▶️' : '⏸️';
+        }
+        
+        // Show Help
+        function showHelp() {
+            alert('🎮 How to Play:\n\n🏗️ Click a tower, then click on the map to build it.\n\n🎯 Stop enemies from reaching the end of the path.\n\n💰 Earn cash from kills to build more towers.\n\n🌊 Survive all 8 waves to win!\n\n💡 Tip: Place towers near corners for maximum coverage.');
+        }
         
         // Tower types
         const towerTypes = {
@@ -630,12 +824,22 @@
         }
         
         function startWave() {
-            if (gameState.waveActive || gameState.gameOver) return;
+            if (gameState.waveActive || gameState.gameOver || gameState.paused) return;
             
             gameState.waveActive = true;
             document.getElementById('startWaveBtn').disabled = true;
             
-            const waveData = waves[(gameState.wave - 1) % waves.length];
+            const diff = DIFFICULTY[gameState.difficulty];
+            const baseWaveData = waves[(gameState.wave - 1) % waves.length];
+            
+            // Apply difficulty multipliers
+            const waveData = {
+                ...baseWaveData,
+                health: Math.floor(baseWaveData.health * diff.healthMult),
+                speed: baseWaveData.speed * diff.speedMult,
+                reward: Math.floor(baseWaveData.reward * diff.rewardMult)
+            };
+            
             document.getElementById('waveTitle').textContent = `Wave ${gameState.wave}: ${waveData.name}`;
             document.getElementById('waveDesc').textContent = waveData.desc;
             
@@ -645,6 +849,7 @@
                     clearInterval(spawnInterval);
                     return;
                 }
+                if (gameState.paused) return; // Skip spawn if paused
                 
                 enemies.push(new Enemy(waveData));
                 spawned++;
@@ -666,15 +871,19 @@
         }
         
         function resetGame() {
+            const diff = DIFFICULTY[gameState.difficulty];
             gameState = {
-                cash: 500,
-                health: 20,
-                maxHealth: 20,
+                cash: diff.startCash,
+                health: diff.startHealth,
+                maxHealth: diff.startHealth,
                 wave: 1,
                 kills: 0,
                 selectedTower: null,
                 waveActive: false,
-                gameOver: false
+                gameOver: false,
+                paused: false,
+                difficulty: gameState.difficulty,
+                soundEnabled: gameState.soundEnabled
             };
             towers = [];
             enemies = [];
@@ -685,6 +894,7 @@
             document.getElementById('startWaveBtn').disabled = false;
             document.getElementById('waveTitle').textContent = 'Wave 1: The Paper Hands';
             document.getElementById('waveDesc').textContent = 'Weak enemies that panic easily';
+            document.getElementById('pauseBtn').textContent = '⏸️';
             
             updateUI();
         }
@@ -768,6 +978,21 @@
         
         // Game loop
         function gameLoop() {
+            // Skip updates if paused (but still draw)
+            if (!gameState.paused) {
+                // Update game objects
+                for (let tower of towers) tower.update();
+                for (let i = enemies.length - 1; i >= 0; i--) enemies[i].update();
+                for (let i = projectiles.length - 1; i >= 0; i--) {
+                    projectiles[i].update();
+                    if (projectiles[i].hit) projectiles.splice(i, 1);
+                }
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update();
+                    if (particles[i].life <= 0) particles.splice(i, 1);
+                }
+            }
+            
             // Clear canvas
             ctx.fillStyle = '#0a0a1a';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -823,34 +1048,26 @@
                 ctx.restore();
             }
             
-            // Update and draw towers
-            for (let tower of towers) {
-                tower.update();
-                tower.draw();
-            }
+            // Draw towers
+            for (let tower of towers) tower.draw();
             
-            // Update and draw enemies
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                enemies[i].update();
-                enemies[i].draw();
-            }
+            // Draw enemies
+            for (let enemy of enemies) enemy.draw();
             
-            // Update and draw projectiles
-            for (let i = projectiles.length - 1; i >= 0; i--) {
-                projectiles[i].update();
-                projectiles[i].draw();
-                if (projectiles[i].hit) {
-                    projectiles.splice(i, 1);
-                }
-            }
+            // Draw projectiles
+            for (let proj of projectiles) proj.draw();
             
-            // Update and draw particles
-            for (let i = particles.length - 1; i >= 0; i--) {
-                particles[i].update();
-                particles[i].draw();
-                if (particles[i].life <= 0) {
-                    particles.splice(i, 1);
-                }
+            // Draw particles
+            for (let p of particles) p.draw();
+            
+            // Draw pause overlay
+            if (gameState.paused) {
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 48px Orbitron';
+                ctx.textAlign = 'center';
+                ctx.fillText('⏸️ PAUSED', canvas.width/2, canvas.height/2);
             }
             
             requestAnimationFrame(gameLoop);
