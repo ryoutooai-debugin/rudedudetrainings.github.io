@@ -350,14 +350,19 @@
 <body>
     <div class="start-screen" id="startScreen">
         <h1 class="game-title">🐂 Bulls vs Bears 🐻</h1>
-        <p class="game-subtitle">TOWER DEFENSE - ENHANCED EDITION</p>
-        <div class="difficulty-select">
-            <button class="difficulty-btn" data-diff="easy" onclick="selectDifficulty('easy')">🟢 EASY</button>
-            <button class="difficulty-btn" data-diff="medium" onclick="selectDifficulty('medium')">🟡 MEDIUM</button>
-            <button class="difficulty-btn" data-diff="hard" onclick="selectDifficulty('hard')">🔴 HARD</button>
+        <p class="game-subtitle">TOWER DEFENSE - PROGRESSIVE EDITION</p>
+        <div class="progressive-info" style="background: rgba(233,69,96,0.1); border: 1px solid rgba(233,69,96,0.3); border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 400px; text-align: left;">
+            <h3 style="color: #e94560; margin-top: 0;">📈 Progressive Difficulty</h3>
+            <p style="font-size: 14px; margin: 10px 0;">Difficulty increases automatically as you progress:</p>
+            <ul style="font-size: 13px; line-height: 1.8; margin: 10px 0; padding-left: 20px;">
+                <li><strong style="color: #0f0;">Waves 1-8:</strong> EASY - Learn the ropes</li>
+                <li><strong style="color: #ff0;">Waves 9-16:</strong> MEDIUM - Things heat up</li>
+                <li><strong style="color: #f90;">Waves 17-24:</strong> HARD - Serious challenge</li>
+                <li><strong style="color: #f00;">Waves 25+:</strong> INSANE - Good luck!</li>
+            </ul>
+            <p style="font-size: 12px; color: #888; margin: 10px 0 0 0;">Each tier: +40% enemy HP, +20% speed, -20% rewards</p>
         </div>
-        <p class="difficulty-desc" id="difficultyDesc">Select difficulty to begin</p>
-        <button class="start-btn" id="startBtn" onclick="startGame()" disabled>START GAME</button>
+        <button class="start-btn" id="startBtn" onclick="startGame()">START GAME</button>
     </div>
     
     <div class="header-controls" id="headerControls" style="display: none;">
@@ -506,24 +511,14 @@
 
     <script src="bundle.js"></script>
     <script>
-        let game = null, selectedDifficulty = null;
+        let game = null;
         let kills = 0; // Track kills for mobile UI
         
-        function selectDifficulty(diff) {
-            selectedDifficulty = diff;
-            document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('selected'));
-            document.querySelector('[data-diff="'+diff+'"]').classList.add('selected');
-            const desc = {easy:'Relaxed pace, weaker enemies',medium:'Balanced challenge',hard:'Intense difficulty'};
-            document.getElementById('difficultyDesc').textContent = desc[diff];
-            document.getElementById('startBtn').disabled = false;
-        }
-        
         function startGame() {
-            if (!selectedDifficulty) return;
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('gameContainer').style.display = 'flex';
             document.getElementById('headerControls').style.display = 'flex';
-            document.getElementById('difficultyBadge').textContent = selectedDifficulty.toUpperCase();
+            document.getElementById('difficultyBadge').textContent = 'EASY';
             game = new GameManager();
             
             // Force canvas to be visible and properly sized on mobile
@@ -579,7 +574,7 @@
                 }
             };
             
-            game.init('gameCanvas', selectedDifficulty);
+            game.init('gameCanvas', 'easy');
             kills = 0;
             
             // Track kills for mobile UI (must be after init)

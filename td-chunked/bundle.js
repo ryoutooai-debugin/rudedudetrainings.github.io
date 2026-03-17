@@ -208,7 +208,7 @@ class ParticleSystem {
 }
 
 // ============================================
-// SYSTEMS: WaveSystem with Infinite Scaling
+// SYSTEMS: WaveSystem with Progressive Difficulty
 // ============================================
 
 class WaveSystem {
@@ -224,25 +224,72 @@ class WaveSystem {
             {name:'The Bears',desc:'Crushing',count:18,interval:700,health:80,speed:1.8,reward:30,color:'#f00',emoji:'🐻'},
             {name:'MOASS',desc:'FINAL WAVE',count:30,interval:400,health:100,speed:2,reward:25,color:'#ffd700',emoji:'🌙'}
         ];
+        // Progressive difficulty tiers - ramps every 8 waves (after each boss)
+        this.difficultyTiers = {
+            easy: { name: 'EASY', healthMult: 0.7, speedMult: 0.8, rewardMult: 1.3, desc: 'Relaxed pace, weaker enemies' },
+            medium: { name: 'MEDIUM', healthMult: 1.0, speedMult: 1.0, rewardMult: 1.0, desc: 'Balanced challenge' },
+            hard: { name: 'HARD', healthMult: 1.4, speedMult: 1.2, rewardMult: 0.8, desc: 'Intense difficulty' },
+            insane: { name: 'INSANE', healthMult: 2.0, speedMult: 1.5, rewardMult: 0.6, desc: 'Maximum difficulty' }
+        };
     }
     init(engine) {
-        this.engine=engine; this.diffConfig={healthMult:1,speedMult:1,rewardMult:1};
+        this.engine=engine;
+        // Start at easy tier
+        this.currentTier = 'easy';
+        this.diffConfig = {...this.difficultyTiers.easy};
+    }
+    // Get current difficulty tier based on wave number
+    getTierForWave(waveNum) {
+        if (waveNum <= 8) return 'easy';
+        if (waveNum <= 16) return 'medium';
+        if (waveNum <= 24) return 'hard';
+        return 'insane';
+    }
+    // Check if we should announce tier change
+    checkTierChange(waveNum) {
+        const newTier = this.getTierForWave(waveNum);
+        if (newTier !== this.currentTier) {
+            this.currentTier = newTier;
+            this.diffConfig = {...this.difficultyTiers[newTier]};
+            // Add progressive scaling for insane tier (waves 25+)
+            if (newTier === 'insane') {
+                const insaneCycles = Math.floor((waveNum - 25) / 8);
+                this.diffConfig.healthMult *= Math.pow(1.1, insaneCycles);
+                this.diffConfig.speedMult *= Math.pow(1.05, insaneCycles);
+            }
+            return {
+                changed: true,
+                tier: newTier,
+                name: this.difficultyTiers[newTier].name,
+                desc: this.difficultyTiers[newTier].desc
+            };
+        }
+        return { changed: false };
     }
     generateWaveData(waveNum) {
-        if (waveNum<=this.baseWaves.length) return this.baseWaves[waveNum-1];
+        // Check for tier change and get announcement data
+        const tierChange = this.checkTierChange(waveNum);
+        
+        if (waveNum<=this.baseWaves.length) return {...this.baseWaves[waveNum-1], tierChange};
         const base=this.baseWaves[(waveNum-1)%this.baseWaves.length];
         const cycles=Math.floor((waveNum-1)/this.baseWaves.length);
-        const isBoss=waveNum%10===0, isElite=waveNum%5===0&&!isBoss;
+        const isBoss=waveNum%8===0, isElite=waveNum%4===0&&!isBoss;
+        
+        // Apply progressive difficulty multipliers
+        let healthMult = this.diffConfig.healthMult * Math.pow(1.08, cycles);
+        let speedMult = this.diffConfig.speedMult * Math.pow(1.02, cycles);
+        let rewardMult = this.diffConfig.rewardMult * Math.pow(1.03, cycles);
+        
         return {
             name:isBoss?`BOSS WAVE ${waveNum}`:isElite?`Elite Wave ${waveNum}`:`Wave ${waveNum}`,
-            desc:isBoss?'EXTREME DIFFICULTY':'Procedural',
-            count:Math.floor(base.count*Math.pow(1.1,cycles)*(isBoss?0.5:1)),
-            interval:Math.max(200,base.interval*Math.pow(0.98,cycles)),
-            health:Math.floor(base.health*Math.pow(1.15,cycles)*(isElite?1.5:1)*(isBoss?3:1)),
-            speed:base.speed*Math.pow(1.02,cycles)*(isBoss?0.8:1),
-            reward:Math.floor(base.reward*Math.pow(1.05,cycles)*(isBoss?5:1)),
+            desc:isBoss?'EXTREME DIFFICULTY':this.difficultyTiers[this.currentTier].desc,
+            count:Math.floor(base.count*Math.pow(1.08,cycles)*(isBoss?0.6:1)),
+            interval:Math.max(250,base.interval*Math.pow(0.97,cycles)),
+            health:Math.floor(base.health*healthMult*(isElite?1.4:1)*(isBoss?2.5:1)),
+            speed:base.speed*speedMult*(isBoss?0.85:1),
+            reward:Math.floor(base.reward*rewardMult*(isBoss?4:1)),
             color:base.color, emoji:isBoss?'👹':isElite?'💀':base.emoji,
-            flying:base.flying||(waveNum>20&&Math.random()>0.7), isBoss, isElite
+            flying:base.flying||(waveNum>20&&Math.random()>0.75), isBoss, isElite, tierChange
         };
     }
     startWave() {
@@ -424,8 +471,24 @@ class GameManager {
             this.gameState.health-=damage; this.updateUI(); this.shakeScreen();
             if (this.gameState.health<=0) this.gameOver();
         });
-        this.engine.events.on('waveStart',({wave,waveData})=>{this.updateWaveDisplay(waveData);});
-        this.engine.events.on('waveComplete',({wave,bonus})=>{this.gameState.cash+=bonus; this.gameState.wave=wave+1; this.updateUI(); document.getElementById('startWaveBtn').disabled=false; const mobileBtn=document.getElementById('mobileStartWaveBtn'); if(mobileBtn) mobileBtn.disabled=false;});
+        this.engine.events.on('waveStart',({wave,waveData})=>{
+            this.updateWaveDisplay(waveData);
+            // Show tier change announcement if difficulty increased
+            if (waveData.tierChange && waveData.tierChange.changed) {
+                this.showTierChange(waveData.tierChange);
+            }
+        });
+        this.engine.events.on('waveComplete',({wave,bonus,waveData})=>{
+            this.gameState.cash+=bonus; this.gameState.wave=wave+1; this.updateUI(); 
+            document.getElementById('startWaveBtn').disabled=false; 
+            const mobileBtn=document.getElementById('mobileStartWaveBtn'); if(mobileBtn) mobileBtn.disabled=false;
+            // Check if tier changed and update badge
+            const wavesystem = this.engine.getSystem('waves');
+            const tierCheck = wavesystem.checkTierChange(this.gameState.wave);
+            if (tierCheck.changed) {
+                this.updateDifficultyBadge(tierCheck.name);
+            }
+        });
         this.engine.events.on('pathChanged',({pathName})=>{console.log('Path changed to:',pathName);});
         this.engine.canvas.addEventListener('click',(e)=>this.handleClick(e));
         this.engine.canvas.addEventListener('contextmenu',(e)=>{e.preventDefault(); this.handleRightClick(e);});
@@ -492,6 +555,35 @@ class GameManager {
         warning.style.cssText='position:fixed;top:100px;left:50%;transform:translateX(-50%);background:rgba(233,69,96,0.95);color:#fff;padding:15px 30px;border-radius:10px;font-weight:bold;z-index:1000;animation:slideDown 0.5s ease;';
         document.body.appendChild(warning);
         setTimeout(()=>{warning.style.animation='fadeOut 0.5s ease'; setTimeout(()=>warning.remove(),500);},3000);
+    }
+    showTierChange(tierChange) {
+        const tierColors = { EASY: '#0f0', MEDIUM: '#ff0', HARD: '#f90', INSANE: '#f00' };
+        const color = tierColors[tierChange.name] || '#fff';
+        const announcement = document.createElement('div');
+        announcement.innerHTML = `
+            <div style="font-size: 24px; margin-bottom: 10px;">⚠️ DIFFICULTY INCREASED ⚠️</div>
+            <div style="font-size: 32px; color: ${color}; text-shadow: 0 0 20px ${color};">${tierChange.name}</div>
+            <div style="font-size: 14px; margin-top: 10px; opacity: 0.9;">${tierChange.desc}</div>
+        `;
+        announcement.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.95);border:3px solid '+color+';color:#fff;padding:30px 50px;border-radius:15px;font-weight:bold;z-index:2000;text-align:center;animation:pulseTier 0.5s ease;';
+        document.body.appendChild(announcement);
+        // Add pulse animation if not exists
+        if (!document.getElementById('tierAnim')) {
+            const style = document.createElement('style');
+            style.id = 'tierAnim';
+            style.textContent = '@keyframes pulseTier {0%{transform:translate(-50%,-50%) scale(0.8);opacity:0;}50%{transform:translate(-50%,-50%) scale(1.05);}100%{transform:translate(-50%,-50%) scale(1);opacity:1;}}';
+            document.head.appendChild(style);
+        }
+        setTimeout(()=>{announcement.style.animation='fadeOut 0.5s ease'; setTimeout(()=>announcement.remove(),500);},4000);
+    }
+    updateDifficultyBadge(tierName) {
+        const badge = document.getElementById('difficultyBadge');
+        if (badge) {
+            badge.textContent = tierName;
+            const tierColors = { EASY: '#0f0', MEDIUM: '#ff0', HARD: '#f90', INSANE: '#f00' };
+            badge.style.color = tierColors[tierName] || '#fff';
+            badge.style.textShadow = '0 0 10px ' + (tierColors[tierName] || '#fff');
+        }
     }
     shakeScreen() {
         const c=this.engine.canvas; c.style.transform='translate(5px,5px)';
