@@ -536,10 +536,23 @@
             setTimeout(() => {
                 if (game && game.engine) {
                     game.engine.resize();
+                    // Recalculate path with new dimensions
+                    const pathSystem = game.engine.getSystem('paths');
+                    if (pathSystem) pathSystem.recalculatePath();
                     // Force a render to ensure something shows
                     game.engine.render(0);
                 }
             }, 200);
+            
+            // Additional delay for slower mobile browsers
+            setTimeout(() => {
+                if (game && game.engine) {
+                    game.engine.resize();
+                    const pathSystem = game.engine.getSystem('paths');
+                    if (pathSystem) pathSystem.recalculatePath();
+                    game.engine.render(0);
+                }
+            }, 500);
             
             // Override updateUI to also update mobile UI
             const originalUpdateUI = game.updateUI.bind(game);

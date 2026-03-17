@@ -117,7 +117,7 @@ class PathSystem {
         this.recalculatePath();
     }
     recalculatePath() {
-        const w = this.canvas.width, h = this.canvas.height;
+        const w = this.canvas.width || 800, h = this.canvas.height || 450;
         this.currentPath = this.paths[this.currentPathName].map(p => ({x:p.x*w, y:p.y*h}));
     }
     updatePathForWave(wave) {
