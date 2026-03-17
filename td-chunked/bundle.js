@@ -417,7 +417,7 @@ class GameManager {
             if (this.gameState.health<=0) this.gameOver();
         });
         this.engine.events.on('waveStart',({wave,waveData})=>{this.updateWaveDisplay(waveData);});
-        this.engine.events.on('waveComplete',({wave,bonus})=>{this.gameState.cash+=bonus; this.gameState.wave=wave+1; this.updateUI(); document.getElementById('startWaveBtn').disabled=false;});
+        this.engine.events.on('waveComplete',({wave,bonus})=>{this.gameState.cash+=bonus; this.gameState.wave=wave+1; this.updateUI(); document.getElementById('startWaveBtn').disabled=false; const mobileBtn=document.getElementById('mobileStartWaveBtn'); if(mobileBtn) mobileBtn.disabled=false;});
         this.engine.events.on('pathChanged',({pathName})=>{console.log('Path changed to:',pathName);});
         this.engine.canvas.addEventListener('click',(e)=>this.handleClick(e));
         this.engine.canvas.addEventListener('contextmenu',(e)=>{e.preventDefault(); this.handleRightClick(e);});

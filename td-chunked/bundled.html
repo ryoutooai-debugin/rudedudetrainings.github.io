@@ -147,6 +147,189 @@
             padding: 12px; border-radius: 8px; font-size: 0.9em; color: #0f0;
             margin-top: 15px;
         }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .game-title { font-size: 2.2em; }
+            .game-subtitle { font-size: 1em; margin-bottom: 20px; }
+            .difficulty-select { flex-direction: column; gap: 10px; }
+            .difficulty-btn { padding: 15px 30px; font-size: 1em; width: 200px; }
+            .start-btn { padding: 15px 40px; font-size: 1.1em; }
+            
+            .game-container {
+                flex-direction: column;
+                height: 100vh;
+                height: 100dvh; /* Dynamic viewport height for mobile */
+            }
+            
+            /* Hide desktop sidebar on mobile */
+            .sidebar {
+                display: none;
+            }
+            
+            /* Mobile top stats bar */
+            .mobile-top-bar {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 12px;
+                background: rgba(0,0,0,0.8);
+                border-bottom: 2px solid #e94560;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            
+            .mobile-stat {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 0.8em;
+            }
+            
+            .mobile-health-bar {
+                width: 50px;
+                height: 8px;
+                background: rgba(0,0,0,0.5);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            
+            .mobile-health-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00);
+                transition: width 0.3s ease;
+            }
+            
+            .main-area {
+                flex: 1;
+                min-height: 0;
+            }
+            
+            .wave-info {
+                padding: 10px;
+            }
+            
+            .wave-info h2 {
+                font-size: 1em;
+            }
+            
+            .wave-enemies {
+                font-size: 0.8em;
+            }
+            
+            /* Mobile tower bar */
+            .mobile-tower-bar {
+                display: flex !important;
+                gap: 6px;
+                padding: 8px;
+                background: rgba(0,0,0,0.9);
+                border-top: 2px solid #e94560;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            
+            .mobile-tower-bar::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .mobile-tower-btn {
+                flex: 0 0 auto;
+                width: 65px;
+                padding: 6px 4px;
+                background: rgba(255,255,255,0.1);
+                border: 2px solid transparent;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-align: center;
+            }
+            
+            .mobile-tower-btn.selected {
+                border-color: #00ff00;
+                background: rgba(0, 255, 0, 0.15);
+            }
+            
+            .mobile-tower-btn.disabled {
+                opacity: 0.4;
+            }
+            
+            .mobile-tower-icon {
+                font-size: 1.3em;
+            }
+            
+            .mobile-tower-name {
+                font-size: 0.6em;
+                font-weight: bold;
+                color: #fff;
+            }
+            
+            .mobile-tower-cost {
+                font-size: 0.65em;
+                color: #ffd700;
+            }
+            
+            /* Mobile controls bar */
+            .mobile-controls-bar {
+                display: flex !important;
+                gap: 8px;
+                padding: 8px;
+                background: rgba(0,0,0,0.95);
+                border-top: 1px solid #333;
+            }
+            
+            .mobile-btn {
+                flex: 1;
+                padding: 12px;
+                background: linear-gradient(135deg, #e94560, #ff6b6b);
+                border: none;
+                border-radius: 8px;
+                color: #fff;
+                font-weight: bold;
+                font-size: 0.9em;
+                cursor: pointer;
+            }
+            
+            .mobile-btn-secondary {
+                background: linear-gradient(135deg, #444, #666);
+            }
+            
+            .header-controls {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1em;
+            }
+            
+            .game-over {
+                padding: 30px 20px;
+                width: 90%;
+                max-width: 350px;
+            }
+            
+            .game-over h2 {
+                font-size: 1.5em;
+            }
+            
+            .help-content {
+                margin: 20px;
+                padding: 20px;
+                max-height: 70vh;
+            }
+        }
+        
+        /* Desktop: hide mobile elements */
+        @media (min-width: 769px) {
+            .mobile-top-bar,
+            .mobile-tower-bar,
+            .mobile-controls-bar {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -206,6 +389,29 @@
     </div>
     
     <div class="game-container" id="gameContainer">
+        <!-- Mobile Top Stats Bar -->
+        <div class="mobile-top-bar" id="mobileTopBar">
+            <div class="mobile-stat">
+                <span>💰</span>
+                <span class="stat-value" id="mobileCash">$500</span>
+            </div>
+            <div class="mobile-stat">
+                <span>❤️</span>
+                <div class="mobile-health-bar">
+                    <div class="mobile-health-fill" id="mobileHealthBar" style="width: 100%"></div>
+                </div>
+            </div>
+            <div class="mobile-stat">
+                <span>🌊</span>
+                <span class="stat-value" id="mobileWave">1</span>
+            </div>
+            <div class="mobile-stat">
+                <span>🎯</span>
+                <span class="stat-value" id="mobileKills">0</span>
+            </div>
+        </div>
+        
+        <!-- Desktop Sidebar (hidden on mobile) -->
         <div class="sidebar">
             <div class="logo">
                 <h1>🐂 vs 🐻</h1>
@@ -231,6 +437,42 @@
                 <button class="btn" onclick="resetGame()">RESET</button>
             </div>
         </div>
+        
+        <!-- Mobile Tower Bar -->
+        <div class="mobile-tower-bar" id="mobileTowerBar">
+            <div class="mobile-tower-btn" id="mobileTowerEWO" onclick="selectTower('EWO')">
+                <div class="mobile-tower-icon">📊</div>
+                <div class="mobile-tower-name">EWO</div>
+                <div class="mobile-tower-cost">$100</div>
+            </div>
+            <div class="mobile-tower-btn" id="mobileTowerScalper" onclick="selectTower('Scalper')">
+                <div class="mobile-tower-icon">⚡</div>
+                <div class="mobile-tower-name">Scalp</div>
+                <div class="mobile-tower-cost">$150</div>
+            </div>
+            <div class="mobile-tower-btn" id="mobileTowerCC" onclick="selectTower('CC')">
+                <div class="mobile-tower-icon">💵</div>
+                <div class="mobile-tower-name">CC</div>
+                <div class="mobile-tower-cost">$200</div>
+            </div>
+            <div class="mobile-tower-btn" id="mobileTowerVWAP" onclick="selectTower('VWAP')">
+                <div class="mobile-tower-icon">🎯</div>
+                <div class="mobile-tower-name">VWAP</div>
+                <div class="mobile-tower-cost">$250</div>
+            </div>
+            <div class="mobile-tower-btn" id="mobileTowerStopLoss" onclick="selectTower('StopLoss')">
+                <div class="mobile-tower-icon">🛑</div>
+                <div class="mobile-tower-name">Stop</div>
+                <div class="mobile-tower-cost">$300</div>
+            </div>
+        </div>
+        
+        <!-- Mobile Controls Bar -->
+        <div class="mobile-controls-bar" id="mobileControlsBar">
+            <button class="mobile-btn" id="mobileStartWaveBtn" onclick="startWave()">START WAVE</button>
+            <button class="mobile-btn mobile-btn-secondary" onclick="resetGame()">RESET</button>
+        </div>
+        
         <div class="main-area">
             <div class="wave-info">
                 <h2 id="waveTitle">Wave 1: The Paper Hands</h2>
@@ -250,6 +492,8 @@
     <script src="bundle.js"></script>
     <script>
         let game = null, selectedDifficulty = null;
+        let kills = 0; // Track kills for mobile UI
+        
         function selectDifficulty(diff) {
             selectedDifficulty = diff;
             document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('selected'));
@@ -258,6 +502,7 @@
             document.getElementById('difficultyDesc').textContent = desc[diff];
             document.getElementById('startBtn').disabled = false;
         }
+        
         function startGame() {
             if (!selectedDifficulty) return;
             document.getElementById('startScreen').style.display = 'none';
@@ -265,21 +510,82 @@
             document.getElementById('headerControls').style.display = 'flex';
             document.getElementById('difficultyBadge').textContent = selectedDifficulty.toUpperCase();
             game = new GameManager();
+            
+            // Override updateUI to also update mobile UI
+            const originalUpdateUI = game.updateUI.bind(game);
+            game.updateUI = function() {
+                originalUpdateUI();
+                // Update mobile UI
+                document.getElementById('mobileCash').textContent = '$' + this.gameState.cash;
+                document.getElementById('mobileWave').textContent = this.gameState.wave;
+                document.getElementById('mobileKills').textContent = kills;
+                document.getElementById('mobileHealthBar').style.width = ((this.gameState.health/this.gameState.maxHealth)*100)+'%';
+                
+                // Update mobile tower buttons
+                document.querySelectorAll('.mobile-tower-btn').forEach(btn => btn.classList.remove('selected'));
+                if (this.gameState.selectedTower) {
+                    document.getElementById('mobileTower'+this.gameState.selectedTower)?.classList.add('selected');
+                }
+                
+                // Disable unaffordable towers on mobile
+                for (let type in TowerTypes) {
+                    const btn = document.getElementById('mobileTower'+type);
+                    if (btn) {
+                        btn.classList.toggle('disabled', this.gameState.cash < TowerTypes[type].cost);
+                    }
+                }
+            };
+            
+            // Track kills for mobile UI
+            game.engine.events.on('cashEarned', () => { kills++; });
+            
             game.init('gameCanvas', selectedDifficulty);
+            kills = 0;
         }
-        function selectTower(type) { if (game) game.selectTower(type); }
-        function startWave() { if (game) game.startWave(); }
+        
+        function selectTower(type) { 
+            if (game) {
+                game.selectTower(type);
+                // Update mobile UI immediately
+                document.querySelectorAll('.mobile-tower-btn').forEach(btn => btn.classList.remove('selected'));
+                if (game.gameState.selectedTower === type) {
+                    document.getElementById('mobileTower'+type)?.classList.add('selected');
+                }
+            }
+        }
+        
+        function startWave() { 
+            if (game) {
+                game.startWave();
+                document.getElementById('mobileStartWaveBtn').disabled = true;
+            }
+        }
+        
         function resetGame() {
             if (!confirm('💸 Liquidate all positions? This will clear your entire portfolio!')) return;
             if (game) game.reset();
             document.getElementById('gameOver').style.display = 'none';
+            document.getElementById('mobileStartWaveBtn').disabled = false;
+            kills = 0;
         }
-        function togglePause() { if (game) game.pause(); }
+        
+        function togglePause() { 
+            if (game) {
+                game.pause();
+                document.getElementById('pauseBtn').textContent = game.engine.state === 'PAUSED' ? '▶️' : '⏸️';
+            }
+        }
+        
         function toggleHelp() {
             const panel = document.getElementById('helpPanel');
             panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
             if (game && panel.style.display === 'flex') game.pause();
         }
+        
+        // Handle wave complete to re-enable start button
+        document.addEventListener('DOMContentLoaded', () => {
+            // This will be set up after game init
+        });
     </script>
 </body>
 </html>
