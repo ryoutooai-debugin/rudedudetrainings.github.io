@@ -526,12 +526,20 @@
             document.getElementById('difficultyBadge').textContent = selectedDifficulty.toUpperCase();
             game = new GameManager();
             
+            // Force canvas to be visible and properly sized on mobile
+            const canvas = document.getElementById('gameCanvas');
+            canvas.style.display = 'block';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            
             // Trigger resize after a short delay to ensure proper canvas sizing on mobile
             setTimeout(() => {
                 if (game && game.engine) {
                     game.engine.resize();
+                    // Force a render to ensure something shows
+                    game.engine.render(0);
                 }
-            }, 100);
+            }, 200);
             
             // Override updateUI to also update mobile UI
             const originalUpdateUI = game.updateUI.bind(game);

@@ -36,8 +36,12 @@ class GameEngine {
     }
     resize() {
         const parent = this.canvas.parentElement;
-        this.canvas.width = parent.clientWidth;
-        this.canvas.height = parent.clientHeight;
+        const width = parent.clientWidth || parent.offsetWidth || 800;
+        const height = parent.clientHeight || parent.offsetHeight || 450;
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.canvas.style.width = width + 'px';
+        this.canvas.style.height = height + 'px';
         this.events.emit('resize', { width: this.canvas.width, height: this.canvas.height });
     }
     registerSystem(name, system) {
@@ -69,6 +73,10 @@ class GameEngine {
         }
     }
     render(alpha) {
+        // Ensure canvas has valid dimensions
+        if (this.canvas.width === 0 || this.canvas.height === 0) {
+            this.resize();
+        }
         this.ctx.fillStyle = '#0a0a1a';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         for (const [, system] of this.systems) {
