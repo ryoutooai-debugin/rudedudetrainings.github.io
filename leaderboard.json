@@ -2,27 +2,27 @@
   "entries": [
     {
       "name": "owl_gr2vmi2kt",
-      "portfolio_value": 148,
+      "portfolio_value": 288,
       "cash": 0,
-      "updated": "2026-03-17T08:49:54.762114"
+      "updated": "2026-03-17T08:50:08.658584"
     }
   ],
-  "last_update": "2026-03-17T08:49:54.762122",
+  "last_update": "2026-03-17T08:50:08.658594",
   "users": {
     "owl_gr2vmi2kt": {
       "name": "owl_gr2vmi2kt",
-      "portfolio_value": 148,
+      "portfolio_value": 288,
       "cash": 0,
-      "owls": 12,
+      "owls": 18,
       "inventory": [],
       "stats": {
-        "trades": 2,
-        "profit_trades": 2,
+        "trades": 3,
+        "profit_trades": 3,
         "streak_days": 0,
         "last_played": null
       },
       "created": "2026-03-17T08:49:42.367431",
-      "updated": "2026-03-17T08:49:54.762108"
+      "updated": "2026-03-17T08:50:08.658578"
     }
   }
 }
