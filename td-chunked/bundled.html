@@ -579,11 +579,13 @@
                 }
             };
             
-            // Track kills for mobile UI
-            game.engine.events.on('cashEarned', () => { kills++; });
-            
             game.init('gameCanvas', selectedDifficulty);
             kills = 0;
+            
+            // Track kills for mobile UI (must be after init)
+            if (game && game.engine && game.engine.events) {
+                game.engine.events.on('cashEarned', () => { kills++; });
+            }
         }
         
         function selectTower(type) { 
