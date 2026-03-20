@@ -215,21 +215,21 @@ class WaveSystem {
     constructor() {
         this.wave=1; this.waveActive=false; this.enemiesSpawned=0; this.spawnTimer=0;
         this.baseWaves=[
-            {name:'The Paper Hands',desc:'Weak enemies',count:10,interval:1500,health:30,speed:1.5,reward:15,color:'#ff9999',emoji:'📄'},
-            {name:'FOMO Traders',desc:'Swarm groups',count:15,interval:800,health:25,speed:2,reward:12,color:'#ffcc99',emoji:'🚀'},
-            {name:'The Whales',desc:'Slow & tanky',count:5,interval:2500,health:150,speed:0.7,reward:50,color:'#99ccff',emoji:'🐋'},
-            {name:'Market Makers',desc:'Fast & tricky',count:8,interval:1200,health:60,speed:1.2,reward:25,color:'#cc99ff',emoji:'🏦'},
-            {name:'Flash Crash',desc:'Flying!',count:12,interval:600,health:20,speed:3,reward:20,color:'#ff6666',emoji:'⚡',flying:true},
-            {name:'The Bulls',desc:'Aggressive',count:20,interval:500,health:40,speed:2.5,reward:18,color:'#0f0',emoji:'🐂'},
-            {name:'The Bears',desc:'Crushing',count:18,interval:700,health:80,speed:1.8,reward:30,color:'#f00',emoji:'🐻'},
-            {name:'MOASS',desc:'FINAL WAVE',count:30,interval:400,health:100,speed:2,reward:25,color:'#ffd700',emoji:'🌙'}
+            {name:'The Paper Hands',desc:'Weak enemies',count:12,interval:1200,health:40,speed:1.8,reward:15,color:'#ff9999',emoji:'📄'},
+            {name:'FOMO Traders',desc:'Swarm groups',count:20,interval:600,health:35,speed:2.5,reward:12,color:'#ffcc99',emoji:'🚀'},
+            {name:'The Whales',desc:'Slow & tanky',count:6,interval:2200,health:200,speed:0.85,reward:50,color:'#99ccff',emoji:'🐋'},
+            {name:'Market Makers',desc:'Fast & tricky',count:10,interval:1000,health:80,speed:1.5,reward:25,color:'#cc99ff',emoji:'🏦'},
+            {name:'Flash Crash',desc:'Flying!',count:15,interval:500,health:30,speed:3.5,reward:20,color:'#ff6666',emoji:'⚡',flying:true},
+            {name:'The Bulls',desc:'Aggressive',count:25,interval:400,health:55,speed:3,reward:18,color:'#0f0',emoji:'🐂'},
+            {name:'The Bears',desc:'Crushing',count:22,interval:550,health:110,speed:2.2,reward:30,color:'#f00',emoji:'🐻'},
+            {name:'MOASS',desc:'FINAL WAVE',count:35,interval:350,health:150,speed:2.5,reward:25,color:'#ffd700',emoji:'🌙'}
         ];
         // Progressive difficulty tiers - ramps every 8 waves (after each boss)
         this.difficultyTiers = {
-            easy: { name: 'EASY', healthMult: 0.7, speedMult: 0.8, rewardMult: 1.3, desc: 'Relaxed pace, weaker enemies' },
-            medium: { name: 'MEDIUM', healthMult: 1.0, speedMult: 1.0, rewardMult: 1.0, desc: 'Balanced challenge' },
-            hard: { name: 'HARD', healthMult: 1.4, speedMult: 1.2, rewardMult: 0.8, desc: 'Intense difficulty' },
-            insane: { name: 'INSANE', healthMult: 2.0, speedMult: 1.5, rewardMult: 0.6, desc: 'Maximum difficulty' }
+            easy: { name: 'EASY', healthMult: 0.85, speedMult: 0.9, rewardMult: 1.3, desc: 'Relaxed pace, weaker enemies' },
+            medium: { name: 'MEDIUM', healthMult: 1.2, speedMult: 1.1, rewardMult: 1.0, desc: 'Balanced challenge' },
+            hard: { name: 'HARD', healthMult: 1.7, speedMult: 1.35, rewardMult: 0.8, desc: 'Intense difficulty' },
+            insane: { name: 'INSANE', healthMult: 2.5, speedMult: 1.7, rewardMult: 0.6, desc: 'Maximum difficulty' }
         };
     }
     init(engine) {
@@ -276,8 +276,8 @@ class WaveSystem {
         const isBoss=waveNum%8===0, isElite=waveNum%4===0&&!isBoss;
         
         // Apply progressive difficulty multipliers
-        let healthMult = this.diffConfig.healthMult * Math.pow(1.08, cycles);
-        let speedMult = this.diffConfig.speedMult * Math.pow(1.02, cycles);
+        let healthMult = this.diffConfig.healthMult * Math.pow(1.12, cycles);
+        let speedMult = this.diffConfig.speedMult * Math.pow(1.04, cycles);
         let rewardMult = this.diffConfig.rewardMult * Math.pow(1.03, cycles);
         
         return {
@@ -340,7 +340,7 @@ class Enemy extends Entity {
         const moveSpeed=this.speed*this.slowFactor*(dt/16);
         if (dist<moveSpeed) {
             this.pathIndex++;
-            if (this.pathIndex>=this.path.length-1) { this.engine.events.emit('playerDamage',{damage:1}); this.destroy(); }
+            if (this.pathIndex>=this.path.length-1) { const leakDamage=Math.max(1,Math.floor(this.maxHealth/30)); this.engine.events.emit('playerDamage',{damage:leakDamage}); this.destroy(); }
         } else { this.x+=(dx/dist)*moveSpeed; this.y+=(dy/dist)*moveSpeed; }
     }
     render(ctx) {
@@ -445,7 +445,7 @@ class Projectile extends Entity {
 class GameManager {
     constructor() {
         this.engine=null;
-        this.gameState={cash:500,health:20,maxHealth:20,selectedTower:null,wave:1};
+        this.gameState={cash:400,health:20,maxHealth:20,selectedTower:null,wave:1};
         this.diffSettings={easy:{startCash:600,startHealth:25},medium:{startCash:500,startHealth:20},hard:{startCash:400,startHealth:15}};
     }
     init(canvasId,difficulty) {
