@@ -1,17 +1,17 @@
 {
   "entries": [
     {
-      "name": "owl_gr2vmi2kt",
-      "portfolio_value": 87,
+      "name": "owl_jjg3qs5jv",
+      "portfolio_value": 520,
       "cash": 0,
-      "updated": "2026-03-17T08:54:06.944207"
+      "updated": "2026-03-20T14:23:32.652318"
     }
   ],
-  "last_update": "2026-03-17T08:54:06.944215",
+  "last_update": "2026-03-20T14:23:32.652326",
   "users": {
-    "owl_gr2vmi2kt": {
-      "name": "owl_gr2vmi2kt",
-      "portfolio_value": 87,
+    "owl_jjg3qs5jv": {
+      "name": "owl_jjg3qs5jv",
+      "portfolio_value": 520,
       "cash": 0,
       "owls": 6,
       "inventory": [],
@@ -21,8 +21,8 @@
         "streak_days": 0,
         "last_played": null
       },
-      "created": "2026-03-17T08:54:06.944192",
-      "updated": "2026-03-17T08:54:06.944204"
+      "created": "2026-03-20T14:23:32.652291",
+      "updated": "2026-03-20T14:23:32.652314"
     }
   }
 }
